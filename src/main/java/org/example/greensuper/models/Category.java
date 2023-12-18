@@ -3,15 +3,15 @@ package org.example.greensuper.models;
 public class Category {
     private int categoryId;
     private String categoryType;
-    private int image_id;
+    private String imageName;
 
     public Category() {
     }
 
-    public Category(int categoryId, String categoryType, int image_id) {
+    public Category(int categoryId, String categoryType, String imageName) {
         this.categoryId = categoryId;
         this.categoryType = categoryType;
-        this.image_id = image_id;
+        this.imageName = imageName;
     }
 
     public void setCategoryId(int categoryId) {
@@ -22,8 +22,8 @@ public class Category {
         this.categoryType = categoryType;
     }
 
-    public void setImage_id(int image_id) {
-        this.image_id = image_id;
+    public void setImageName(int image_id) {
+        this.imageName = imageName;
     }
 
     public int getCategoryId() {
@@ -34,7 +34,7 @@ public class Category {
         return categoryType;
     }
 
-    public int getImage_id() {
-        return image_id;
+    public String getImage_id() {
+        return imageName;
     }
 }
