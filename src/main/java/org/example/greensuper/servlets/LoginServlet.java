@@ -29,7 +29,10 @@ public class LoginServlet extends HttpServlet {
 
         UserDao userDao = new UserDao();
         if (userDao.userLogin(customer)) {
-            session.setAttribute("email", userEmail);
+            session.setAttribute("auth", userEmail);
+            resp.sendRedirect("index.jsp");
+        } else {
+            resp.sendRedirect("login.jsp");
         }
     }
 }
