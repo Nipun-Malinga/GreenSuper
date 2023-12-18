@@ -37,4 +37,8 @@ public class Category {
     public String getImage_id() {
         return imageName;
     }
+
+    public String getImageName() {
+        return imageName;
+    }
 }
