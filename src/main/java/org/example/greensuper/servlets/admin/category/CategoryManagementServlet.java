@@ -3,11 +3,9 @@ package org.example.greensuper.servlets.admin.category;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
+import jakarta.servlet.http.*;
 import org.example.greensuper.dao.CategoryDao;
+import org.example.greensuper.dao.ProductDao;
 import org.example.greensuper.models.Category;
 import org.example.greensuper.models.Image;
 import org.example.greensuper.utils.FileHandling;
@@ -37,21 +35,24 @@ public class CategoryManagementServlet extends HttpServlet {
                 String uploadPath = "D:\\University\\Projects\\Java\\Practices\\GreenSuper\\src\\main\\webapp\\uploadedImages\\category";
 
                 category.setCategoryType(newCategory);
+
                 image.setImageName(imageName);
 
                 if(categoryDao.addCategory(category, image) && handling.moveFile(uploadPath, categoryImage)) {
-                    writer.write("productAddedSuccessfully");
+                    writer.write("categoryAddedSuccessfully");
                 } else {
-                    writer.write("failedToAddProduct");
+                    writer.write("failedToAddCategory");
                 }
                 break;
             case "update":
                 break;
             case "delete":
                 break;
-            case "view":
-                break;
         }
     }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
 }
