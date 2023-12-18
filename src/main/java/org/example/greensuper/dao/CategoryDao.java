@@ -58,7 +58,22 @@ public class CategoryDao {
     }
 
     public List<Category> fetchAllCategories() {
+        Connection connection = DBConnection.getConnection();
         List<Category> categoryList = new ArrayList<>();
+
+        String SQL = "SELECT ca.category_id, ca.category_type, img.image_name FROM category ca JOIN images img ON ca.image_id = img.image_id";
+        try(PreparedStatement statement = connection.prepareStatement(SQL)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                categoryList.add(new Category(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3)
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         return categoryList;
     }
