@@ -4,7 +4,7 @@
 
 <%
     if(session.getAttribute("categories") == null) {
-        response.sendRedirect("view");
+        response.sendRedirect("mainView");
     } else {
         @SuppressWarnings("unchecked")
         List<Category> categoryList = (List<Category>) session.getAttribute("categories");
@@ -43,9 +43,9 @@
             <h1 class="categories__topic">Categories</h1>
             <div class="categories">
             <% for (var category : categoryList) { %>
-                <div class="item">
-                    <img src="./uploadedImages/category/<%=category.getImageName()%>" class="item__img" alt="" />
-                    <p><%=category.getCategoryType()%></p>
+                <div class="item" onclick="getCategoryID(<%=category.getCategoryId()%>)">
+                        <img src="./uploadedImages/category/<%=category.getImageName()%>" class="item__img" alt="" />
+                        <p><%=category.getCategoryType()%></p>
                 </div>
             <%  }  %>
             </div>

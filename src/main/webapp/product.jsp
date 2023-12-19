@@ -1,55 +1,39 @@
 <%@ page import="java.util.List" %>
-<%@ page import="org.example.greensuper.models.Category" %>
+<%@ page import="org.example.greensuper.models.Product" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<html>
-<head>
-    <title>Admin Panel (Add Product) - Green Super</title>
-</head>
-<body>
-    <%
-        if(session.getAttribute("category") == null) {
-            response.sendRedirect("productManagement");
-        }
-        else {
-        @SuppressWarnings("unchecked")
-        List<Category> categoryList = (List<Category>) session.getAttribute("category");
-    %>
-    <form action="productManagement" method="post" enctype="multipart/form-data">
-        <label>
-            <input type="text" name="product" placeholder="Product Name">
-        </label>
-        <label>
-            <input type="text" name="price" placeholder="Price">
-        </label>
-        <label>
-            <select name="category">
-                <option selected>Select Category</option>
-                <%
-                    for (var category : categoryList) {
-                %>
-                <option value="<%=category.getCategoryId()%>"><%=category.getCategoryType()%></option>
-                <%
-                    }
-                %>
-            </select>
-        </label>
-        <label>
-            <input type="text" name="quantity" placeholder="Quantity">
-        </label>
-        <label>
-            <input type="file" name="image">
-        </label>
-        <label>
-            <textarea name="description"></textarea>
-        </label>
-        <label>
-            <input type="text" name="operation" value="add" hidden="hidden">
-        </label>
-        <input type="reset">
-        <input type="submit">
-    </form>
-    <%
-        }
-    %>
-</body>
-</html>
+<%
+    if(session.getAttribute("product") == null) {
+        response.sendRedirect("productView");
+    } else {
+    @SuppressWarnings("unchecked")
+    List<Product> products = (List<Product>) session.getAttribute("product");
+    int categoryID = Integer.parseInt(request.getParameter("categoryId"));
+%>
+<%@ include file="./includes/header.jsp"%>
+<div class="product-grid grid grid--product">
+    <% for(var product : products) { %>
+    <div class="product-card">
+        <img src="./uploadedImages/category/<%=product.getImageName()%>" alt="brinjal" />
+        <h3><%=product.getProductName()%>></h3>
+        <p><%=product.getDescription()%></p>
+        <h6><%=product.getPrice()%>></h6>
+        <button class="buy-1" onclick="options.showModal()">Add to Cart</button>
+
+        <!--TODO: Complete the popup card-->
+        <dialog id="options" class="popup">
+            <img src="./images/main/categories/meat.png" class="card--img" alt="" />
+            <h3>name</h3>
+
+            <button class="btn btn-primary">Add to cart</button>
+            <button onclick="options.close()">
+                <svg class="icon icon--primary">
+                    <use xlink:href="./images/icons/sprite.svg#cancel"></use>
+                </svg>
+            </button>
+        </dialog>
+    </div>
+    <% } %>
+</div>
+<%@ include file="includes/footer.jsp"%>
+
+<% } %>
