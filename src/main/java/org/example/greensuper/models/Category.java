@@ -22,7 +22,7 @@ public class Category {
         this.categoryType = categoryType;
     }
 
-    public void setImageName(int image_id) {
+    public void setImageName(String imageName) {
         this.imageName = imageName;
     }
 
@@ -32,10 +32,6 @@ public class Category {
 
     public String getCategoryType() {
         return categoryType;
-    }
-
-    public String getImage_id() {
-        return imageName;
     }
 
     public String getImageName() {

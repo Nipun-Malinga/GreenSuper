@@ -8,12 +8,12 @@ public class Product {
     private double price;
     private int quantity;
     private boolean isInStock;
-    private int imageId;
+    private String imageName;
 
     public Product() {
     }
 
-    public Product(int productId, int categoryId, String productName, String description, double price, int quantity, boolean isInStock, int imageId) {
+    public Product(int productId, int categoryId, String productName, String description, double price, int quantity, boolean isInStock, String imageName) {
         this.productId = productId;
         this.categoryId = categoryId;
         this.productName = productName;
@@ -21,7 +21,7 @@ public class Product {
         this.price = price;
         this.quantity = quantity;
         this.isInStock = isInStock;
-        this.imageId = imageId;
+        this.imageName = imageName;
     }
 
     public void setProductId(int productId) {
@@ -52,8 +52,8 @@ public class Product {
         isInStock = inStock;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 
     public int getProductId() {
@@ -84,7 +84,7 @@ public class Product {
         return isInStock;
     }
 
-    public int getImageId() {
-        return imageId;
+    public String getImageName() {
+        return imageName;
     }
 }

@@ -10,8 +10,8 @@ import org.example.greensuper.dao.CategoryDao;
 
 import java.io.IOException;
 
-@WebServlet("/view")
-public class ViewServlet extends HttpServlet {
+@WebServlet("/mainView")
+public class MainViewServlet extends HttpServlet {
     CategoryDao categoryDao = new CategoryDao();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

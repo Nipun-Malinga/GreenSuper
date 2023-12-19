@@ -69,7 +69,7 @@ public class ProductManagementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         session.setAttribute("category", categoryDao.fetchAllCategories());
-        resp.sendRedirect("product.jsp");
+        resp.sendRedirect("productManagement.jsp");
     }
 
 }
