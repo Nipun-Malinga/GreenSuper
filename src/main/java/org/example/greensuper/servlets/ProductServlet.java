@@ -1,5 +1,6 @@
 package org.example.greensuper.servlets;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,21 +12,21 @@ import org.example.greensuper.models.Category;
 
 import java.io.IOException;
 
-@WebServlet("/productView")
-public class ProductView extends HttpServlet {
+@WebServlet("/product")
+public class ProductServlet extends HttpServlet {
     ProductDao productDao = new ProductDao();
     Category category = new Category();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+
         if(req.getParameter("categoryId") != null) {
-            int categoryId = Integer.parseInt(req.getParameter("categoryId"));
-            String redirectUrl = "product.jsp?categoryId=" + categoryId;
-            HttpSession session = req.getSession();
-            category.setCategoryId(categoryId);
+            category.setCategoryId(Integer.parseInt(req.getParameter("categoryId")));
+
             session.setAttribute("product", productDao.fetchAllProducts(category));
-            resp.getWriter().write(redirectUrl);
-            System.out.println(categoryId);
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("product.jsp");
+            requestDispatcher.forward(req, resp);
         }
     }
 }
