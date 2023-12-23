@@ -29,6 +29,7 @@ public class RegisterServlet extends HttpServlet {
 
         Customer customer = new Customer(
                 firstName, lastName ,
+                //Hashing the password
                 email ,  encryption.hashingPassword(password),
                 phoneNumber, homeNumber ,
                 streetName, city
@@ -37,7 +38,7 @@ public class RegisterServlet extends HttpServlet {
         PrintWriter writer = resp.getWriter();
 
         UserDao userDao = new UserDao();
-        //Front end response.
+        //Front end response. (Under development)
         if (userDao.registerUser(customer)) {
             writer.write("userRegistrationSuccess");
         } else {
