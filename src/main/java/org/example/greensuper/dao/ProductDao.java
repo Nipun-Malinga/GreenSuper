@@ -1,5 +1,6 @@
 package org.example.greensuper.dao;
 
+import org.example.greensuper.models.CartItem;
 import org.example.greensuper.models.Category;
 import org.example.greensuper.models.Image;
 import org.example.greensuper.models.Product;
@@ -60,7 +61,7 @@ public class ProductDao {
         return false;
     }
 
-    public List<Product> fetchAllProducts(Category category) {
+    public List<Product> fetchProducts(Category category) {
         Connection connection = DBConnection.getConnection();
         List<Product> productList = new ArrayList<>();
 
@@ -85,5 +86,61 @@ public class ProductDao {
             throw new RuntimeException(e);
         }
         return productList;
+    }
+
+    public List<CartItem> fetchForCart(List<CartItem> cartItemList) {
+        Connection connection = DBConnection.getConnection();
+        List<CartItem> cartItems = new ArrayList<>();
+
+        String SQL = "SELECT pr.product_id, pr.product_name, pr.price, pr.quantity, img.image_name " +
+                        "FROM product pr J" +
+                        "OIN images img " +
+                        "ON pr.image_id = img.image_id WHERE product_id = ?";
+        if(!cartItemList.isEmpty()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+                for (var item : cartItemList) {
+                    preparedStatement.setInt(1, item.getProductId());
+
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    while (resultSet.next()) {
+                        CartItem cartItem = new CartItem();
+
+                        cartItem.setProductId(resultSet.getInt(1));
+                        cartItem.setProductName(resultSet.getString(2));
+                        cartItem.setPrice(resultSet.getDouble(3));
+                        cartItem.setBoughtQuantity(item.getBoughtQuantity());
+                        cartItem.setQuantity(resultSet.getInt(4));
+                        cartItem.setImageName(resultSet.getString(5));
+
+                        cartItems.add(cartItem);
+                    }
+               }
+            }
+            catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return cartItems;
+        }
+
+    public double fetchCartAmount(List<CartItem> cartItemList) {
+        Connection connection = DBConnection.getConnection();
+        double totalAmount = 0;
+        String SQL = "SELECT price FROM product WHERE product_id = ?";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            for(var item : cartItemList) {
+                preparedStatement.setInt(1, item.getProductId());
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    totalAmount += resultSet.getDouble(1) * item.getBoughtQuantity();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return totalAmount;
     }
 }
