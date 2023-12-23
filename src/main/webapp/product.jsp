@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.example.greensuper.models.Product" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <% if(session.getAttribute("product") == null) {
     response.sendRedirect("index.jsp");
 } else {
@@ -11,13 +12,12 @@
 
 <div class="product-grid grid grid--product">
     <%for(var product : productList) {%>
-    <div class="product-card">
+    <div class="product-card" >
             <img src="./uploadedImages/product/<%=product.getImageName()%>" alt="" />
             <h3><%=product.getProductName()%></h3>
             <p><%=product.getDescription()%></p>
             <p><%=product.getPrice()%></p>
-            <h6><%=product.getQuantity()%></h6>
-            <button class="buy-1">Add to Cart</button>
+            <button class="buy-1" onclick="cart(<%=product.getProductId()%>)">Add to Cart</button>
     </div>
     <%}%>
 </div>
