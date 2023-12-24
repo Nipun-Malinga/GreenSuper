@@ -1,15 +1,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.example.greensuper.models.CartItem" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
+<%@ include file="includes/header.jsp"%>
+<%@ include file="includes/navbar.jsp"%>
     <%
         double cartPrice;
         if(session.getAttribute("cart_item") == null && session.getAttribute("cartPrice") == null) {
-            response.sendRedirect("index.jsp");
+            
         } else {
             @SuppressWarnings("unchecked")
             List<CartItem> cartItemList = (List<CartItem>) session.getAttribute("cart_item");
@@ -25,13 +21,18 @@
         <h1><%=item.getProductId()%></h1>
         <h2><%=item.getPrice()%></h2>
         <a href="quantity-inc-dec?action=inc&productId=<%=item.getProductId()%>"> + </a>
-        <input type="text" value="<%=item.getBoughtQuantity()%>">
-        <a href="quantity-inc-dec?action=dec&productId=<%=item.getProductId()%>"> - </a>
+        <label>
+            <input type="text" value="<%=item.getBoughtQuantity()%>">
+        </label>
+    <a href="quantity-inc-dec?action=dec&productId=<%=item.getProductId()%>"> - </a>
         <a href="remove-Cart-Item?productId=<%=item.getProductId()%>">removeFromCart</a>
 
     <%
             }
         }
     %>
-</body>
-</html>
+<form action="payment" method="post">
+    <input type="hidden" name="action" value="checkout">
+    <button type="submit">Checkout with PayPal</button>
+</form>
+<%@ include file="includes/footer.jsp"%>
