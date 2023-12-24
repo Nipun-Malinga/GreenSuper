@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/cart")
+@SuppressWarnings("unchecked")
 public class CartServlet extends HttpServlet {
-    List<CartItem> cartItemList = new ArrayList<>();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         String productIdParam = req.getParameter("productId");
@@ -22,28 +22,32 @@ public class CartServlet extends HttpServlet {
         HttpSession session = req.getSession();
         ProductDao productDao = new ProductDao();
 
-        if((productIdParam != null && !productIdParam.isEmpty()) && quantityParam == null) {
+        List<CartItem> cartItemList = (List<CartItem>) session.getAttribute("cart_item");
+        if (cartItemList == null) {
+            cartItemList = new ArrayList<>();
+        }
+
+        if ((productIdParam != null && !productIdParam.isEmpty()) && quantityParam == null) {
             CartItem cartItem = new CartItem();
             int productID = Integer.parseInt(productIdParam);
 
             cartItem.setProductId(productID);
             cartItem.setBoughtQuantity(1);
 
-            if(session.getAttribute("cart_item") == null) {
+            if (session.getAttribute("cart_item") == null) {
                 cartItemList.add(cartItem);
                 System.out.println("Product Added");
-            }
-            else {
+            } else {
                 boolean isExist = false;
 
                 for (var item : cartItemList) {
-                    if(item.getProductId() == productID) {
+                    if (item.getProductId() == productID) {
                         isExist = true;
                         System.out.println("Product Exists");
                         break;
                     }
                 }
-                if(!isExist) {
+                if (!isExist) {
                     cartItemList.add(cartItem);
                     System.out.println("Product Added");
                 }
@@ -52,4 +56,5 @@ public class CartServlet extends HttpServlet {
         session.setAttribute("cartPrice", productDao.fetchCartAmount(cartItemList));
         session.setAttribute("cart_item", productDao.fetchForCart(cartItemList));
     }
+
 }
