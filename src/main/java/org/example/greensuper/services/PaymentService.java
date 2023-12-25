@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentService {
-    private static final String MODE = "sandbox";
 
     public static APIContext getAPIContext() {
-        return new APIContext(PaypalConfig.Client_ID, PaypalConfig.Client_Secret, MODE);
+        return new APIContext(PaypalConfig.Client_ID, PaypalConfig.Client_Secret, PaypalConfig.MODE);
     }
 
     public static Payment createPayment(double total, String currency, String method, String intent, String description,
