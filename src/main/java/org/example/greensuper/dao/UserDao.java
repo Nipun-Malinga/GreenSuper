@@ -1,6 +1,7 @@
 package org.example.greensuper.dao;
 
 import org.example.greensuper.models.Customer;
+import org.example.greensuper.models.Feedback;
 import org.example.greensuper.utils.DecryptionUtil;
 
 import java.sql.*;
@@ -11,11 +12,6 @@ public class UserDao {
     public boolean registerUser(Customer customer) {
         Connection connection = DBConnection.getConnection();
 
-
-        boolean customer_registered = false;
-        boolean password_registered = false;
-        boolean address_registered = false;
-
         // Storing Customer basic details.
         String SQL = "INSERT INTO customer (first_name, last_name, email, phone_number) VALUES (?, ?, ?, ?)";
         try(PreparedStatement statement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -25,35 +21,34 @@ public class UserDao {
             statement.setString(4, customer.getPhoneNumber());
 
             if(statement.executeUpdate() > 0) {
-                customer_registered = true;
-            }
 
-            //Generating the customer id for above data insertion.
-            try(ResultSet generatedKey = statement.getGeneratedKeys()) {
-                if(generatedKey.next()) {
-                    int customerID = generatedKey.getInt(1);
-                    System.out.println(customerID);
+                //Generating the customer id for above data insertion.
+                try(ResultSet generatedKey = statement.getGeneratedKeys()) {
+                    if(generatedKey.next()) {
+                        int customerID = generatedKey.getInt(1);
+                        System.out.println(customerID);
 
-                    // Storing Customer Password.
-                    String SQL_Password = "INSERT INTO customer_passwords (customer_id, hashed_password) VALUES (?, ?)";
-                    try(PreparedStatement insertPassword = connection.prepareStatement(SQL_Password)) {
-                        insertPassword.setInt(1, customerID);
-                        insertPassword.setString(2, customer.getPassword());
+                        // Storing Customer Password.
+                        String SQL_Password = "INSERT INTO customer_passwords (customer_id, hashed_password) VALUES (?, ?)";
+                        try(PreparedStatement insertPassword = connection.prepareStatement(SQL_Password)) {
+                            insertPassword.setInt(1, customerID);
+                            insertPassword.setString(2, customer.getPassword());
 
-                        if(insertPassword.executeUpdate() > 0) {
-                            password_registered = true;
-                        }
-                    }
-                    // Storing Customer Address.
-                    String SQL_Address = "INSERT INTO customer_address (customer_id, city, street, home_number) VALUES (?, ?, ?, ?)";
-                    try(PreparedStatement insertAddress = connection.prepareStatement(SQL_Address)) {
-                        insertAddress.setInt(1, customerID);
-                        insertAddress.setString(2, customer.getCity());
-                        insertAddress.setString(3, customer.getStreetName());
-                        insertAddress.setString(4, customer.getHomeNumber());
+                            if(insertPassword.executeUpdate() > 0) {
 
-                        if(insertAddress.executeUpdate() > 0) {
-                            address_registered =true;
+                                // Storing Customer Address.
+                                String SQL_Address = "INSERT INTO customer_address (customer_id, city, street, home_number) VALUES (?, ?, ?, ?)";
+                                try(PreparedStatement insertAddress = connection.prepareStatement(SQL_Address)) {
+                                    insertAddress.setInt(1, customerID);
+                                    insertAddress.setString(2, customer.getCity());
+                                    insertAddress.setString(3, customer.getStreetName());
+                                    insertAddress.setString(4, customer.getHomeNumber());
+
+                                    if(insertAddress.executeUpdate() > 0) {
+                                        return true;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -62,7 +57,7 @@ public class UserDao {
         catch (SQLException ex) {
             throw new RuntimeException("An error accord while registering user into the database.");
         }
-        return customer_registered && password_registered && address_registered;
+        return false;
     }
 
     //User login
@@ -85,7 +80,7 @@ public class UserDao {
         return false;
     }
 
-    public Customer getCustomerDetails(String email) {
+    public Customer getUserDetails(String email) {
         Connection connection = DBConnection.getConnection();
 
         String SQL = "SELECT * FROM customer JOIN customer_address ON customer.customer_id = customer_address.customer_id WHERE customer.email = ?";
@@ -108,5 +103,22 @@ public class UserDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean addCustomerFeedback(Feedback feedback) {
+        Connection connection = DBConnection.getConnection();
+
+        String SQL = "INSERT INTO customer_feedback (customer_id, feedback) VALUES (?, ?)";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setInt(1, feedback.getCustomer_id());
+            preparedStatement.setString(2, feedback.getFeedback());
+
+            if(preparedStatement.executeUpdate() > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 }

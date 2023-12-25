@@ -11,11 +11,11 @@ import java.util.Properties;
 import java.time.LocalDate;
 
 public class EmailSender {
-    private final String senderEmail = "nipunmalinga11@gmail.com";
+    private final String senderEmail = "greensuper66@gmail.com";
     Customer customer = new Customer();
     UserDao userDao = new UserDao();
-
     private double cartPrice;
+    private int billId;
 
     private Properties emailServer() {
         Properties properties = new Properties();
@@ -26,18 +26,18 @@ public class EmailSender {
 
         return properties;
     }
-
     Session session = Session.getInstance(emailServer(), new Authenticator() {
         @Override
         protected PasswordAuthentication getPasswordAuthentication() {
-            String password = "wmxsfdexhxzugetr";
+            String password = "jgmojzkocrsoaavn";
             return new PasswordAuthentication(senderEmail, password);
         }
     });
 
-    public void sendEmail(String reviverEmail, List<CartItem> cartItemList, double cartPrice) {
-        customer = userDao.getCustomerDetails(reviverEmail);
+    public void sendEmail(String reviverEmail, List<CartItem> cartItemList, double cartPrice, int billID) {
+        customer = userDao.getUserDetails(reviverEmail);
         this.cartPrice = cartPrice;
+        this.billId = billID;
         System.out.println(cartPrice);
 
         try{
@@ -45,7 +45,7 @@ public class EmailSender {
             message.setFrom(new InternetAddress(senderEmail));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(reviverEmail));
 
-            String emailPart_02 = null;
+            String emailPart_02 = "";
             for (var item : cartItemList) {
                 emailPart_02 += "                  <tr>\n" +
                         "                    <td class=\"item-col item\">\n" +
@@ -61,7 +61,7 @@ public class EmailSender {
                                                 item.getBoughtQuantity() +
                         "                    </td>\n" +
                         "                    <td class=\"item-col\">\n" +
-                                                item.getPrice() +
+                                                item.getPrice()*item.getBoughtQuantity() +
                         "                    </td>\n" +
                         "                  </tr>";
             }
@@ -260,7 +260,7 @@ public class EmailSender {
                 "  </style>\n" +
                 "\n" +
                 "  <style type=\"text/css\" media=\"screen\">\n" +
-                "    @import url(http://fonts.googleapis.com/css?family=Oxygen:400,700);\n" +
+                "    @import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@400;700&display=swap');\n" +
                 "  </style>\n" +
                 "\n" +
                 "  <style type=\"text/css\" media=\"screen\">\n" +
@@ -409,8 +409,8 @@ public class EmailSender {
                 "                                <span class=\"header-sm\">Date Ordered</span><br />\n" +
                 "                                 "+ localDate +
                 "                                <br />\n" +
-                "                                <span class=\"header-sm\">Order</span> <br />\n" +
-                "                                #12342\n" +
+                "                                <span class=\"header-sm\">Bill ID</span> <br />\n" +
+                                                    billId +
                 "                              </td>\n" +
                 "                            </tr>\n" +
                 "                          </table>\n" +
@@ -441,7 +441,7 @@ public class EmailSender {
                 "                      Qty\n" +
                 "                    </td>\n" +
                 "                    <td class=\"title-dark\" width=\"97\">\n" +
-                "                      " + cartPrice + "\n" +
+                "                      Total\n" +
                 "                    </td>\n" +
                 "                  </tr>";
     }
