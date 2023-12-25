@@ -18,15 +18,14 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         Customer customer = new Customer();
+        UserDao userDao = new UserDao();
 
         customer.setEmail(userEmail);
         customer.setPassword(password);
 
         HttpSession session = req.getSession();
-
-        UserDao userDao = new UserDao();
         if (userDao.userLogin(customer)) {
-            customer = userDao.getCustomerDetails(userEmail);
+            customer = userDao.getUserDetails(userEmail);
 
             session.setAttribute("auth", customer.getFirstName() + " " + customer.getLastName());
             session.setAttribute("userCredentials", customer);

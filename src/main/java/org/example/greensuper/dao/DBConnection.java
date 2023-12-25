@@ -8,7 +8,6 @@ public class DBConnection {
     private static final String URL = "jdbc:mysql://127.0.0.1:3307/green_super_database";
     private static final String USER = "root";
     private static final String Password = "";
-
     private static Connection connection = null;
     public static Connection getConnection() {
         if(connection == null)

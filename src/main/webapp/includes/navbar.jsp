@@ -1,15 +1,18 @@
 <header>
     <nav class="nav collapsible">
-        <a aria-label="Green Super Logo" class="nav__brand" href="/"><img src="images/main/logo/logo.png" alt="" /></a>
+        <a aria-label="Green Super Logo" class="nav__brand" href="index.jsp"><img src="images/main/logo/logo.png" alt="" /></a>
         <svg class="icon icon--white nav__toggler">
             <use href="./images/icons/sprite.svg#list"></use>
         </svg>
         <ul class="list nav__list collapsible__content">
             <li class="nav__item">
-                <a target="_blank" href="#">Home</a>
+                <a target="_blank" href="index.jsp">Home</a>
             </li>
             <li class="nav__item">
                 <a target="_blank" href="#categories">Categories</a>
+            </li>
+            <li class="nav__item">
+                <a target="_blank" href="cart.jsp">Cart</a>
             </li>
             <li class="nav__item">
                 <a target="_blank" href="#">About Us</a>
@@ -19,7 +22,22 @@
                 <button class="input input-search input--dark">Search</button>
             </li>
             <li class="nav__item">
-                <a target="_blank" href="#">Login | Register</a>
+                <%
+                    if(session.getAttribute("auth") == null) {
+                %>
+                <a target="_blank" href="login.jsp">Login | Register</a>
+                <%
+                    } else {
+                        String auth = (String) session.getAttribute("auth");
+
+                %>
+                <details>
+                    <summary><p><%=auth%><p></summary>
+                    <a href="logout">Logout</a>
+                </details>
+                <%
+                    }
+                %>
             </li>
         </ul>
     </nav>

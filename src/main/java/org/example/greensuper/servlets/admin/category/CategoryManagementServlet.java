@@ -5,7 +5,6 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.example.greensuper.dao.CategoryDao;
-import org.example.greensuper.dao.ProductDao;
 import org.example.greensuper.models.Category;
 import org.example.greensuper.models.Image;
 import org.example.greensuper.utils.FileHandling;
