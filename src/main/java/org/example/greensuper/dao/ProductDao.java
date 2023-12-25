@@ -14,7 +14,6 @@ public class ProductDao {
         //Testing (Debug)
 
         Connection connection = DBConnection.getConnection();
-        boolean imageStored = false;
         boolean productStored = false;
 
         String SQL = "INSERT INTO images(image_name) VALUES (?)";
@@ -22,28 +21,26 @@ public class ProductDao {
             preparedStatement.setString(1, image.getImageName());
 
             if (preparedStatement.executeUpdate() > 0) {
-                imageStored = true;
-            }
-            // Getting Generated key(image id)
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    int image_id = generatedKeys.getInt(1);
+                // Getting Generated key(image id)
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int image_id = generatedKeys.getInt(1);
 
-                    String SQL_Category = "INSERT INTO product (category_id, product_name, description, price, quantity, image_id) VALUES (?, ?, ?, ?, ?, ?)";
+                        String SQL_Category = "INSERT INTO product (category_id, product_name, description, price, quantity, image_id) VALUES (?, ?, ?, ?, ?, ?)";
 
-                    try (PreparedStatement categoryDetails = connection.prepareStatement(SQL_Category)) {
-                        categoryDetails.setInt(1, product.getCategoryId());
-                        categoryDetails.setString(2, product.getProductName());
-                        categoryDetails.setString(3, product.getDescription());
-                        categoryDetails.setDouble(4, product.getPrice());
-                        categoryDetails.setInt(5, product.getQuantity());
-                        categoryDetails.setInt(6, image_id);
+                        try (PreparedStatement categoryDetails = connection.prepareStatement(SQL_Category)) {
+                            categoryDetails.setInt(1, product.getCategoryId());
+                            categoryDetails.setString(2, product.getProductName());
+                            categoryDetails.setString(3, product.getDescription());
+                            categoryDetails.setDouble(4, product.getPrice());
+                            categoryDetails.setInt(5, product.getQuantity());
+                            categoryDetails.setInt(6, image_id);
 
-                        if (categoryDetails.executeUpdate() > 0) {
-                            productStored = true;
+                            if (categoryDetails.executeUpdate() > 0) {
+                                //Return true if image and category are stored in a database.
+                                return productStored;
+                            }
                         }
-                        //Return true if image and category is stored.
-                        return imageStored && productStored;
                     }
                 }
             }

@@ -84,4 +84,29 @@ public class UserDao {
         }
         return false;
     }
+
+    public Customer getCustomerDetails(String email) {
+        Connection connection = DBConnection.getConnection();
+
+        String SQL = "SELECT * FROM customer JOIN customer_address ON customer.customer_id = customer_address.customer_id WHERE customer.email = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setString(1, email);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Customer customer = new Customer();
+            while (resultSet.next()) {
+                customer.setCustomerId(resultSet.getInt(1));
+                customer.setFirstName(resultSet.getString(2));
+                customer.setLastName(resultSet.getString(3));
+                customer.setEmail(resultSet.getString(4));
+                customer.setPhoneNumber(resultSet.getString(5));
+                customer.setCity(resultSet.getString(8));
+                customer.setStreetName(resultSet.getString(9));
+                customer.setHomeNumber(resultSet.getString(10));
+            }
+            return customer;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
