@@ -6,7 +6,7 @@
 <body>
     <form method="post" action="categoryManagement" enctype="multipart/form-data">
         <label>
-            <input type="text" name="operation" value="add" readonly>
+            <input type="hidden" name="operation" value="add" readonly>
         </label>
         <label>
             <input type="text" name="category" placeholder="Enter new category.">

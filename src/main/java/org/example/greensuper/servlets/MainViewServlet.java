@@ -1,6 +1,5 @@
 package org.example.greensuper.servlets;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +13,7 @@ import java.io.IOException;
 public class MainViewServlet extends HttpServlet {
     CategoryDao categoryDao = new CategoryDao();
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
         session.setAttribute("categories", categoryDao.fetchAllCategories());
         resp.sendRedirect("index.jsp");

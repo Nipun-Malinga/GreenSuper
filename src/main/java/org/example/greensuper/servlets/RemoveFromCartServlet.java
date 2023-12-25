@@ -1,6 +1,5 @@
 package org.example.greensuper.servlets;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +17,7 @@ import java.util.function.Predicate;
 public class RemoveFromCartServlet extends HttpServlet {
     ProductDao productDao = new ProductDao();
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String productIdParam = req.getParameter("productId");
         HttpSession session = req.getSession();
 
