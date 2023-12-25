@@ -12,9 +12,7 @@ import java.util.List;
 public class ProductDao {
     public boolean addProduct(Product product, Image image) {
         //Testing (Debug)
-
         Connection connection = DBConnection.getConnection();
-        boolean productStored = false;
 
         String SQL = "INSERT INTO images(image_name) VALUES (?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -26,7 +24,7 @@ public class ProductDao {
                     if (generatedKeys.next()) {
                         int image_id = generatedKeys.getInt(1);
 
-                        String SQL_Category = "INSERT INTO product (category_id, product_name, description, price, quantity, image_id) VALUES (?, ?, ?, ?, ?, ?)";
+                        String SQL_Category = "INSERT INTO product (category_id, product_name, description, price, quantity, is_in_stock, image_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
                         try (PreparedStatement categoryDetails = connection.prepareStatement(SQL_Category)) {
                             categoryDetails.setInt(1, product.getCategoryId());
@@ -34,11 +32,12 @@ public class ProductDao {
                             categoryDetails.setString(3, product.getDescription());
                             categoryDetails.setDouble(4, product.getPrice());
                             categoryDetails.setInt(5, product.getQuantity());
-                            categoryDetails.setInt(6, image_id);
+                            categoryDetails.setBoolean(6, product.getIsInStock());
+                            categoryDetails.setInt(7, image_id);
 
                             if (categoryDetails.executeUpdate() > 0) {
                                 //Return true if image and category are stored in a database.
-                                return productStored;
+                                return true;
                             }
                         }
                     }

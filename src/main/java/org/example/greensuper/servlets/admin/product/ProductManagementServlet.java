@@ -37,6 +37,8 @@ public class ProductManagementServlet extends HttpServlet {
                 int categoryId = Integer.parseInt(req.getParameter("category"));
                 Part productImage = req.getPart("image");
 
+                boolean isInStock = quantity > 0;
+
                 System.out.println(productName + "\n" + description + "\n" + price + "\n" + quantity + "\n" + categoryId);
 
                 String imageName = handling.getFileName(productImage);
@@ -46,6 +48,7 @@ public class ProductManagementServlet extends HttpServlet {
                 product.setDescription(description);
                 product.setPrice(price);
                 product.setQuantity(quantity);
+                product.setInStock(isInStock);
                 product.setCategoryId(categoryId);
 
                 image.setImageName(imageName);

@@ -80,7 +80,7 @@ public class Product {
         return quantity;
     }
 
-    public boolean isInStock() {
+    public boolean getIsInStock() {
         return isInStock;
     }
 

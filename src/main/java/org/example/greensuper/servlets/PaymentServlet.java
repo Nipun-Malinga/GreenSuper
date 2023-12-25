@@ -20,7 +20,7 @@ import java.util.List;
 
 @WebServlet("/payment")
 @SuppressWarnings("unchecked")
-public class AuthorizePaymentServlet extends HttpServlet {
+public class PaymentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
@@ -58,12 +58,17 @@ public class AuthorizePaymentServlet extends HttpServlet {
                 try {
                     Payment executedPayment = PaymentService.executePayment(paymentId, payerId);
 
+
                     if ("approved".equalsIgnoreCase(executedPayment.getState())) {
                         Customer customer = (Customer) session.getAttribute("userCredentials");
                         EmailSender emailSender = new EmailSender();
                         CartDao cartDao = new CartDao();
-                        cartDao.addTocCart(customer, (List<CartItem>) session.getAttribute("cart_item"), cartPrice);
-                        emailSender.sendEmail(customer.getEmail(), (List<CartItem>) session.getAttribute("cart_item"), cartPrice);
+
+                        int previousBillId = cartDao.getBillId();
+                        int nextBillId = previousBillId + 1;
+
+                        cartDao.addTocCart(paymentId, customer, (List<CartItem>) session.getAttribute("cart_item"), cartPrice);
+                        emailSender.sendEmail(customer.getEmail(), (List<CartItem>) session.getAttribute("cart_item"), cartPrice, nextBillId);
 
                         resp.sendRedirect("payment_success.jsp");
                     } else {
