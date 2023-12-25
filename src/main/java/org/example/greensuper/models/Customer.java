@@ -1,6 +1,7 @@
 package org.example.greensuper.models;
 
 public class Customer {
+    private int customerId;
     private String firstName;
     private String lastName;
     private String email;
@@ -22,6 +23,10 @@ public class Customer {
         this.homeNumber = homeNumber;
         this.streetName = streetName;
         this.city = city;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
     public void setFirstName(String firstName) {
@@ -54,6 +59,10 @@ public class Customer {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public int getCustomerId() {
+        return customerId;
     }
 
     public String getFirstName() {

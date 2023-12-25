@@ -1,14 +1,11 @@
-function getCategoryID(categoryId) {
+function cart(productId) {
     $.ajax({
-        type: 'GET',
-        url: 'productView',
+        method: 'GET',
+        url: 'cart',
         data: {
-            categoryId: categoryId,
-        }, success: function (response) {
-            console.log(response)
-            window.location.href = response;
-        }, error: function (status, error) {
-            console.log("Error", status, error);
+            productId: productId
+        },
+        success: function (response) {
         }
     })
 }
