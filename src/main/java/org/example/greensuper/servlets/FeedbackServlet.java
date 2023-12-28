@@ -14,6 +14,8 @@ import org.example.greensuper.models.Feedback;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.time.LocalDate;
 
 @WebServlet("/feedback")
 public class FeedbackServlet extends HttpServlet {
@@ -23,6 +25,7 @@ public class FeedbackServlet extends HttpServlet {
         HttpSession session = req.getSession();
         PrintWriter writer = resp.getWriter();
         Customer customer = (Customer) session.getAttribute("userCredentials");
+
 
         if(billIdParam != null && !billIdParam.isEmpty() && customer != null) {
             int billID = Integer.parseInt(billIdParam);
@@ -40,6 +43,7 @@ public class FeedbackServlet extends HttpServlet {
                 UserDao userDao = new UserDao();
 
                 customerFeedback.setCustomer_id(customer.getCustomerId());
+//                customerFeedback.setBill_id(billID);
                 customerFeedback.setFeedback(feedback);
 
                 if(userDao.addCustomerFeedback(customerFeedback)) {

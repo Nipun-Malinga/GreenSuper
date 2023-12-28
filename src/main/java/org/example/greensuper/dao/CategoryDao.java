@@ -38,7 +38,7 @@ public class CategoryDao {
                         if (categoryDetails.executeUpdate() > 0) {
                             categoryStored = true;
                         }
-                        //Return true if image and category is stored.
+                        //Return true if image and category are stored.
                         return imageStored && categoryStored;
                     }
                 }
