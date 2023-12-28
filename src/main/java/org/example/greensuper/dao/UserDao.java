@@ -5,12 +5,15 @@ import org.example.greensuper.models.Feedback;
 import org.example.greensuper.utils.DecryptionUtil;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDao {
+    Connection connection = DBConnection.getConnection();
 
     //User Registration
     public boolean registerUser(Customer customer) {
-        Connection connection = DBConnection.getConnection();
 
         // Storing Customer basic details.
         String SQL = "INSERT INTO customer (first_name, last_name, email, phone_number) VALUES (?, ?, ?, ?)";
@@ -62,7 +65,6 @@ public class UserDao {
 
     //User login
     public boolean userLogin(Customer customer) {
-        Connection connection = DBConnection.getConnection();
         DecryptionUtil decryptionUtil = new DecryptionUtil();
 
         String SQL = "SELECT cus_pass.hashed_password FROM customer_passwords cus_pass JOIN customer c ON cus_pass.customer_id = c.customer_id WHERE c.email = ?";
@@ -80,8 +82,8 @@ public class UserDao {
         return false;
     }
 
+    //Fetching a specific user details from the database.
     public Customer getUserDetails(String email) {
-        Connection connection = DBConnection.getConnection();
 
         String SQL = "SELECT * FROM customer JOIN customer_address ON customer.customer_id = customer_address.customer_id WHERE customer.email = ?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
@@ -105,13 +107,33 @@ public class UserDao {
         }
     }
 
-    public boolean addCustomerFeedback(Feedback feedback) {
-        Connection connection = DBConnection.getConnection();
+    //Counting all the user count in the database.
+    public int getUserCount() {
 
-        String SQL = "INSERT INTO customer_feedback (customer_id, feedback) VALUES (?, ?)";
+        String SQL = "SELECT COUNT(*) FROM customer";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
+    //Adding customer feedback to the database.
+    public boolean addCustomerFeedback(Feedback feedback) {
+        LocalDate localDate = LocalDate.now();
+
+        String SQL = "INSERT INTO customer_feedback (customer_id, feedback, feedback_date) VALUES (?, ?, ?)";
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setInt(1, feedback.getCustomer_id());
+
+//            preparedStatement.setInt(2, feedback.getBill_id());
+
             preparedStatement.setString(2, feedback.getFeedback());
+            preparedStatement.setDate(3, Date.valueOf(localDate));
 
             if(preparedStatement.executeUpdate() > 0) {
                 return true;
@@ -120,5 +142,29 @@ public class UserDao {
             throw new RuntimeException(e);
         }
         return false;
+    }
+
+    //Fetching all customer feedbacks.
+    public List<Feedback> getAllCustomerFeedbacks() {
+        List<Feedback> feedbackList = new ArrayList<>();
+
+        String SQL = "SELECT * FROM customer_feedback";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                feedbackList.add(
+                        new Feedback(
+                                resultSet.getInt("feedback_id"),
+                                resultSet.getInt("customer_id"),
+                                resultSet.getString("feedback"),
+                                resultSet.getDate("feedback_date").toLocalDate()
+                        )
+                );
+            }
+            return feedbackList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
