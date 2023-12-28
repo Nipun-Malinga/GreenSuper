@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpSession;
 import org.example.greensuper.dao.ProductDao;
 import org.example.greensuper.models.CartItem;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +17,14 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class CartServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String productIdParam = req.getParameter("productId");
         String quantityParam = req.getParameter("quantity");
 
         HttpSession session = req.getSession();
         ProductDao productDao = new ProductDao();
+
+        PrintWriter writer = resp.getWriter();
 
         List<CartItem> cartItemList = (List<CartItem>) session.getAttribute("cart_item");
         if (cartItemList == null) {
@@ -36,6 +40,7 @@ public class CartServlet extends HttpServlet {
 
             if (session.getAttribute("cart_item") == null) {
                 cartItemList.add(cartItem);
+                writer.write("productAdded");
                 System.out.println("Product Added");
             } else {
                 boolean isExist = false;
@@ -43,12 +48,14 @@ public class CartServlet extends HttpServlet {
                 for (var item : cartItemList) {
                     if (item.getProductId() == productID) {
                         isExist = true;
+                        writer.write("productExists");
                         System.out.println("Product Exists");
                         break;
                     }
                 }
                 if (!isExist) {
                     cartItemList.add(cartItem);
+                    writer.write("productAdded");
                     System.out.println("Product Added");
                 }
             }
