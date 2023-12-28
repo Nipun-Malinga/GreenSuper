@@ -11,7 +11,7 @@
 %>
 
 <%@ include file="./includes/header.jsp"%>
-    <%@ include file="includes/navbar.jsp"%>
+<%@ include file="includes/navbar.jsp"%>
         <section class="top__categories container" id="#categories">
             <h1 class="categories__topic">Categories</h1>
             <div class="categories">

@@ -29,12 +29,9 @@
                 <%
                     } else {
                         String auth = (String) session.getAttribute("auth");
-
                 %>
-                <details>
-                    <summary><p><%=auth%><p></summary>
+                    <span><%=auth%><span>
                     <a href="logout">Logout</a>
-                </details>
                 <%
                     }
                 %>
