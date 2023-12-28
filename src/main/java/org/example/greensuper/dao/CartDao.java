@@ -8,8 +8,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class CartDao {
+    Connection connection = DBConnection.getConnection();
+
     public void addTocCart(String paymentId, Customer customer, List<CartItem> cartItemList, double cartPrice) {
-        Connection connection = DBConnection.getConnection();
         LocalDate date = LocalDate.now();
 
         //Inserting data into cart table.
@@ -74,7 +75,6 @@ public class CartDao {
     }
 
     public int getBillId() {
-        Connection connection = DBConnection.getConnection();
 
         int lastBillID = 0;
         String SQL = "SELECT bill_id FROM bill ORDER BY bill_id DESC LIMIT 1";
@@ -87,5 +87,38 @@ public class CartDao {
             throw new RuntimeException(e);
         }
         return lastBillID;
+    }
+
+    public double getAllSalesAmount() {
+
+        String SQL = "SELECT SUM(amount) FROM payment";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                return resultSet.getDouble(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
+    public int getAllCompletedOrders() {
+
+        String SQL = "SELECT COUNT(*) FROM bill";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+
     }
 }
