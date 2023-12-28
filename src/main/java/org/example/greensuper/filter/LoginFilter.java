@@ -24,11 +24,10 @@ public class LoginFilter implements Filter {
         customer.setPassword(password);
 
         if(userDao.userLogin(customer)) {
-                response.getWriter().write("success");
-                chain.doFilter(request, response);
+            chain.doFilter(request, response);
         }
         else {
-                response.getWriter().write("failed");
+            response.getWriter().write("loginFailed");
         }
     }
 
