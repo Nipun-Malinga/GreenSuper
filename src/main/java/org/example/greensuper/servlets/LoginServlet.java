@@ -15,24 +15,18 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String userEmail = req.getParameter("userEmail");
-        String password = req.getParameter("password");
 
         Customer customer = new Customer();
         UserDao userDao = new UserDao();
+        HttpSession session = req.getSession();
 
         customer.setEmail(userEmail);
-        customer.setPassword(password);
+        customer = userDao.getUserDetails(userEmail);
 
-        HttpSession session = req.getSession();
-        if (userDao.userLogin(customer)) {
-            customer = userDao.getUserDetails(userEmail);
+        session.setAttribute("auth", customer.getFirstName() + " " + customer.getLastName());
+        session.setAttribute("userCredentials", customer);
 
-            session.setAttribute("auth", customer.getFirstName() + " " + customer.getLastName());
-            session.setAttribute("userCredentials", customer);
-            resp.sendRedirect("index.jsp");
-        } else {
-            resp.sendRedirect("login.jsp");
-        }
+        resp.sendRedirect("index.jsp");
     }
 
 }

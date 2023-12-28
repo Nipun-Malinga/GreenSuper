@@ -50,18 +50,67 @@ public class ProductDao {
     }
 
     public boolean removeProduct(Product product) {
+        Connection connection = DBConnection.getConnection();
+        String SQL = "DELETE FROM product WHERE product_id = ?";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setInt(1, product.getProductId());
+
+            if(preparedStatement.executeUpdate() > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return false;
     }
 
     public boolean updateProduct(Product product) {
+        Connection connection = DBConnection.getConnection();
+
+        String SQL = "UPDATE product pr" +
+                     "JOIN image img ON pr.image_id = img.image_id" +
+                     "SET " +
+                        "pr.product_name = ?," +
+                        "pr.description = ?," +
+                        "pr.price = ?," +
+                        "pr.quantity = ?," +
+                        "img.img_name = ?" +
+                    "WHERE pr.product_id = ?;";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)){
+            preparedStatement.setString(1, product.getProductName());
+            preparedStatement.setString(2, product.getDescription());
+            preparedStatement.setDouble(3, product.getPrice());
+            preparedStatement.setInt(4, product.getQuantity());
+            preparedStatement.setString(5, product.getImageName());
+
+            if(preparedStatement.executeUpdate() > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return false;
     }
 
+    //Fetching product items for a specific category,
     public List<Product> fetchProducts(Category category) {
         Connection connection = DBConnection.getConnection();
         List<Product> productList = new ArrayList<>();
 
-        String SQL = "SELECT pr.product_id, pr.category_id, pr.product_name, pr.description, pr.price, pr.quantity, pr.is_in_stock, img.image_name FROM product pr JOIN images img ON pr.image_id = img.image_id WHERE category_id = ?";
+        String SQL = "SELECT " +
+                        "pr.product_id, " +
+                        "pr.category_id, " +
+                        "pr.product_name, " +
+                        "pr.description, " +
+                        "pr.price, " +
+                        "pr.quantity, " +
+                        "pr.is_in_stock, " +
+                        "img.image_name " +
+                    "FROM product pr " +
+                    "JOIN images img ON pr.image_id = img.image_id " +
+                    "WHERE category_id = ?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setInt(1, category.getCategoryId());
 
@@ -84,14 +133,20 @@ public class ProductDao {
         return productList;
     }
 
+    //Fetching Product items for cart.
     public List<CartItem> fetchForCart(List<CartItem> cartItemList) {
         Connection connection = DBConnection.getConnection();
         List<CartItem> cartItems = new ArrayList<>();
 
-        String SQL = "SELECT pr.product_id, pr.product_name, pr.price, pr.quantity, img.image_name " +
-                        "FROM product pr J" +
-                        "OIN images img " +
-                        "ON pr.image_id = img.image_id WHERE product_id = ?";
+        String SQL = "SELECT " +
+                        "pr.product_id, " +
+                        "pr.product_name, " +
+                        "pr.price, " +
+                        "pr.quantity, " +
+                        "img.image_name " +
+                    "FROM product pr J" +
+                    "OIN images img " +
+                    "ON pr.image_id = img.image_id WHERE product_id = ?";
         if(!cartItemList.isEmpty()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
                 for (var item : cartItemList) {
@@ -117,12 +172,14 @@ public class ProductDao {
             }
         }
         return cartItems;
-        }
+    }
 
     public double fetchCartAmount(List<CartItem> cartItemList) {
         Connection connection = DBConnection.getConnection();
         double totalAmount = 0;
-        String SQL = "SELECT price FROM product WHERE product_id = ?";
+        String SQL = "SELECT price " +
+                     "FROM product " +
+                     "WHERE product_id = ?";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             for(var item : cartItemList) {
