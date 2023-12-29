@@ -37,13 +37,13 @@
             <input type="text" name="quantity" placeholder="Quantity">
         </label>
         <label>
-            <input type="file" name="image">
+            <input type="file" name="image" accept="image/jpeg, image/png">
         </label>
         <label>
             <textarea name="description"></textarea>
         </label>
         <label>
-            <input type="text" name="operation" value="add" hidden="hidden">
+            <input type="hidden" name="operation" value="add" hidden="hidden">
         </label>
         <input type="reset">
         <input type="submit">
