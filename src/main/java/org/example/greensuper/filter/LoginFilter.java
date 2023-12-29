@@ -15,8 +15,6 @@ public class LoginFilter implements Filter {
         String email = request.getParameter("userEmail");
         String password = request.getParameter("password");
 
-        System.out.println(email + password);
-
         UserDao userDao = new UserDao();
 
         if(isEmpty(email) || isEmpty(password)) {

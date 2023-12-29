@@ -9,8 +9,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.example.greensuper.dao.CartDao;
+import org.example.greensuper.dao.ProductDao;
 import org.example.greensuper.models.CartItem;
 import org.example.greensuper.models.Customer;
+import org.example.greensuper.models.Product;
 import org.example.greensuper.services.PaymentService;
 import org.example.greensuper.utils.EmailSender;
 
@@ -30,7 +32,7 @@ public class PaymentServlet extends HttpServlet {
         if (session.getAttribute("auth") != null) {
             if ("checkout".equals(action)) {
                 System.out.println(cartPrice);
-                String cancelUrl = "http://localhost:8080/GreenSuper_war_exploded/cancel_payment.jsp";
+                String cancelUrl = "http://localhost:8080/GreenSuper_war_exploded/payment_canceled.jsp";
                 String successUrl = "http://localhost:8080/GreenSuper_war_exploded/payment_approve.jsp";
 
                 System.out.println(action);
@@ -50,25 +52,30 @@ public class PaymentServlet extends HttpServlet {
                     throw new RuntimeException("An error accorded while checkout the payment.");
                 }
             } else if ("execute_payment".equals(action)) {
-                String paymentId = req.getParameter("paymentId");
+                String transaction_id = req.getParameter("paymentId");
                 String payerId = req.getParameter("PayerId");
 
-                System.out.println(paymentId + payerId);
+                System.out.println(transaction_id + payerId);
 
                 try {
-                    Payment executedPayment = PaymentService.executePayment(paymentId, payerId);
+                    Payment executedPayment = PaymentService.executePayment(transaction_id, payerId);
 
 
                     if ("approved".equalsIgnoreCase(executedPayment.getState())) {
                         Customer customer = (Customer) session.getAttribute("userCredentials");
                         EmailSender emailSender = new EmailSender();
                         CartDao cartDao = new CartDao();
+                        ProductDao productDao = new ProductDao();
 
                         int previousBillId = cartDao.getBillId();
                         int nextBillId = previousBillId + 1;
 
-                        cartDao.addTocCart(paymentId, customer, (List<CartItem>) session.getAttribute("cart_item"), cartPrice);
-                        emailSender.sendEmail(customer.getEmail(), (List<CartItem>) session.getAttribute("cart_item"), cartPrice, nextBillId);
+                        List<CartItem> cartItemList = (List<CartItem>) session.getAttribute("cart_item");
+
+                        cartDao.addTocCart(transaction_id, customer, cartItemList, cartPrice);
+                        emailSender.sendEmail(customer.getEmail(), cartItemList, cartPrice, nextBillId);
+
+                        productDao.updateQuantity(cartItemList);
 
                         resp.sendRedirect("payment_success.jsp");
                     } else {

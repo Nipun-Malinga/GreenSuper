@@ -3,6 +3,7 @@ package org.example.greensuper.models;
 public class Product {
     private int productId;
     private int categoryId;
+    private String categoryName;
     private String productName;
     private String description;
     private double price;
@@ -30,6 +31,10 @@ public class Product {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public void setProductName(String productName) {
@@ -62,6 +67,10 @@ public class Product {
 
     public int getCategoryId() {
         return categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
     }
 
     public String getProductName() {

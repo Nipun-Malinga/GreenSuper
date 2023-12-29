@@ -12,6 +12,6 @@ public class LogOutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.getSession().removeAttribute("auth");
-        resp.sendRedirect("login.jsp");
+        resp.sendRedirect("index.jsp");
     }
 }
