@@ -82,6 +82,34 @@ public class UserDao {
         return false;
     }
 
+    //Fetching All Customer details
+    public List<Customer> fetchAllCustomers() {
+        List<Customer> customerList = new ArrayList<>();
+
+        String SQL = "SELECT * FROM customer cus JOIN customer_address cus_addr ON cus.customer_id = cus_addr.customer_id ";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Customer customer = new Customer();
+
+                customer.setCustomerId(resultSet.getInt(1));
+                customer.setFirstName(resultSet.getString(2));
+                customer.setLastName(resultSet.getString(3));
+                customer.setEmail(resultSet.getString(4));
+                customer.setPhoneNumber(resultSet.getString(5));
+                customer.setHomeNumber(resultSet.getString(10));
+                customer.setStreetName(resultSet.getString(9));
+                customer.setCity(resultSet.getString(8));
+
+                customerList.add(customer);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customerList;
+    }
+
     //Fetching a specific user details from the database.
     public Customer getUserDetails(String email) {
 
@@ -107,7 +135,7 @@ public class UserDao {
         }
     }
 
-    //Counting all the user count in the database.
+    //Counting all the users counts in the database.
     public int getUserCount() {
 
         String SQL = "SELECT COUNT(*) FROM customer";
@@ -126,14 +154,12 @@ public class UserDao {
     public boolean addCustomerFeedback(Feedback feedback) {
         LocalDate localDate = LocalDate.now();
 
-        String SQL = "INSERT INTO customer_feedback (customer_id, feedback, feedback_date) VALUES (?, ?, ?)";
+        String SQL = "INSERT INTO customer_feedback (customer_id, bill_id, feedback, feedback_date) VALUES (?, ?, ?, ?)";
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setInt(1, feedback.getCustomer_id());
-
-//            preparedStatement.setInt(2, feedback.getBill_id());
-
-            preparedStatement.setString(2, feedback.getFeedback());
-            preparedStatement.setDate(3, Date.valueOf(localDate));
+            preparedStatement.setInt(2, feedback.getBill_id());
+            preparedStatement.setString(3, feedback.getFeedback());
+            preparedStatement.setDate(4, Date.valueOf(localDate));
 
             if(preparedStatement.executeUpdate() > 0) {
                 return true;
@@ -148,19 +174,19 @@ public class UserDao {
     public List<Feedback> getAllCustomerFeedbacks() {
         List<Feedback> feedbackList = new ArrayList<>();
 
-        String SQL = "SELECT * FROM customer_feedback";
+        String SQL = "SELECT cus.first_name, cus.last_name, cus_f.bill_id, cus_f.feedback_date, cus_f.feedback FROM customer_feedback cus_f JOIN customer cus ON cus_f.customer_id = cus.customer_id";
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()) {
-                feedbackList.add(
-                        new Feedback(
-                                resultSet.getInt("feedback_id"),
-                                resultSet.getInt("customer_id"),
-                                resultSet.getString("feedback"),
-                                resultSet.getDate("feedback_date").toLocalDate()
-                        )
-                );
+                Feedback feedback = new Feedback();
+                feedback.setCustomer_name(
+                        resultSet.getString("first_name") + " " + resultSet.getString("last_name"));
+                feedback.setBill_id(resultSet.getInt("bill_id"));
+                feedback.setFeedback__date(resultSet.getDate("feedback_date").toLocalDate());
+                feedback.setFeedback(resultSet.getString("feedback"));
+
+                feedbackList.add(feedback);
             }
             return feedbackList;
         } catch (SQLException e) {
