@@ -6,19 +6,21 @@ import java.time.LocalDate;
 public class Feedback {
     private int feedback_id;
     private int customer_id;
+    private String customer_name;
     private int bill_id;
-    private String feedback;
     private LocalDate feedback__date;
+    private String feedback;
 
     public Feedback() {
     }
 
-    public Feedback(int feedback_id, int customer_id, String feedback, LocalDate feedback__date) {
+    public Feedback(int feedback_id, int customer_id, String customer_name, int bill_id, LocalDate feedback__date, String feedback) {
         this.feedback_id = feedback_id;
         this.customer_id = customer_id;
-//        this.bill_id = bill_id;
-        this.feedback = feedback;
+        this.customer_name = customer_name;
+        this.bill_id = bill_id;
         this.feedback__date = feedback__date;
+        this.feedback = feedback;
     }
 
     public void setFeedback_id(int feedback_id) {
@@ -29,35 +31,43 @@ public class Feedback {
         this.customer_id = customer_id;
     }
 
-    public void setBill_id(int bill_id) {
-        this.bill_id = bill_id;
+    public void setCustomer_name(String customer_name) {
+        this.customer_name = customer_name;
     }
 
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
+    public void setBill_id(int bill_id) {
+        this.bill_id = bill_id;
     }
 
     public void setFeedback__date(LocalDate feedback__date) {
         this.feedback__date = feedback__date;
     }
 
-    public int getFeedback_id() {
-        return feedback_id;
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
     }
 
-    public int getBill_id() {
-        return bill_id;
+    public int getFeedback_id() {
+        return feedback_id;
     }
 
     public int getCustomer_id() {
         return customer_id;
     }
 
-    public String getFeedback() {
-        return feedback;
+    public String getCustomer_name() {
+        return customer_name;
+    }
+
+    public int getBill_id() {
+        return bill_id;
     }
 
     public LocalDate getFeedback__date() {
         return feedback__date;
+    }
+
+    public String getFeedback() {
+        return feedback;
     }
 }

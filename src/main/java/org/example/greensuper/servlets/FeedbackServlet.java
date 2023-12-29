@@ -43,7 +43,7 @@ public class FeedbackServlet extends HttpServlet {
                 UserDao userDao = new UserDao();
 
                 customerFeedback.setCustomer_id(customer.getCustomerId());
-//                customerFeedback.setBill_id(billID);
+                customerFeedback.setBill_id(billID);
                 customerFeedback.setFeedback(feedback);
 
                 if(userDao.addCustomerFeedback(customerFeedback)) {
