@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDao {
+    Connection connection = DBConnection.getConnection();
+
     //Add category image with details.
     public boolean addCategory(Category category, Image image) {
         // Testing(Debug)
         System.out.println(category.getCategoryType() + " " + image.getImageName());
 
-        Connection connection = DBConnection.getConnection();
         boolean imageStored = false;
         boolean categoryStored = false;
 
@@ -38,15 +39,13 @@ public class CategoryDao {
                         if (categoryDetails.executeUpdate() > 0) {
                             categoryStored = true;
                         }
-                        //Return true if image and category are stored.
-                        return imageStored && categoryStored;
                     }
                 }
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException("An error occurred while inserting product details to the database....");
         }
-        return false;
+        return imageStored && categoryStored;
     }
 
     public boolean removeCategory(Category category) {
@@ -58,7 +57,6 @@ public class CategoryDao {
     }
 
     public List<Category> fetchAllCategories() {
-        Connection connection = DBConnection.getConnection();
         List<Category> categoryList = new ArrayList<>();
 
         String SQL = "SELECT ca.category_id, ca.category_type, img.image_name FROM category ca JOIN images img ON ca.image_id = img.image_id";
@@ -72,7 +70,7 @@ public class CategoryDao {
                 ));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("An error occurred while fetching categories from the database...");
         }
 
         return categoryList;

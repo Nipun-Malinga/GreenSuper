@@ -24,6 +24,7 @@ public class CartDao {
                 try(ResultSet cart_id_key = preparedStatement.getGeneratedKeys()) {
                     if(cart_id_key.next()) {
                         int cart_id = cart_id_key.getInt(1);
+                        System.out.println("Cart table updated");
 
                         //Inserting data into cart_item table.
                         String SQL_CartItem = "INSERT INTO cart_item (cart_id, product_id, bought_quantity) VALUES (?, ?, ?)";
@@ -33,7 +34,7 @@ public class CartDao {
                                     cart_item.setInt(2, cartItem.getProductId());
                                     cart_item.setInt(3, cartItem.getBoughtQuantity());
                                 if(cart_item.executeUpdate() > 0) {
-                                    System.out.println("Cart, Cart_Item Tables Updated");
+                                    System.out.println("Cart_Item table updated");
 
                                     //Inserting data into bill table.
                                     String SQL_Bill = "INSERT INTO bill (cart_id) VALUES (?)";
@@ -70,7 +71,7 @@ public class CartDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("An error occurred while inserting data in to database after making the payment.....");
         }
     }
 
@@ -100,7 +101,7 @@ public class CartDao {
                 return resultSet.getDouble(1);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("An error occurred while calculating sales data in the payment database...");
         }
         return 0;
     }
@@ -116,9 +117,8 @@ public class CartDao {
                 return resultSet.getInt(1);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("An error occurred while fetching all completed orders from the database...");
         }
         return 0;
-
     }
 }
