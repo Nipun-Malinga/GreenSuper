@@ -46,12 +46,21 @@ public class CategoryManagementServlet extends HttpServlet {
             case "update":
                 break;
             case "delete":
+                int categoryId = Integer.parseInt(req.getParameter("categoryId"));
+
+                System.out.println(operation);
+                System.out.println(categoryId);
+                category.setCategoryId(categoryId);
+
+                if(categoryDao.removeCategory(category)) {
+                    writer.write("categoryDeleted");
+                    resp.sendRedirect("admin_categories.jsp");
+                } else {
+                    writer.write("failedToDeleteCategory");
+                    System.out.println("Failed to delete category");
+                }
                 break;
         }
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    }
 }

@@ -49,11 +49,64 @@ public class CategoryDao {
     }
 
     public boolean removeCategory(Category category) {
+
+        String SQL_delete_cart_item = "DELETE FROM cart_item WHERE product_id IN (SELECT product_id FROM product WHERE category_id = ?)";
+        String SQL_delete_products = "DELETE FROM product WHERE category_id = ?";
+        String SQL_delete_category = "DELETE FROM category WHERE category_id = ?";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_delete_cart_item)) {
+            preparedStatement.setInt(1, category.getCategoryId());
+
+            if(preparedStatement.executeUpdate() > 0) {
+                System.out.println("Cart Item Deleted SuccessFully");
+            }
+            try(PreparedStatement deleteProduct = connection.prepareStatement(SQL_delete_products)) {
+                deleteProduct.setInt(1, category.getCategoryId());
+
+                if(deleteProduct.executeUpdate() > 0) {
+                    System.out.println("Products Deleted Successfully");
+                }
+            }
+            try(PreparedStatement deleteCategory = connection.prepareStatement(SQL_delete_category)) {
+                deleteCategory.setInt(1, category.getCategoryId());
+
+                if(deleteCategory.executeUpdate() > 0) {
+                    System.out.println("Category Successfully Deleted from the database");
+                    return true;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return false;
     }
 
     public boolean updateCategory(Category category) {
         return false;
+    }
+
+    public Category fetchCategory(int categoryId) {
+        Category category = new Category();
+
+
+        String SQL = "SELECT * FROM category WHERE category_id = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setInt(1, categoryId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()) {
+                category.setCategoryId(resultSet.getInt(1));
+                category.setCategoryType(resultSet.getString(2));
+                category.setImageName(resultSet.getString(3));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return category;
     }
 
     public List<Category> fetchAllCategories() {

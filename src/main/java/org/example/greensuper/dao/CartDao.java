@@ -10,7 +10,7 @@ import java.util.List;
 public class CartDao {
     Connection connection = DBConnection.getConnection();
 
-    public void addTocCart(String paymentId, Customer customer, List<CartItem> cartItemList, double cartPrice) {
+    public void addTocCart(String transaction_id, Customer customer, List<CartItem> cartItemList, double cartPrice) {
         LocalDate date = LocalDate.now();
 
         //Inserting data into cart table.
@@ -49,9 +49,9 @@ public class CartDao {
                                                     int bill_Id = bill_id_key.getInt(1);
 
                                                     //Inserting data into payment table.
-                                                    String SQL_Payment = "INSERT INTO payment (payment_id, bill_id, payment_date, amount) VALUES (?, ?, ?, ?)";
+                                                    String SQL_Payment = "INSERT INTO payment (transaction_id, bill_id, payment_date, amount) VALUES (?, ?, ?, ?)";
                                                     try(PreparedStatement inserting_to_payment = connection.prepareStatement(SQL_Payment)) {
-                                                        inserting_to_payment.setString(1, paymentId);
+                                                        inserting_to_payment.setString(1, transaction_id);
                                                         inserting_to_payment.setInt(2, bill_Id);
                                                         inserting_to_payment.setDate(3, Date.valueOf(date));
                                                         inserting_to_payment.setDouble(4, cartPrice);

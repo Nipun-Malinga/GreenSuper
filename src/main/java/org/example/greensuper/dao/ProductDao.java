@@ -10,10 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDao {
+    Connection connection = DBConnection.getConnection();
     public boolean addProduct(Product product, Image image) {
         //Testing (Debug)
-        Connection connection = DBConnection.getConnection();
-
         String SQL = "INSERT INTO images(image_name) VALUES (?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, image.getImageName());
@@ -44,13 +43,12 @@ public class ProductDao {
                 }
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException("An error occurred while adding product into the database.");
         }
         return false;
     }
 
     public boolean removeProduct(Product product) {
-        Connection connection = DBConnection.getConnection();
         String SQL = "DELETE FROM product WHERE product_id = ?";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
@@ -66,8 +64,6 @@ public class ProductDao {
     }
 
     public boolean updateProduct(Product product) {
-        Connection connection = DBConnection.getConnection();
-
         String SQL = "UPDATE product pr" +
                      "JOIN image img ON pr.image_id = img.image_id" +
                      "SET " +
@@ -89,14 +85,31 @@ public class ProductDao {
                 return true;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("An error occurred while updating product in the database.");
         }
         return false;
     }
 
+    public void updateQuantity(List<CartItem> cartItemList) {
+        String SQL = "UPDATE product SET quantity = ? WHERE product_id = ?";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            for (var cart_item : cartItemList) {
+                preparedStatement.setInt(1, cart_item.getQuantity()-cart_item.getBoughtQuantity());
+                preparedStatement.setInt(2, cart_item.getProductId());
+
+                if(preparedStatement.executeUpdate() > 0) {
+                    System.out.println("Product: " + cart_item.getProductName() + " Quantity Updated.");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //Fetching product items for a specific category,
     public List<Product> fetchProducts(Category category) {
-        Connection connection = DBConnection.getConnection();
         List<Product> productList = new ArrayList<>();
 
         String SQL = "SELECT " +
@@ -128,6 +141,31 @@ public class ProductDao {
                 ));
             }
         } catch (SQLException e) {
+            throw new RuntimeException("An error occurred while fetching products from the database.");
+        }
+        return productList;
+    }
+
+    // Fetching All products
+    public List<Product> fetchAllProducts() {
+        String SQL = "SELECT * FROM product JOIN category ON product.category_id = category.category_id JOIN images ON product.product_id = images.image_id";
+        List<Product> productList = new ArrayList<>();
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()) {
+                Product product = new Product();
+                product.setProductId(resultSet.getInt("product_id"));
+                product.setProductName(resultSet.getString("product_name"));
+                product.setImageName(resultSet.getString("image_name"));
+                product.setCategoryName(resultSet.getString("category_type"));
+                product.setQuantity(resultSet.getInt("quantity"));
+                product.setPrice(resultSet.getDouble("price"));
+
+                productList.add(product);
+            }
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return productList;
@@ -135,7 +173,6 @@ public class ProductDao {
 
     //Fetching Product items for cart.
     public List<CartItem> fetchForCart(List<CartItem> cartItemList) {
-        Connection connection = DBConnection.getConnection();
         List<CartItem> cartItems = new ArrayList<>();
 
         String SQL = "SELECT " +
@@ -168,14 +205,13 @@ public class ProductDao {
                }
             }
             catch (SQLException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("An error occurred while fetching product info from the database.");
             }
         }
         return cartItems;
     }
 
     public double fetchCartAmount(List<CartItem> cartItemList) {
-        Connection connection = DBConnection.getConnection();
         double totalAmount = 0;
         String SQL = "SELECT price " +
                      "FROM product " +
@@ -192,7 +228,7 @@ public class ProductDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("An error occurred while calculating cart amount.");
         }
         return totalAmount;
     }
