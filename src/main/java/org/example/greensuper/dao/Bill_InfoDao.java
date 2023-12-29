@@ -11,8 +11,8 @@ public class Bill_InfoDao {
     public boolean isBillValid(Bill bill) {
         Connection connection = DBConnection.getConnection();
 
-        String SQL = "SELECT bill_id FROM bill WHERE bill_id = ?";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)){
+        String SQL_billValidation = "SELECT bill_id FROM bill WHERE bill_id = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_billValidation)){
             preparedStatement.setInt(1, bill.getBillId());
 
             ResultSet resultSet = preparedStatement.executeQuery();
