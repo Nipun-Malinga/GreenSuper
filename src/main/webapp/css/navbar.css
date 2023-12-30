@@ -8,11 +8,18 @@
     align-items: center;
     box-shadow: 0 0 10px #000;
     background: #fff;
+    position: relative;
+
 }
 
+.logo {
+     position: relative;
+     top: -0.5rem;
+ }
+
 .nav__img {
-    height: 1rem !important;
-    visibility: hidden ;
+    height: 7rem !important;
+    object-fit: contain;
 }
 
 #chk1{
@@ -24,14 +31,6 @@ i{
 }
 header .logo{
     flex: 1;
-}
-.logo a{
-    display: flex;
-    align-items: center;
-    font-size: 20px;
-}
-.logo a:hover{
-    color: #fff;
 }
 
 .search-box button{
@@ -51,6 +50,9 @@ header ul {
     flex:2;
     display: flex;
     justify-content: space-evenly;
+    position: relative;
+    right: 10rem;
+    z-index: 99;
 }
 header ul li{
     list-style: none;
