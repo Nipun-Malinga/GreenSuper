@@ -60,8 +60,8 @@ public class CartServlet extends HttpServlet {
                 }
             }
         }
-        session.setAttribute("cartPrice", productDao.fetchCartAmount(cartItemList));
-        session.setAttribute("cart_item", productDao.fetchForCart(cartItemList));
+        session.setAttribute("cartPrice", productDao.getCartAmount(cartItemList));
+        session.setAttribute("cart_item", productDao.getForCart(cartItemList));
     }
 
 }

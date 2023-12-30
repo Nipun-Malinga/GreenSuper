@@ -51,7 +51,7 @@ public class QuantityIncDecServlet extends HttpServlet {
                 }
             }
         }
-        session.setAttribute("cartPrice", productDao.fetchCartAmount(cartItemList));
+        session.setAttribute("cartPrice", productDao.getCartAmount(cartItemList));
 
     }
 }

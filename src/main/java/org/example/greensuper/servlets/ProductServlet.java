@@ -27,9 +27,9 @@ public class ProductServlet extends HttpServlet {
             int categoryId = Integer.parseInt(req.getParameter("categoryId"));
             category.setCategoryId(Integer.parseInt(req.getParameter("categoryId")));
 
-            session.setAttribute("product", productDao.fetchProducts(category));
+            session.setAttribute("product", productDao.getProducts(category));
 
-            session.setAttribute("categoryName", categoryDao.fetchCategory(categoryId));
+            session.setAttribute("categoryName", categoryDao.getCategory(categoryId));
             RequestDispatcher requestDispatcher = req.getRequestDispatcher("product.jsp");
             requestDispatcher.forward(req, resp);
         }

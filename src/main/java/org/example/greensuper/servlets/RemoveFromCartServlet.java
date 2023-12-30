@@ -26,7 +26,7 @@ public class RemoveFromCartServlet extends HttpServlet {
             List<CartItem> cartItemList = (List<CartItem>) session.getAttribute("cart_item");
             Predicate<CartItem> predicate = item -> item.getProductId() == productId;
             cartItemList.removeIf(predicate);
-            session.setAttribute("cartPrice", productDao.fetchCartAmount(cartItemList));
+            session.setAttribute("cartPrice", productDao.getCartAmount(cartItemList));
             resp.sendRedirect("cart.jsp");
         }
     }

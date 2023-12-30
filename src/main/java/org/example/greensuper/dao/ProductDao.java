@@ -109,7 +109,7 @@ public class ProductDao {
     }
 
     //Fetch Single Product Information
-    public Product fetchSingleProduct(int productId) {
+    public Product getSingleProduct(int productId) {
         Product product = new Product();
 
         String SQL = "SELECT * FROM product JOIN category ON product.category_id = category.category_id WHERE  product_id = ?";
@@ -134,7 +134,7 @@ public class ProductDao {
     }
 
     //Fetching product items for a specific category,
-    public List<Product> fetchProducts(Category category) {
+    public List<Product> getProducts(Category category) {
         List<Product> productList = new ArrayList<>();
 
         String SQL = "SELECT " +
@@ -172,7 +172,7 @@ public class ProductDao {
     }
 
     // Fetching All products
-    public List<Product> fetchAllProducts() {
+    public List<Product> getAllProducts() {
         String SQL = "SELECT * FROM product JOIN category ON product.category_id = category.category_id JOIN images ON product.product_id = images.image_id";
         List<Product> productList = new ArrayList<>();
 
@@ -197,7 +197,7 @@ public class ProductDao {
     }
 
     //Fetching Product items for cart.
-    public List<CartItem> fetchForCart(List<CartItem> cartItemList) {
+    public List<CartItem> getForCart(List<CartItem> cartItemList) {
         List<CartItem> cartItems = new ArrayList<>();
 
         String SQL = "SELECT " +
@@ -236,7 +236,7 @@ public class ProductDao {
         return cartItems;
     }
 
-    public double fetchCartAmount(List<CartItem> cartItemList) {
+    public double getCartAmount(List<CartItem> cartItemList) {
         double totalAmount = 0;
         String SQL = "SELECT price " +
                      "FROM product " +

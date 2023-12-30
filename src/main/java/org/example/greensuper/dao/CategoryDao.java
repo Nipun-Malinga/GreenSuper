@@ -86,7 +86,7 @@ public class CategoryDao {
         return false;
     }
 
-    public Category fetchCategory(int categoryId) {
+    public Category getCategory(int categoryId) {
         Category category = new Category();
 
 
@@ -109,7 +109,7 @@ public class CategoryDao {
         return category;
     }
 
-    public List<Category> fetchAllCategories() {
+    public List<Category> getAllCategories() {
         List<Category> categoryList = new ArrayList<>();
 
         String SQL = "SELECT ca.category_id, ca.category_type, img.image_name FROM category ca JOIN images img ON ca.image_id = img.image_id";
