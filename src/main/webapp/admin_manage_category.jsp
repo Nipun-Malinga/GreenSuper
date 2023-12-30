@@ -19,14 +19,16 @@
     Category category = categoryDao.getCategory(categoryId);
     System.out.println(category.getCategoryId());
 %>
-<form class="product-form">
+<form class="product-form" action="categoryManagement" method="post" enctype="multipart/form-data">
     <h1> Update Category</h1>
     <label for="product-name">Category Name</label>
-    <input type="text" id="product-name" name="product-name" value="<%=category.getCategoryType()%>" required>
+    <input type="text" id="product-name" name="categoryName" value="<%=category.getCategoryType()%>" required>
 
-    <label for="product-image">Category Image</label>
-    <input type="file" id="product-image" name="product-image" required><br><br>
+    <label for="image">Category Image</label>
+    <input type="file" id="image" name="category-image" required><br><br>
 
+    <input type="hidden" name="operation" value="update">
+    <input type="hidden" name="categoryId" value="<%=category.getCategoryId()%>">
     <button type="submit">Update</button>
     <button type="reset">Cancel</button>
 </form>

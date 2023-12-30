@@ -26,10 +26,10 @@
     <link rel="stylesheet" href="./css/admin/addproduct.css">
 </head>
 <body>
-<form class="product-form">
+<form class="product-form" action="productManagement" method="post" enctype="multipart/form-data">
     <h1> Update Product</h1>
     <label for="product-name">Product Name</label>
-    <input type="text" id="product-name" name="product" value="<%=product.getProductName()%>" required>
+    <input type="text" id="product-name" name="productName" value="<%=product.getProductName()%>" required>
 
     <label for="product-price">Product Price</label>
     <input type="number" id="product-price" name="price" step="0.01" value="<%=product.getPrice()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
@@ -38,7 +38,7 @@
     <input type="number" id="product-quantity" name="quantity" value="<%=product.getQuantity()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
 
     <label for="product-image">Product Image</label>
-    <input type="file" id="product-image" name="product-image" accept="image/jpeg, image/png" required><br><br>
+    <input type="file" id="product-image" name="image" accept="image/jpeg, image/png" required><br><br>
 
     <label for="category">Category</label>
     <select id="category" name="category" required>
@@ -49,8 +49,10 @@
     </select>
 
     <label for="description">Description</label>
-    <textarea id="description" name="description" rows="4" cols="50"></textarea>
+    <textarea id="description" name="description"  rows="4" cols="50"><%=product.getDescription()%></textarea>
 
+    <input type="hidden" value="update" name="operation">
+    <input type="hidden" value="<%=product.getProductId()%>" name="productId">
     <button type="submit">Update</button>
     <button type="reset">Cancel</button>
 </form>

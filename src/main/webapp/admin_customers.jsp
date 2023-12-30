@@ -17,7 +17,7 @@
             <input type="text" placeholder="Search here..." />
         </div>
     </div>
-    <br /><br /><br /><br />
+    <br /><br /><br /><br/>
 
     <main class="table">
         <section class="table__header">

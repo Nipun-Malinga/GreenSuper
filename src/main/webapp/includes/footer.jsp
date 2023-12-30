@@ -8,7 +8,6 @@
 <%--        </ul>--%>
 <%--    <p class="footer__copyright">Copyright &copy; 2023 <span class="footer__highlight">Green Super</span></p>--%>
 <%--    </footer>--%>
-
 <footer class="footer">
     <div class="container">
         <div class="row">

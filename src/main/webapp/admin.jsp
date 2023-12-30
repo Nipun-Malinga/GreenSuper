@@ -72,7 +72,7 @@
                     <%
                         for(var bill_id: feedbackList) {
                     %>
-                    <span class="data-list"><%=bill_id.getCustomer_id()%></span>
+                    <span class="data-list"><%=bill_id.getBill_id()%></span>
                     <%
                         }
                     %>
