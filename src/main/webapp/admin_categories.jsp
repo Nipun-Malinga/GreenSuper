@@ -6,7 +6,7 @@
 
 <%
     CategoryDao categoryDao = new CategoryDao();
-    List<Category> categoryList = categoryDao.fetchAllCategories();
+    List<Category> categoryList = categoryDao.getAllCategories();
 %>
 
 <section class="dashboard">

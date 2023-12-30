@@ -6,7 +6,7 @@
 
 <%
   ProductDao productDao = new ProductDao();
-  List<Product> productList = productDao.fetchAllProducts();
+  List<Product> productList = productDao.getAllProducts();
 %>
 
 <section class="dashboard">
