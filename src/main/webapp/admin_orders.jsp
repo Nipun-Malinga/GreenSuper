@@ -1,6 +1,13 @@
-
+<%@ page import="org.example.greensuper.dao.Bill_InfoDao" %>
+<%@ page import="java.util.List" %>
+<%@ page import="org.example.greensuper.models.Order" %>
 <%@ include file="admin/admin_includes/header.jsp" %>
 <%@ include file="admin/admin_includes/navbar.jsp" %>
+
+<%
+    Bill_InfoDao billInfoDao = new Bill_InfoDao();
+    List<Order> orderList = billInfoDao.getAllOrderDetails();
+%>
 
 <section class="dashboard">
     <div class="top">
@@ -28,13 +35,20 @@
                 </tr>
                 </thead>
                 <tbody>
+                <%
+                    if(orderList != null) {
+                        for (var order : orderList) {
+                %>
                 <tr>
-                    <td>001</td>
-                    <td>001</td>
-                    <td>2023-01-02</td>
-                    <td><strong>Rs.150.00</strong></td>
-                    <td>Paid</td>
+                    <td><%=order.getBillId()%></td>
+                    <td><%=order.getCustomerId()%></td>
+                    <td><%=order.getDate()%></td>
+                    <td><strong><%=order.getBillTotal()%></strong></td>
+                    <td><%=order.getStatus()%></td>
                 </tr>
+                <%      }
+                    }
+                %>
                 </tbody>
             </table>
         </section>
