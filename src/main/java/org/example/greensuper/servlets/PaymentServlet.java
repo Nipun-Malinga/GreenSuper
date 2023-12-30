@@ -12,7 +12,6 @@ import org.example.greensuper.dao.CartDao;
 import org.example.greensuper.dao.ProductDao;
 import org.example.greensuper.models.CartItem;
 import org.example.greensuper.models.Customer;
-import org.example.greensuper.models.Product;
 import org.example.greensuper.services.PaymentService;
 import org.example.greensuper.utils.EmailSender;
 
@@ -60,6 +59,7 @@ public class PaymentServlet extends HttpServlet {
                 try {
                     Payment executedPayment = PaymentService.executePayment(transaction_id, payerId);
 
+                    String paymentStatus;
 
                     if ("approved".equalsIgnoreCase(executedPayment.getState())) {
                         Customer customer = (Customer) session.getAttribute("userCredentials");
@@ -70,9 +70,10 @@ public class PaymentServlet extends HttpServlet {
                         int previousBillId = cartDao.getBillId();
                         int nextBillId = previousBillId + 1;
 
+                        paymentStatus = "paid";
                         List<CartItem> cartItemList = (List<CartItem>) session.getAttribute("cart_item");
 
-                        cartDao.addTocCart(transaction_id, customer, cartItemList, cartPrice);
+                        cartDao.storingSalesInfo(transaction_id, customer, cartItemList, cartPrice, paymentStatus);
                         emailSender.sendEmail(customer.getEmail(), cartItemList, cartPrice, nextBillId);
 
                         productDao.updateQuantity(cartItemList);
