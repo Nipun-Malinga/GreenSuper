@@ -60,19 +60,26 @@ public class ProductManagementServlet extends HttpServlet {
                 }
                 break;
             case "update":
+                int update_product_id = Integer.parseInt(req.getParameter("productId"));
                 String updated_product_name = req.getParameter("productName");
-                String updated_description = req.getParameter("description");
-                int updated_price = Integer.parseInt(req.getParameter("price"));
+                double updated_price = Double.parseDouble(req.getParameter("price"));
+                int update_categoryId = Integer.parseInt(req.getParameter("category"));
                 int updated_quantity = Integer.parseInt(req.getParameter("quantity"));
                 Part updated_image = req.getPart("image");
+                String updated_description = req.getParameter("description");
 
                 String update_image_name = handling.getFileName(updated_image);
 
+                System.out.println(updated_product_name + " " + updated_description + " " + updated_price + " " + update_categoryId
+                        + " " + updated_quantity + " " + update_image_name);
+
+                product.setProductId(update_product_id);
                 product.setProductName(updated_product_name);
-                product.setDescription(updated_description);
                 product.setPrice(updated_price);
                 product.setQuantity(updated_quantity);
+                product.setCategoryId(update_categoryId);
                 product.setImageName(update_image_name);
+                product.setDescription(updated_description);
 
                 if(productDao.updateProduct(product) && handling.moveFile(uploadPath, updated_image)) {
                     writer.write("productUpdated");

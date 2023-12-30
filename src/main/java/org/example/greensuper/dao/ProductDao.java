@@ -64,22 +64,19 @@ public class ProductDao {
     }
 
     public boolean updateProduct(Product product) {
-        String SQL = "UPDATE product pr" +
-                     "JOIN image img ON pr.image_id = img.image_id" +
-                     "SET " +
-                        "pr.product_name = ?," +
-                        "pr.description = ?," +
-                        "pr.price = ?," +
-                        "pr.quantity = ?," +
-                        "img.img_name = ?" +
-                    "WHERE pr.product_id = ?;";
+        String SQL = "UPDATE product pr " +
+                "JOIN images img ON pr.image_id = img.image_id " +
+                "SET pr.category_id = ?, pr.product_name = ?, pr.price = ?, pr.quantity = ?, pr.description = ?, img.image_name = ? " +
+                "WHERE pr.product_id = ?";
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)){
-            preparedStatement.setString(1, product.getProductName());
-            preparedStatement.setString(2, product.getDescription());
+            preparedStatement.setInt(1, product.getCategoryId());
+            preparedStatement.setString(2, product.getProductName());
             preparedStatement.setDouble(3, product.getPrice());
             preparedStatement.setInt(4, product.getQuantity());
-            preparedStatement.setString(5, product.getImageName());
+            preparedStatement.setString(5, product.getDescription());
+            preparedStatement.setString(6, product.getImageName());
+            preparedStatement.setInt(7, product.getProductId());
 
             if(preparedStatement.executeUpdate() > 0) {
                 return true;
@@ -173,9 +170,17 @@ public class ProductDao {
 
     // Fetching All products
     public List<Product> getAllProducts() {
-        String SQL = "SELECT * FROM product JOIN category ON product.category_id = category.category_id JOIN images ON product.product_id = images.image_id";
-        List<Product> productList = new ArrayList<>();
+        String SQL = "SELECT product.product_id, " +
+                            "product.product_name, " +
+                            "images.image_name, " +
+                            "category.category_type, " +
+                            "product.quantity, " +
+                            "product.price " +
+                    "FROM product JOIN category " +
+                    "ON product.category_id = category.category_id " +
+                    "JOIN images ON product.image_id = images.image_id";
 
+        List<Product> productList = new ArrayList<>();
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
