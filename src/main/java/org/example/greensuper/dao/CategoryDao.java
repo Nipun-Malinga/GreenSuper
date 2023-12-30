@@ -83,6 +83,21 @@ public class CategoryDao {
     }
 
     public boolean updateCategory(Category category) {
+        String SQL = "UPDATE category JOIN images ON category.category_id = images.image_id SET category.category_type = ?, images.image_name = ? WHERE category.category_id = ?";
+
+        System.out.println(category.getCategoryType() + category.getImageName());
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setString(1, category.getCategoryType());
+            preparedStatement.setString(2, category.getImageName());
+            preparedStatement.setInt(3, category.getCategoryId());
+
+            if(preparedStatement.executeUpdate() > 0) {
+                System.out.println("Category Updated Successfully.");
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return false;
     }
 

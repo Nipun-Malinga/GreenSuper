@@ -23,6 +23,7 @@ public class CategoryManagementServlet extends HttpServlet {
         Category category = new Category();
         Image image = new Image();
 
+        String uploadPath = "D:\\University\\Projects\\Java\\Practices\\GreenSuper\\src\\main\\webapp\\uploadedImages\\category";
         String operation = req.getParameter("operation");
 
         switch (operation) {
@@ -31,10 +32,8 @@ public class CategoryManagementServlet extends HttpServlet {
                 Part categoryImage = req.getPart("image");
 
                 String imageName = handling.getFileName(categoryImage);
-                String uploadPath = "D:\\University\\Projects\\Java\\Practices\\GreenSuper\\src\\main\\webapp\\uploadedImages\\category";
 
                 category.setCategoryType(newCategory);
-
                 image.setImageName(imageName);
 
                 if(categoryDao.addCategory(category, image) && handling.moveFile(uploadPath, categoryImage)) {
@@ -44,6 +43,22 @@ public class CategoryManagementServlet extends HttpServlet {
                 }
                 break;
             case "update":
+                int update_categoryId = Integer.parseInt(req.getParameter("categoryId"));
+                String update_categoryName = req.getParameter("categoryName");
+                Part update_image = req.getPart("category-image");
+
+                String update_imageName = handling.getFileName(update_image);
+
+                category.setCategoryId(update_categoryId);
+                category.setCategoryType(update_categoryName);
+                category.setImageName(update_imageName);
+
+                if(categoryDao.updateCategory(category) && handling.moveFile(uploadPath, update_image)) {
+                    writer.write("categoryUpdated");
+                } else {
+                    writer.write("failedToUpdateCategory");
+                }
+
                 break;
             case "delete":
                 int categoryId = Integer.parseInt(req.getParameter("categoryId"));
@@ -62,5 +77,4 @@ public class CategoryManagementServlet extends HttpServlet {
                 break;
         }
     }
-
 }
