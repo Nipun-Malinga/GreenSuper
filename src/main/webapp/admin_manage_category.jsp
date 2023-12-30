@@ -14,17 +14,18 @@
 </head>
 <body>
 <%
+    if(request.getParameter("categoryId") != null) {
     int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-    Category category = categoryDao.fetchCategory(categoryId);
+    Category category = categoryDao.getCategory(categoryId);
     System.out.println(category.getCategoryId());
 %>
 <form class="product-form">
     <h1> Update Category</h1>
     <label for="product-name">Category Name</label>
-    <input type="text" id="product-name" name="product-name" placeholder="<%=category.getCategoryType()%>" required>
+    <input type="text" id="product-name" name="product-name" value="<%=category.getCategoryType()%>" required>
 
     <label for="product-image">Category Image</label>
-    <input type="file" id="product-image" name="product-image"><br><br><br>
+    <input type="file" id="product-image" name="product-image" required><br><br>
 
     <button type="submit">Update</button>
     <button type="reset">Cancel</button>
@@ -37,3 +38,9 @@
     </form>
 </body>
 </html>
+
+<%
+    }else {
+        response.sendRedirect("admin_categories.jsp");
+    }
+%>

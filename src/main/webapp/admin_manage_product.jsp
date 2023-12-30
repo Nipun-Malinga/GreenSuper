@@ -9,10 +9,11 @@
     ProductDao productDao = new ProductDao();
     CategoryDao categoryDao = new CategoryDao();
 
-    List<Category> categoryList = categoryDao.fetchAllCategories();
+    List<Category> categoryList = categoryDao.getAllCategories();
 
+    if(request.getParameter("productId") != null) {
     int productId = Integer.parseInt(request.getParameter("productId"));
-    Product product = productDao.fetchSingleProduct(productId);
+    Product product = productDao.getSingleProduct(productId);
 
 %>
 
@@ -37,11 +38,11 @@
     <input type="number" id="product-quantity" name="quantity" value="<%=product.getQuantity()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
 
     <label for="product-image">Product Image</label>
-    <input type="file" id="product-image" name="product-image" accept="image/jpeg, image/png"><br><br>
+    <input type="file" id="product-image" name="product-image" accept="image/jpeg, image/png" required><br><br>
 
     <label for="category">Category</label>
     <select id="category" name="category" required>
-        <option selected>Current Category: <%=product.getCategoryName()%></option>
+        <option value="<%=product.getCategoryId()%>" selected>Current Category: <%=product.getCategoryName()%></option>
         <% for (var category : categoryList) { %>
         <option value="<%=category.getCategoryId()%>"><%=category.getCategoryType()%></option>
         <% } %>
@@ -61,3 +62,9 @@
 </form>
 </body>
 </html>
+
+<%
+    } else {
+        response.sendRedirect("./admin_products.jsp");
+    }
+%>
