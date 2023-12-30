@@ -11,60 +11,8 @@
     List<Feedback> feedbackList = userDao.getAllCustomerFeedbacks();
 %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="./css/admin/style.css">
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-
-    <title>Admin Dashboard Panel</title>
-</head>
-<body>
-<nav>
-    <div class="logo-name">
-        <div class="logo-image">
-            <img src="images/logo.png" alt="">
-        </div>
-
-        <span class="logo_name">Green Super</span>
-    </div>
-
-    <div class="menu-items">
-        <ul class="nav-links">
-            <li><a href="index.html">
-                <i class="uil uil-estate"></i>
-                <span class="link-name">Dashboard</span>
-            </a></li>
-            <li><a href="categories.html">
-                <i class="uil uil-box"></i>
-                <span class="link-name">Categories</span>
-            </a></li>
-            <li><a href="products.html">
-                <i class="uil uil-pizza-slice"></i>
-                <span class="link-name">Products</span>
-            </a></li>
-            <li><a href="customers.html">
-                <i class="uil uil-user"></i>
-                <span class="link-name">Customers</span>
-            </a></li>
-            <li><a href="orders.html">
-                <i class="uil uil-transaction"></i>
-                <span class="link-name">Orders</span>
-            </a></li>
-        </ul>
-
-        <ul class="logout-mode">
-            <li><a href="#">
-                <i class="uil uil-signout"></i>
-                <span class="link-name">Logout</span>
-            </a></li>
-        </ul>
-    </div>
-</nav>
+<%@ include file="admin/admin_includes/header.jsp"%>
+<%@ include file="admin/admin_includes/navbar.jsp"%>
 
 <section class="dashboard">
     <div class="top">
@@ -110,33 +58,49 @@
 
             <div class="activity-data">
                 <div class="data names">
-                    <span class="data-title">Customer ID</span>
+                    <span class="data-title">Customer Name</span>
                     <%
-                        for(var customer_id : feedbackList) {
+                        for(var customer_name: feedbackList) {
                     %>
-                        <span class="data-list"><%=customer_id.getCustomer_id()%></span>
+                        <span class="data-list"><%=customer_name.getCustomer_name()%></span>
                     <%
                         }
                     %>
                 </div>
                 <div class="data email">
                     <span class="data-title">Bill ID</span>
-                    <span class="data-list">1</span>
+                    <%
+                        for(var bill_id: feedbackList) {
+                    %>
+                    <span class="data-list"><%=bill_id.getCustomer_id()%></span>
+                    <%
+                        }
+                    %>
                 </div>
                 <div class="data joined">
                     <span class="data-title">Date</span>
-                    <span class="data-list">2022-02-12</span>
+                    <%
+                        for(var date: feedbackList) {
+                    %>
+                    <span class="data-list"><%=date.getFeedback__date()%></span>
+                    <%
+                        }
+                    %>
 
                 </div>
                 <div class="data type">
                     <span class="data-title">Feedback</span>
-
+                    <%
+                        for(var feedback: feedbackList) {
+                    %>
+                    <span class="data-list"><%=feedback.getFeedback()%></span>
+                    <%
+                        }
+                    %>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<script src="./js/script.js"></script>
-</body>
-</html>
+<%@ include file="admin/admin_includes/end.jsp"%>
