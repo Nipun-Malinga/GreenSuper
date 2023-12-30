@@ -39,7 +39,8 @@ public class RegisterServlet extends HttpServlet {
         UserDao userDao = new UserDao();
         //Front end response. (Under development)
         if (userDao.registerUser(customer)) {
-            writer.write("userRegistrationSuccess");
+            System.out.println("userRegistrationSuccess");
+            resp.sendRedirect("login.jsp");
         } else {
             writer.write("userRegistrationFailed");
         }

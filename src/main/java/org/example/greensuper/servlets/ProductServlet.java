@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.example.greensuper.dao.CategoryDao;
 import org.example.greensuper.dao.ProductDao;
 import org.example.greensuper.models.Category;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 @WebServlet("/product")
 public class ProductServlet extends HttpServlet {
     ProductDao productDao = new ProductDao();
+    CategoryDao categoryDao = new CategoryDao();
     Category category = new Category();
 
     @Override
@@ -22,9 +24,12 @@ public class ProductServlet extends HttpServlet {
         HttpSession session = req.getSession();
 
         if(req.getParameter("categoryId") != null) {
+            int categoryId = Integer.parseInt(req.getParameter("categoryId"));
             category.setCategoryId(Integer.parseInt(req.getParameter("categoryId")));
 
             session.setAttribute("product", productDao.fetchProducts(category));
+
+            session.setAttribute("categoryName", categoryDao.fetchCategory(categoryId));
             RequestDispatcher requestDispatcher = req.getRequestDispatcher("product.jsp");
             requestDispatcher.forward(req, resp);
         }

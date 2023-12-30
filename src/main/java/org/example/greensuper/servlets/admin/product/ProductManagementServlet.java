@@ -87,6 +87,7 @@ public class ProductManagementServlet extends HttpServlet {
 
                 if(productDao.removeProduct(product)) {
                     writer.write("productDeleted");
+                    resp.sendRedirect("admin_products.jsp");
                 } else {
                     writer.write("failedToDeleteProduct");
                 }
@@ -98,7 +99,7 @@ public class ProductManagementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
         session.setAttribute("category", categoryDao.fetchAllCategories());
-        resp.sendRedirect("add_product_admin.jsp");
+        resp.sendRedirect("admin_add_product.jsp");
     }
 
 }

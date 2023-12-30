@@ -108,6 +108,31 @@ public class ProductDao {
         }
     }
 
+    //Fetch Single Product Information
+    public Product fetchSingleProduct(int productId) {
+        Product product = new Product();
+
+        String SQL = "SELECT * FROM product JOIN category ON product.category_id = category.category_id WHERE  product_id = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+
+            preparedStatement.setInt(1, productId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                product.setProductId(resultSet.getInt(1));
+                product.setCategoryId(resultSet.getInt(2));
+                product.setProductName(resultSet.getString(3));
+                product.setDescription(resultSet.getString(4));
+                product.setPrice(resultSet.getDouble(5));
+                product.setQuantity(resultSet.getInt(6));
+                product.setCategoryName(resultSet.getString(10));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return product;
+    }
+
     //Fetching product items for a specific category,
     public List<Product> fetchProducts(Category category) {
         List<Product> productList = new ArrayList<>();
