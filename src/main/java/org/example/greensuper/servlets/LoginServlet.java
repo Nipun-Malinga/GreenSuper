@@ -9,6 +9,7 @@ import org.example.greensuper.dao.UserDao;
 import org.example.greensuper.models.Customer;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -26,7 +27,8 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("auth", customer.getFirstName() + " " + customer.getLastName());
         session.setAttribute("userCredentials", customer);
 
-        resp.sendRedirect("index.jsp");
+        PrintWriter writer = resp.getWriter();
+        writer.write("./index.jsp");
     }
 
 }

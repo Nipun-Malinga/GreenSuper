@@ -6,7 +6,6 @@ import org.example.greensuper.dao.UserDao;
 import org.example.greensuper.models.Customer;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebFilter("/login")
 public class LoginFilter implements Filter {
@@ -17,6 +16,7 @@ public class LoginFilter implements Filter {
 
         UserDao userDao = new UserDao();
 
+        System.out.println(email + password);
         if(isEmpty(email) || isEmpty(password)) {
             response.getWriter().write("emptyParameters");
         } else {

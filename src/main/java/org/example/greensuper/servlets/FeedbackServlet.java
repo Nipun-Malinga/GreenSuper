@@ -31,6 +31,7 @@ public class FeedbackServlet extends HttpServlet {
             int billID = Integer.parseInt(billIdParam);
             String feedback = req.getParameter("feedback");
 
+            System.out.println(billID + feedback);
             Bill_InfoDao billInfoDao = new Bill_InfoDao();
             Bill bill = new Bill();
             bill.setBillId(billID);
