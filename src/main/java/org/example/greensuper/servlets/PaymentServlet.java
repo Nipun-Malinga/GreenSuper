@@ -54,8 +54,6 @@ public class PaymentServlet extends HttpServlet {
                 String transaction_id = req.getParameter("paymentId");
                 String payerId = req.getParameter("PayerId");
 
-                System.out.println(transaction_id + payerId);
-
                 try {
                     Payment executedPayment = PaymentService.executePayment(transaction_id, payerId);
 
