@@ -5,6 +5,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+
+    if(session.getAttribute("adminAuth") == null) {
+        response.sendRedirect("./admin_login.jsp");
+    }
+
     UserDao userDao = new UserDao();
     CartDao cartDao = new CartDao();
 

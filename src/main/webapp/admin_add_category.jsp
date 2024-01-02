@@ -1,4 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+
+    if(session.getAttribute("adminAuth") == null) {
+        response.sendRedirect("./admin_login.jsp");
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category Form</title>
-    <link rel="stylesheet" href="./css/admin/addproduct.css">
+    <link rel="stylesheet" href="css/admin/addProduct.css">
 </head>
 <body>
 <form class="product-form" method="post" action="categoryManagement" enctype="multipart/form-data">

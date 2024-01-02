@@ -5,6 +5,12 @@
 <%@ include file="admin/admin_includes/navbar.jsp"%>
 
 <%
+  response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+
+  if(session.getAttribute("adminAuth") == null) {
+    response.sendRedirect("./admin_login.jsp");
+  }
+
   ProductDao productDao = new ProductDao();
   List<Product> productList = productDao.getAllProducts();
 %>
@@ -52,6 +58,7 @@
           <td><%=product.getProductId()%></td>
           <td><%=product.getProductName()%></td>
           <td><img src="./uploadedImages/product/<%=product.getImageName()%>" alt="" /></td>
+          <%System.out.printf(product.getImageName());%>
           <td><%=product.getCategoryName()%></td>
           <td><%=product.getQuantity()%></td>
           <td><strong><%=product.getPrice()%></strong></td>

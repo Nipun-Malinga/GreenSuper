@@ -6,6 +6,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+
+    if(session.getAttribute("adminAuth") == null) {
+        response.sendRedirect("./admin_login.jsp");
+    } else {
+
+
     ProductDao productDao = new ProductDao();
     CategoryDao categoryDao = new CategoryDao();
 
@@ -23,7 +30,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Product Form</title>
-    <link rel="stylesheet" href="./css/admin/addproduct.css">
+    <link rel="stylesheet" href="css/admin/addProduct.css">
 </head>
 <body>
 <form class="product-form" action="productManagement" method="post" enctype="multipart/form-data">
@@ -66,7 +73,8 @@
 </html>
 
 <%
-    } else {
-        response.sendRedirect("./admin_products.jsp");
+        } else {
+            response.sendRedirect("./admin_products.jsp");
+        }
     }
 %>

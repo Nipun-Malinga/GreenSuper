@@ -5,6 +5,11 @@
 <%@ include file="admin/admin_includes/navbar.jsp"%>
 
 <%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    if(session.getAttribute("adminAuth") == null) {
+        response.sendRedirect("./admin_login.jsp");
+    }
+
     CategoryDao categoryDao = new CategoryDao();
     List<Category> categoryList = categoryDao.getAllCategories();
 %>

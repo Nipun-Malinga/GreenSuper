@@ -1,22 +1,27 @@
-<%@ page import="java.util.List" %><%@ page import="org.example.greensuper.models.Category" %>
+<%@ page import="java.util.List" %>
+<%@ page import="org.example.greensuper.models.Category" %>
+<%@ page import="org.example.greensuper.dao.CategoryDao" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+<%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+
+    if(session.getAttribute("adminAuth") == null) {
+        response.sendRedirect("./admin_login.jsp");
+    } else {
+        CategoryDao categoryDao = new CategoryDao();
+        List<Category> categoryList = categoryDao.getAllCategories();
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Form</title>
-    <link rel="stylesheet" href="./css/admin/addproduct.css">
+    <link rel="stylesheet" href="./css/admin/addProduct.css">
 </head>
 <body>
-<%
-    if (session.getAttribute("category") == null) {
-        response.sendRedirect("productManagement");
-    } else {
-        @SuppressWarnings("unchecked")
-        List<Category> categoryList = (List<Category>) session.getAttribute("category");
-%>
+
 <form class="product-form" action="productManagement" method="post" enctype="multipart/form-data">
     <h1>New Product</h1>
     <label for="product-name">Product Name</label>
@@ -47,8 +52,8 @@
     <button type="submit">Submit</button>
     <button type="reset">Reset</button>
 </form>
+</body>
+</html>
 <%
     }
 %>
-</body>
-</html>
