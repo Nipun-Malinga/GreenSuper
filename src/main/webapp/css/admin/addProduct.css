@@ -5,10 +5,12 @@ body {
     padding: 0;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     height: 100vh;
     background-color: #f2f2f2;
 }
+
 
 .product-form {
     width: 100%;
@@ -57,7 +59,11 @@ body {
 }
 
 .product-form button:hover {
-    background-color: #a04545;
+    background-color: #3c7841;
+}
+
+.danger_btn {
+    background: #FF0000;
 }
 
 @media (max-width: 768px) {

@@ -20,7 +20,6 @@
 
     --tran-05: all 0.5s ease;
     --tran-03: all 0.3s ease;
-    --tran-03: all 0.2s ease;
 }
 
 body{
@@ -42,6 +41,15 @@ body{
 
 ::-webkit-scrollbar-thumb:hover {
     background: #3a3b3c;
+}
+
+a {
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #FF0000;
 }
 
 nav{

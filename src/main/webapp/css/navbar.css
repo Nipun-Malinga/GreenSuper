@@ -15,6 +15,7 @@
 .logo {
      position: relative;
      top: -0.5rem;
+    cursor: pointer;
  }
 
 .nav__img {

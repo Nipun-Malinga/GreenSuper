@@ -1,0 +1,19 @@
+.promo {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.promo img {
+    width: 50%;
+    box-sizing:border-box;
+    cursor: pointer;
+}
+@media (max-width: 768px) {
+    .promo img {
+        width: 100%;
+        cursor: pointer;
+    }
+}

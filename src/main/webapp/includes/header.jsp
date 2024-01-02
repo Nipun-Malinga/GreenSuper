@@ -13,8 +13,11 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 
   <link rel="stylesheet" href="./css/normalize.css">
-  <link rel="stylesheet" href="./css/navbar.css">
+  <link rel="stylesheet" href="./css/feedback_style.css">
+  <link rel="stylesheet" href="./css/promo.css">
+  <link rel="stylesheet" href="./css/cart_style.css">
   <link rel="stylesheet" href="./css/footer.css">
+  <link rel="stylesheet" href="./css/navbar.css">
   <link rel="stylesheet" href="./css/style.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,5 +26,4 @@
 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </head>
-
 <body>

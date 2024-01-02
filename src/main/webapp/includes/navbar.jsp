@@ -43,7 +43,7 @@
 
 <header class="navbar">
     <input type ="checkbox" name ="" id ="chk1">
-    <div class="logo"><img class="nav__img" src="./images/main/logo/logo.png" alt=""></div>
+    <div class="logo"><img id="logo" class="nav__img" src="./images/main/logo/logo.png" alt=""></div>
     <ul>
         <li></li>
         <li></li>
@@ -51,7 +51,7 @@
         <li><a href="#categories">Shop</a></li>
         <li><a href="#">About Us</a></li>
         <li><a href="cart.jsp">Cart</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="contact.jsp">Contact</a></li>
         <li>
             <% if(session.getAttribute("auth") == null) {%>
             <a href="login.jsp"> Login / Register</a>
