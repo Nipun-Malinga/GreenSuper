@@ -33,22 +33,23 @@
     <link rel="stylesheet" href="css/admin/addProduct.css">
 </head>
 <body>
-<form class="product-form" action="productManagement" method="post" enctype="multipart/form-data">
+<section class="product-form">
+<form action="productManagement" method="post" enctype="multipart/form-data">
     <h1> Update Product</h1>
     <label for="product-name">Product Name</label>
-    <input type="text" id="product-name" name="productName" value="<%=product.getProductName()%>" required>
+    <input type="text" id="product-name" name="productName" value="<%=product.getProductName()%>">
 
     <label for="product-price">Product Price</label>
-    <input type="number" id="product-price" name="price" step="0.01" value="<%=product.getPrice()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+    <input type="number" id="product-price" name="price" step="0.01" value="<%=product.getPrice()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
 
     <label for="product-quantity">Product Quantity</label>
-    <input type="number" id="product-quantity" name="quantity" value="<%=product.getQuantity()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+    <input type="number" id="product-quantity" name="quantity" value="<%=product.getQuantity()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
 
     <label for="product-image">Product Image</label>
-    <input type="file" id="product-image" name="image" accept="image/jpeg, image/png" required><br><br>
+    <input type="file" id="product-image" name="image" accept="image/jpeg, image/png" ><br><br>
 
     <label for="category">Category</label>
-    <select id="category" name="category" required>
+    <select id="category" name="category">
         <option value="<%=product.getCategoryId()%>" selected>Current Category: <%=product.getCategoryName()%></option>
         <% for (var category : categoryList) { %>
         <option value="<%=category.getCategoryId()%>"><%=category.getCategoryType()%></option>
@@ -60,15 +61,17 @@
 
     <input type="hidden" value="update" name="operation">
     <input type="hidden" value="<%=product.getProductId()%>" name="productId">
+    <input type="hidden" value="<%=product.getImageName()%>" name="productImageName">
     <button type="submit">Update</button>
     <button type="reset">Cancel</button>
 </form>
-<form class="product-form" action="productManagement" method="post">
+<form action="productManagement" method="post">
     <input type="hidden" name="productId" value="<%=product.getProductId()%>">
     <input type="hidden" name="operation" value="delete">
     <button type="submit"><i class="uil uil-trash-alt"></i>
         <span class="link-name">Delete</span></button>
 </form>
+</section>
 </body>
 </html>
 

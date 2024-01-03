@@ -105,7 +105,7 @@ public class CategoryDao {
         Category category = new Category();
 
 
-        String SQL = "SELECT * FROM category WHERE category_id = ?";
+        String SQL = "SELECT ca.category_id, ca.category_type, img.image_name FROM category ca JOIN images img ON ca.image_id = img.image_id WHERE category_id = ?";
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setInt(1, categoryId);
 

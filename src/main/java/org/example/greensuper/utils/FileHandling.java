@@ -27,4 +27,8 @@ public class FileHandling {
         }
         return Files.exists(destinationPath);
     }
+
+    public boolean isFileSelected(Part file) {
+        return file.getSize() > 0;
+    }
 }

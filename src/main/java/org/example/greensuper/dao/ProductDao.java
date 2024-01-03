@@ -109,7 +109,12 @@ public class ProductDao {
     public Product getSingleProduct(int productId) {
         Product product = new Product();
 
-        String SQL = "SELECT * FROM product JOIN category ON product.category_id = category.category_id WHERE  product_id = ?";
+        String SQL = "SELECT pr.product_id, pr.category_id, pr.product_name, pr.description, pr.price, pr.quantity, ca.category_type, img.image_name " +
+                "FROM product pr " +
+                "JOIN category ca ON pr.category_id = ca.category_id " +
+                "JOIN images img ON pr.image_id = img.image_id " +
+                "WHERE pr.product_id = ?";
+
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
 
             preparedStatement.setInt(1, productId);
@@ -122,7 +127,8 @@ public class ProductDao {
                 product.setDescription(resultSet.getString(4));
                 product.setPrice(resultSet.getDouble(5));
                 product.setQuantity(resultSet.getInt(6));
-                product.setCategoryName(resultSet.getString(10));
+                product.setCategoryName(resultSet.getString(7));
+                product.setImageName(resultSet.getString(8));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

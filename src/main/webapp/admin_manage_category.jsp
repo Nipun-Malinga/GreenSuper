@@ -25,7 +25,8 @@
     <link rel="stylesheet" href="css/admin/addProduct.css">
 </head>
 <body>
-<form class="product-form" action="categoryManagement" method="post" enctype="multipart/form-data">
+<section class="product-form">
+<form action="categoryManagement" method="post" enctype="multipart/form-data">
     <h1> Update Category</h1>
     <label for="product-name">Category Name</label>
     <input type="text" id="product-name" name="categoryName" value="<%=category.getCategoryType()%>" >
@@ -35,15 +36,21 @@
 
     <input type="hidden" name="operation" value="update">
     <input type="hidden" name="categoryId" value="<%=category.getCategoryId()%>">
+    <!-- Sending the image name to the server
+    so the ado can update the existing image name if the user doesn't change the image.  -->
+    <input type="hidden" name="category_imageName" value="<%=category.getImageName()%>">
     <button type="submit">Update</button>
     <button type="reset">Reset</button>
+
+
+    <!--Delete Category-->
 </form>
-    <form class="product-form" action="categoryManagement" method="post">
+    <form action="categoryManagement" method="post">
         <input type="hidden" name="categoryId" value="<%=category.getCategoryId()%>">
-        <input type="hidden" name="category_imageName" value="<%=category.getImageName()%>">
         <input type="hidden" name="operation" value="delete">
         <button class="danger_btn" type="submit">Delete</button>
     </form>
+</section>
 </body>
 </html>
 
