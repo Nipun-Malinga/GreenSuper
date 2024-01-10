@@ -27,7 +27,7 @@ public class PaymentServlet extends HttpServlet {
         HttpSession session = req.getSession();
         if (session.getAttribute("auth") != null) {
             String action = req.getParameter("action");
-            double cartPrice = (double) session.getAttribute("cartPrice");
+            double cartPrice = (double) session.getAttribute("cartPrice") / 325;
             if ("checkout".equals(action)) {
                 System.out.println(cartPrice);
                 String cancelUrl = "http://localhost:8080/GreenSuper_war_exploded/payment_canceled.jsp";

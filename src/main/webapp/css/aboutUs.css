@@ -1,23 +1,7 @@
-*{
-    margin: 0;
-    padding: 0;
-    font-family: "Open Sans",sans-serif;
-    box-sizing: border-box;
-}
-
-body{
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f1f1f1;
-}
-
 .about-section{
     background: url(.././images/main/aboutUs/istockphoto-1288664808-1024x1024.jpg) no-repeat left;
     background-size: 100%;
     overflow: hidden;
-    padding: 100px 0;
 }
 
 .inner-container{
