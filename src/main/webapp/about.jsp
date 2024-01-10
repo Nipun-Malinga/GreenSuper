@@ -1,25 +1,19 @@
+<%@ include file="includes/header.jsp"%>
+<%@ include file="includes/navbar.jsp"%>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <link rel="stylesheet" href="./css/aboutUs.css">
-</head>
-<body>
 <div class="about-section">
     <div class="inner-container">
         <h1>About Us</h1>
         <p class="text">
-            Welcome to the Green supermarket, where culinary artistry meets exceptional taste. Established with a passion for creating unforgettable dining experiences, we take pride in sourcing the finest ingredients for our delectable dishes. At Green supermarket, we invite you to savor every bite and embark on a journey of gastronomic delight.
+            Welcome to Green Supermarket, where sustainability meets convenience.
+            We are dedicated to providing eco-conscious consumers with a diverse range of responsibly sourced products.
+            Our commitment
+            to reducing environmental impact extends from our carefully curated selection to our eco-friendly practices.
+            At Green Supermarket, we believe that every small,
+            conscious choice contributes to a greener, healthier planet.
+            Join us in making a positive impact through mindful shopping.
         </p>
-        <div class="skills">
-            <span>Web Design</span>
-            <span>Photoshop & Illustrator</span>
-            <span>Coding</span>
-        </div>
     </div>
 </div>
-</body>
-</html>
+
+<%@ include file="includes/footer.jsp"%>

@@ -8,7 +8,7 @@
 .container{
     width: 200%;
     height: 200vh;
-    background: #3c5077;
+    background: #a8b1c4;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,7 +16,7 @@
 
 
 .popup{
-    width: 400xp;
+    width: 400px;
     background: #fff;
     border-radius: 50px;
     position: absolute;

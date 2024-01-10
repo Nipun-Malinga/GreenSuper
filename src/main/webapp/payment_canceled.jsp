@@ -17,7 +17,7 @@
         <h2>Payment canceled</h2>
         <p>Your payment process is successfully canceled</p>
         <p>"You will be redirected to the cart page in 10 seconds.</p>
-        <a href="cart.jsp">Go Back TO Cart</a>
+        <a href="cart.jsp"><button id="continue" type="button" >Go Back TO Cart</button></a>
     </div>
 </div>
 

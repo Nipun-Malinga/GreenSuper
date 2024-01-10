@@ -49,8 +49,8 @@
         <li></li>
         <li><a href="index.jsp" class="active">Home</a></li>
         <li><a href="#categories">Shop</a></li>
-        <li><a href="#">About Us</a></li>
         <li><a href="cart.jsp">Cart</a></li>
+        <li><a href="about.jsp">About Us</a></li>
         <li><a href="contact.jsp">Contact</a></li>
         <li>
             <% if(session.getAttribute("auth") == null) {%>

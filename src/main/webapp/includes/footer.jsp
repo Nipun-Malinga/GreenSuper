@@ -18,11 +18,11 @@
             <div class="footer-col">
                 <h4>More Info</h4>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Meet the Devs</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="./index.jsp">Home</a></li>
+                    <li><a href="./contact.jsp">Contact Us</a></li>
+                    <li><a href="./about.jsp">About Us</a></li>
+                    <li><a href="./feedback.jsp">Feedbacks</a></li>
+                    <li><a href="./terms_and_conditions.jsp">Terms & Conditions</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -59,5 +59,6 @@
         crossorigin="anonymous">
     </script>
     <script src="./js/main.js"></script>
+    <script src="./js/script.js"></script>
 </body>
 </html>

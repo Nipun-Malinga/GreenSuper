@@ -2,8 +2,8 @@
 <%@ include file="includes/navbar.jsp"%>
 
 <div class="container feedback-form">
-    <h2>Drop Us Your Feedback</h2>
     <form onsubmit="feedbackSubmit(event)">
+    <h2>Give Us Your Feedback</h2>
         <div class="row">
             <div class="form-group col">
                 <input type="text" id="billId" class="form-control" placeholder="Enter your Bill ID">

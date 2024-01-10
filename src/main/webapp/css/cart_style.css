@@ -1,3 +1,7 @@
+.cart {
+    margin: 2rem 0;
+}
+
 tr {
     text-align: center;
 }
@@ -26,6 +30,23 @@ tr {
 .shopping-cart-footer .column {
     display: flex;
     justify-content: flex-end;
+}
+
+.cart-table-row {
+    height: 10rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-table-row input {
+    padding-left: 40%;
+    margin: 0 5px;
+}
+
+.cart-table-row img {
+    margin: 10px;
 }
 
 .shopping-cart-footer .column:nth-of-type(2) {

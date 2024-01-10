@@ -1,3 +1,17 @@
+document.getElementById('promo_cart').addEventListener('click', () => {
+    window.location.href = './cart.jsp';
+    console.log('ola')
+})
+
+document.getElementById('promo_contact').addEventListener('click', () => {
+    window.location.href = './contact.jsp';
+})
+
+document.getElementById('logo').addEventListener('click', ()=> {
+    window.location.href = './index.jsp';
+})
+
+
 function AddToCart(productId) {
     $.ajax({
         method: 'GET',
@@ -15,16 +29,6 @@ function AddToCart(productId) {
         }
     })
 }
-
-document.getElementById('promo_cart').addEventListener('click', () => {
-    window.location.href = './cart.jsp';
-    console.log('ola')
-})
-
-document.getElementById('promo_contact').addEventListener('click', () => {
-    window.location.href = './contact_us.jsp';
-})
-
 
 function feedbackSubmit(event) {
     event.preventDefault();
