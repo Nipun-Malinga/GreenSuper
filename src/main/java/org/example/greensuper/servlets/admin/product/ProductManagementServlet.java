@@ -4,7 +4,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import org.example.greensuper.dao.CategoryDao;
 import org.example.greensuper.dao.ProductDao;
 import org.example.greensuper.models.Image;
 import org.example.greensuper.models.Product;
@@ -17,7 +16,6 @@ import java.io.PrintWriter;
 @MultipartConfig
 public class ProductManagementServlet extends HttpServlet {
     ProductDao productDao = new ProductDao();
-    CategoryDao categoryDao = new CategoryDao();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,7 +25,7 @@ public class ProductManagementServlet extends HttpServlet {
             FileHandling handling = new FileHandling();
             Product product = new Product();
             Image image = new Image();
-            String uploadPath = "D:\\University\\Projects\\Java\\Practices\\GreenSuper\\src\\main\\webapp\\uploadedImages\\product";
+            String uploadPath = System.getenv("IMAGE_UPLOAD_PATH") + "/product";
 
             String operation = req.getParameter("operation");
 
@@ -41,8 +39,6 @@ public class ProductManagementServlet extends HttpServlet {
                     Part productImage = req.getPart("image");
 
                     boolean isInStock = quantity > 0;
-
-                    System.out.println(productName + "\n" + description + "\n" + price + "\n" + quantity + "\n" + categoryId);
 
                     String imageName = handling.getFileName(productImage);
 
@@ -88,8 +84,6 @@ public class ProductManagementServlet extends HttpServlet {
                         }
                     } else {
                         String current_image_name = req.getParameter("productImageName");
-                        System.out.println("ghjf" + current_image_name);
-
                         product.setImageName(current_image_name);
 
                         if (productDao.updateProduct(product)) {

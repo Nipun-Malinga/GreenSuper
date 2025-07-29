@@ -67,6 +67,9 @@ export DB_URL="jdbc:mysql://localhost:3306/your_database_name"
 export DB_USER="your_database_username"
 export DB_PASS="your_database_password"
 
+#Image Upload Location
+export IMAGE_UPLOAD_PATH="your_preferred_path"
+
 # Green Super PayPal Payment Configs
 export PAYPAL_CLIENT_ID="your_paypal_client_id"
 export PAYPAL_CLIENT_SECRET="your_paypal_client_secret"

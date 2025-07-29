@@ -25,7 +25,7 @@ public class CategoryManagementServlet extends HttpServlet {
             Category category = new Category();
             Image image = new Image();
 
-            String uploadPath = "D:\\University\\Projects\\Java\\Practices\\GreenSuper\\src\\main\\webapp\\uploadedImages\\category";
+            String uploadPath = System.getenv("IMAGE_UPLOAD_PATH") + "/category";
             String operation = req.getParameter("operation");
 
             switch (operation) {
