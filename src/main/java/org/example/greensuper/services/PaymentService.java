@@ -9,10 +9,6 @@ import java.util.List;
 
 public class PaymentService {
 
-    public static APIContext getAPIContext() {
-        return new APIContext(PaypalConfig.Client_ID, PaypalConfig.Client_Secret, PaypalConfig.MODE);
-    }
-
     public static Payment createPayment(double total, String currency, String method, String intent, String description,
                                         String cancelUrl, String successUrl) throws PayPalRESTException {
         Amount amount = new Amount();
@@ -42,6 +38,10 @@ public class PaymentService {
         Payment payment = new Payment().setId(paymentId);
         PaymentExecution paymentExecution = new PaymentExecution().setPayerId(payerId);
         return payment.execute(getAPIContext(), paymentExecution);
+    }
+
+    private static APIContext getAPIContext() {
+        return new APIContext(PaypalConfig.Client_ID, PaypalConfig.Client_Secret, PaypalConfig.MODE);
     }
 
 }
