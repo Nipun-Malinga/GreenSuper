@@ -1,5 +1,5 @@
 // Admin sidebar collapse toggle; the state is remembered in localStorage.
-// The saved state is applied by the inline script in admin/admin_includes/navbar.jsp.
+// The saved state is applied by the inline script in WEB-INF/views/includes/admin/navbar.jsp.
 // Delegated on document because the toggle button lives in the page content,
 // which js/admin_nav.js swaps without reloading the page.
 document.addEventListener("click", (event) => {
