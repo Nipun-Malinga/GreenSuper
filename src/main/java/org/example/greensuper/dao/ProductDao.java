@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDao {
-    Connection connection = DBConnection.getConnection();
     public boolean addProduct(Product product, Image image) {
         //Testing (Debug)
         String SQL = "INSERT INTO images(image_name) VALUES (?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, image.getImageName());
 
             if (preparedStatement.executeUpdate() > 0) {
@@ -51,7 +51,8 @@ public class ProductDao {
     public boolean removeProduct(Product product) {
         String SQL = "DELETE FROM product WHERE product_id = ?";
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setInt(1, product.getProductId());
 
             if(preparedStatement.executeUpdate() > 0) {
@@ -69,7 +70,8 @@ public class ProductDao {
                 "SET pr.category_id = ?, pr.product_name = ?, pr.price = ?, pr.quantity = ?, pr.description = ?, img.image_name = ? " +
                 "WHERE pr.product_id = ?";
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)){
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)){
             preparedStatement.setInt(1, product.getCategoryId());
             preparedStatement.setString(2, product.getProductName());
             preparedStatement.setDouble(3, product.getPrice());
@@ -90,7 +92,8 @@ public class ProductDao {
     public void updateQuantity(List<CartItem> cartItemList) {
         String SQL = "UPDATE product SET quantity = ? WHERE product_id = ?";
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             for (var cart_item : cartItemList) {
                 preparedStatement.setInt(1, cart_item.getQuantity()-cart_item.getBoughtQuantity());
                 preparedStatement.setInt(2, cart_item.getProductId());
@@ -115,7 +118,8 @@ public class ProductDao {
                 "JOIN images img ON pr.image_id = img.image_id " +
                 "WHERE pr.product_id = ?";
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
 
             preparedStatement.setInt(1, productId);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -152,7 +156,8 @@ public class ProductDao {
                     "FROM product pr " +
                     "JOIN images img ON pr.image_id = img.image_id " +
                     "WHERE category_id = ?";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setInt(1, category.getCategoryId());
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -187,7 +192,8 @@ public class ProductDao {
                     "JOIN images ON product.image_id = images.image_id";
 
         List<Product> productList = new ArrayList<>();
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()) {
@@ -221,7 +227,8 @@ public class ProductDao {
                     "OIN images img " +
                     "ON pr.image_id = img.image_id WHERE product_id = ?";
         if(!cartItemList.isEmpty()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            try (Connection connection = DBConnection.getConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
                 for (var item : cartItemList) {
                     preparedStatement.setInt(1, item.getProductId());
 
@@ -253,7 +260,8 @@ public class ProductDao {
                      "FROM product " +
                      "WHERE product_id = ?";
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             for(var item : cartItemList) {
                 preparedStatement.setInt(1, item.getProductId());
 

@@ -8,14 +8,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class CartDao {
-    Connection connection = DBConnection.getConnection();
-
     public void storingSalesInfo(String transaction_id, Customer customer, List<CartItem> cartItemList, double cartPrice, String paymentStatus) {
         LocalDate date = LocalDate.now();
 
         //Inserting data into cart table.
         String SQL = "INSERT INTO cart (customer_id, total_price) VALUES (?, ?)";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, customer.getCustomerId());
             preparedStatement.setDouble(2, cartPrice);
 
@@ -80,7 +79,8 @@ public class CartDao {
 
         int lastBillID = 0;
         String SQL = "SELECT bill_id FROM bill ORDER BY bill_id DESC LIMIT 1";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next())
@@ -95,7 +95,8 @@ public class CartDao {
 
         String SQL = "SELECT SUM(amount) FROM payment";
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()) {
@@ -111,7 +112,8 @@ public class CartDao {
 
         String SQL = "SELECT COUNT(*) FROM bill";
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()) {

@@ -10,14 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
-    Connection connection = DBConnection.getConnection();
-
     //User Registration
     public boolean registerUser(Customer customer) {
 
         // Storing Customer basic details.
         String SQL = "INSERT INTO customer (first_name, last_name, email, phone_number) VALUES (?, ?, ?, ?)";
-        try(PreparedStatement statement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, customer.getFirstName());
             statement.setString(2, customer.getLastName());
             statement.setString(3, customer.getEmail());
@@ -68,7 +67,8 @@ public class UserDao {
         DecryptionUtil decryptionUtil = new DecryptionUtil();
 
         String SQL = "SELECT cus_pass.hashed_password FROM customer_passwords cus_pass JOIN customer c ON cus_pass.customer_id = c.customer_id WHERE c.email = ?";
-        try(PreparedStatement ps = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SQL)) {
             ps.setString(1, customer.getEmail());
 
             ResultSet resultSet = ps.executeQuery();
@@ -87,7 +87,8 @@ public class UserDao {
         List<Customer> customerList = new ArrayList<>();
 
         String SQL = "SELECT * FROM customer cus JOIN customer_address cus_addr ON cus.customer_id = cus_addr.customer_id ";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -114,7 +115,8 @@ public class UserDao {
     public Customer getUserDetails(String email) {
 
         String SQL = "SELECT * FROM customer JOIN customer_address ON customer.customer_id = customer_address.customer_id WHERE customer.email = ?";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setString(1, email);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -139,7 +141,8 @@ public class UserDao {
     public int getUserCount() {
 
         String SQL = "SELECT COUNT(*) FROM customer";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()) {
                 return resultSet.getInt(1);
@@ -155,7 +158,8 @@ public class UserDao {
         LocalDate localDate = LocalDate.now();
 
         String SQL = "INSERT INTO customer_feedback (customer_id, bill_id, feedback, feedback_date) VALUES (?, ?, ?, ?)";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setInt(1, feedback.getCustomer_id());
             preparedStatement.setInt(2, feedback.getBill_id());
             preparedStatement.setString(3, feedback.getFeedback());
@@ -175,7 +179,8 @@ public class UserDao {
         List<Feedback> feedbackList = new ArrayList<>();
 
         String SQL = "SELECT cus.first_name, cus.last_name, cus_f.bill_id, cus_f.feedback_date, cus_f.feedback FROM customer_feedback cus_f JOIN customer cus ON cus_f.customer_id = cus.customer_id";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()) {
@@ -188,9 +193,9 @@ public class UserDao {
 
                 feedbackList.add(feedback);
             }
-            return feedbackList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return feedbackList;
     }
 }

@@ -9,12 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AdminDao {
-    Connection connection = DBConnection.getConnection();
     public boolean isValidAdmin(Admin admin) {
         DecryptionUtil util = new DecryptionUtil();
         String SQL = "SELECT admin_hashed_password FROM admin WHERE admin_email = ?";
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setString(1, admin.getAdminEmail());
 
             ResultSet resultSet = preparedStatement.executeQuery();

@@ -1,24 +1,59 @@
 package org.example.greensuper.dao;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String URL = System.getenv("DB_URL");
-    private static final String USER = System.getenv("DB_USER");
-    private static final String Password = System.getenv("DB_PASS");
-    private static Connection connection = null;
+
+    private static final HikariDataSource dataSource;
+
+    static {
+        var config = new HikariConfig();
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        config.setJdbcUrl(requireEnv("DB_URL"));
+        config.setUsername(requireEnv("DB_USER"));
+        config.setPassword(requireEnv("DB_PASS"));
+        config.setPoolName("GreenSuperPool");
+
+        config.setMaximumPoolSize(10);
+        config.setMinimumIdle(2);
+        config.setConnectionTimeout(30000);
+        config.setIdleTimeout(600000);
+        config.setMaxLifetime(1800000);
+
+        dataSource = new HikariDataSource(config);
+    }
+
+    //Preventing object instantiation
+    private DBConnection() {}
+
+    private static String requireEnv(String name) {
+        String value = System.getenv(name);
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException("Missing required environment variable: " + name);
+        }
+        return value;
+    }
+
+    /**
+     * Borrows a connection from the pool. Callers must close it (use try-with-resources)
+     * so it is returned to the pool.
+     */
     public static Connection getConnection() {
-        if(connection == null)
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(URL, USER, Password);
-            } catch (SQLException ex) {
-                throw new RuntimeException("Could not able to Connect to the SQL server");
-            } catch (ClassNotFoundException ex) {
-                throw new RuntimeException("JDBC Class Not Found.");
-            }
-        return connection;
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not obtain a database connection", e);
+        }
+    }
+
+    /** Shuts down the pool. Call only once, on application shutdown. */
+    public static void closePool() {
+        if (dataSource != null && !dataSource.isClosed()) {
+            dataSource.close();
+        }
     }
 }

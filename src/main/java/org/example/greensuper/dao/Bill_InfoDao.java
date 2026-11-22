@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bill_InfoDao {
-    Connection connection = DBConnection.getConnection();
     public boolean isBillValid(Bill bill) {
 
         String SQL_billValidation = "SELECT bill_id FROM bill WHERE bill_id = ?";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_billValidation)){
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_billValidation)){
             preparedStatement.setInt(1, bill.getBillId());
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -25,6 +25,7 @@ public class Bill_InfoDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         return false;
     }
 
@@ -37,7 +38,8 @@ public class Bill_InfoDao {
                 "join bill bi on ca.cart_id = bi.bill_id " +
                 "join payment pay on bi.bill_id = pay.payment_id;";
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

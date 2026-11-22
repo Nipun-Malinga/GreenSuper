@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDao {
-    Connection connection = DBConnection.getConnection();
-
     //Add category image with details.
     public boolean addCategory(Category category, Image image) {
         // Testing(Debug)
@@ -19,7 +17,8 @@ public class CategoryDao {
         boolean categoryStored = false;
 
         String SQL = "INSERT INTO images(image_name) VALUES (?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, image.getImageName());
 
             if (preparedStatement.executeUpdate() > 0) {
@@ -54,7 +53,8 @@ public class CategoryDao {
         String SQL_delete_products = "DELETE FROM product WHERE category_id = ?";
         String SQL_delete_category = "DELETE FROM category WHERE category_id = ?";
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_delete_cart_item)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_delete_cart_item)) {
             preparedStatement.setInt(1, category.getCategoryId());
 
             if(preparedStatement.executeUpdate() > 0) {
@@ -86,7 +86,8 @@ public class CategoryDao {
         String SQL = "UPDATE category JOIN images ON category.category_id = images.image_id SET category.category_type = ?, images.image_name = ? WHERE category.category_id = ?";
 
         System.out.println(category.getCategoryType() + category.getImageName());
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setString(1, category.getCategoryType());
             preparedStatement.setString(2, category.getImageName());
             preparedStatement.setInt(3, category.getCategoryId());
@@ -106,7 +107,8 @@ public class CategoryDao {
 
 
         String SQL = "SELECT ca.category_id, ca.category_type, img.image_name FROM category ca JOIN images img ON ca.image_id = img.image_id WHERE category_id = ?";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setInt(1, categoryId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -128,7 +130,8 @@ public class CategoryDao {
         List<Category> categoryList = new ArrayList<>();
 
         String SQL = "SELECT ca.category_id, ca.category_type, img.image_name FROM category ca JOIN images img ON ca.image_id = img.image_id";
-        try(PreparedStatement statement = connection.prepareStatement(SQL)) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 categoryList.add(new Category(
