@@ -27,7 +27,7 @@ public class ProductDao {
                         int image_id = generatedKeys.getInt(1);
 
                         String SQL_Category = """
-                                INSERT INTO product (category_id, product_name, description, price, quantity, is_in_stock, image_id)
+                                INSERT INTO products (category_id, product_name, description, price, quantity, is_in_stock, image_id)
                                 VALUES (?, ?, ?, ?, ?, ?, ?)
                                 """;
 
@@ -56,7 +56,7 @@ public class ProductDao {
 
     public boolean removeProduct(Product product) {
         String SQL = """
-                DELETE FROM product
+                DELETE FROM products
                 WHERE product_id = ?
                 """;
 
@@ -78,7 +78,7 @@ public class ProductDao {
 
     public boolean updateProduct(Product product) {
         String SQL = """
-                UPDATE product pr
+                UPDATE products pr
                 JOIN images img ON pr.image_id = img.image_id
                 SET
                     pr.category_id = ?,
@@ -110,7 +110,7 @@ public class ProductDao {
 
     public void updateQuantity(List<CartItem> cartItemList) {
         String SQL = """
-                UPDATE product
+                UPDATE products
                 SET quantity = ?
                 WHERE product_id = ?
                 """;
@@ -144,8 +144,8 @@ public class ProductDao {
                     pr.quantity,
                     ca.category_type,
                     img.image_name
-                FROM product pr
-                JOIN category ca ON pr.category_id = ca.category_id
+                FROM products pr
+                JOIN categories ca ON pr.category_id = ca.category_id
                 JOIN images img ON pr.image_id = img.image_id
                 WHERE pr.product_id = ?
                 """;
@@ -185,7 +185,7 @@ public class ProductDao {
                     pr.quantity,
                     pr.is_in_stock,
                     img.image_name
-                FROM product pr
+                FROM products pr
                 JOIN images img ON pr.image_id = img.image_id
                 WHERE category_id = ?
                 """;
@@ -206,15 +206,15 @@ public class ProductDao {
     public List<Product> getAllProducts() {
         String SQL = """
                 SELECT
-                    product.product_id,
-                    product.product_name,
+                    products.product_id,
+                    products.product_name,
                     images.image_name,
-                    category.category_type,
-                    product.quantity,
-                    product.price
-                FROM product
-                JOIN category ON product.category_id = category.category_id
-                JOIN images ON product.image_id = images.image_id
+                    categories.category_type,
+                    products.quantity,
+                    products.price
+                FROM products
+                JOIN categories ON products.category_id = categories.category_id
+                JOIN images ON products.image_id = images.image_id
                 """;
 
         List<Product> productList = new ArrayList<>();
@@ -250,7 +250,7 @@ public class ProductDao {
                     pr.quantity,
                     pr.is_in_stock,
                     img.image_name
-                FROM product pr
+                FROM products pr
                 JOIN images img ON pr.image_id = img.image_id
                 WHERE pr.quantity > 0
                 ORDER BY pr.product_id DESC
@@ -282,7 +282,7 @@ public class ProductDao {
                     pr.price,
                     pr.quantity,
                     img.image_name
-                FROM product pr
+                FROM products pr
                 JOIN images img ON pr.image_id = img.image_id
                 WHERE product_id = ?
                 """;
@@ -316,7 +316,7 @@ public class ProductDao {
         double totalAmount = 0;
         String SQL = """
                 SELECT price
-                FROM product
+                FROM products
                 WHERE product_id = ?
                 """;
 
@@ -341,7 +341,7 @@ public class ProductDao {
     private void isProductExists(String productName, int categoryId) {
         String SQL = """
                 SELECT 1
-                FROM product
+                FROM products
                 WHERE category_id = ?
                   AND LOWER(TRIM(product_name)) = LOWER(TRIM(?))
                 LIMIT 1
@@ -362,7 +362,7 @@ public class ProductDao {
     private List<Integer> getProductImageIds(Connection connection, int productId) throws SQLException {
         String SQL = """
                 SELECT image_id
-                FROM product
+                FROM products
                 WHERE product_id = ?
                   AND image_id IS NOT NULL
                 """;

@@ -15,7 +15,7 @@ public class UserDao {
 
         // Storing Customer basic details.
         String SQL = """
-                INSERT INTO customer (first_name, last_name, email, phone_number)
+                INSERT INTO customers (first_name, last_name, email, phone_number)
                 VALUES (?, ?, ?, ?)
                 """;
         try (Connection connection = DBConnection.getConnection();
@@ -78,7 +78,7 @@ public class UserDao {
         String SQL = """
                 SELECT cus_pass.hashed_password
                 FROM customer_passwords cus_pass
-                JOIN customer c ON cus_pass.customer_id = c.customer_id
+                JOIN customers c ON cus_pass.customer_id = c.customer_id
                 WHERE c.email = ?
                 """;
         try (Connection connection = DBConnection.getConnection();
@@ -102,7 +102,7 @@ public class UserDao {
 
         String SQL = """
                 SELECT *
-                FROM customer cus
+                FROM customers cus
                 JOIN customer_address cus_addr ON cus.customer_id = cus_addr.customer_id
                 """;
         try (Connection connection = DBConnection.getConnection();
@@ -134,9 +134,9 @@ public class UserDao {
 
         String SQL = """
                 SELECT *
-                FROM customer
-                JOIN customer_address ON customer.customer_id = customer_address.customer_id
-                WHERE customer.email = ?
+                FROM customers
+                JOIN customer_address ON customers.customer_id = customer_address.customer_id
+                WHERE customers.email = ?
                 """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
@@ -163,7 +163,7 @@ public class UserDao {
     //Counting all the users counts in the database.
     public int getUserCount() {
 
-        String SQL = "SELECT COUNT(*) FROM customer";
+        String SQL = "SELECT COUNT(*) FROM customers";
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -180,7 +180,7 @@ public class UserDao {
     public boolean hasFeedbackForBill(int billId) {
         String SQL = """
                 SELECT 1
-                FROM customer_feedback
+                FROM customer_feedbacks
                 WHERE bill_id = ?
                 """;
         try (Connection connection = DBConnection.getConnection();
@@ -199,7 +199,7 @@ public class UserDao {
         LocalDate localDate = LocalDate.now();
 
         String SQL = """
-                INSERT INTO customer_feedback (customer_id, bill_id, feedback, feedback_date)
+                INSERT INTO customer_feedbacks (customer_id, bill_id, feedback, feedback_date)
                 VALUES (?, ?, ?, ?)
                 """;
         try (Connection connection = DBConnection.getConnection();
@@ -229,8 +229,8 @@ public class UserDao {
                     cus_f.bill_id,
                     cus_f.feedback_date,
                     cus_f.feedback
-                FROM customer_feedback cus_f
-                JOIN customer cus ON cus_f.customer_id = cus.customer_id
+                FROM customer_feedbacks cus_f
+                JOIN customers cus ON cus_f.customer_id = cus.customer_id
                 """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {

@@ -15,8 +15,8 @@ public class Bill_InfoDao {
     public boolean isBillOwnedByCustomer(int billId, int customerId) {
         String SQL = """
                 SELECT 1
-                FROM bill b
-                JOIN cart c ON b.cart_id = c.cart_id
+                FROM bills b
+                JOIN carts c ON b.cart_id = c.cart_id
                 WHERE b.bill_id = ? AND c.customer_id = ?
                 """;
         try (Connection connection = DBConnection.getConnection();
@@ -35,7 +35,7 @@ public class Bill_InfoDao {
 
         String SQL_billValidation = """
                 SELECT bill_id
-                FROM bill
+                FROM bills
                 WHERE bill_id = ?
                 """;
         try (Connection connection = DBConnection.getConnection();
@@ -63,10 +63,10 @@ public class Bill_InfoDao {
                     pay.payment_date,
                     pay.amount,
                     bi.payment_status
-                FROM customer cu
-                JOIN cart ca ON cu.customer_id = ca.customer_id
-                JOIN bill bi ON ca.cart_id = bi.bill_id
-                JOIN payment pay ON bi.bill_id = pay.payment_id
+                FROM customers cu
+                JOIN carts ca ON cu.customer_id = ca.customer_id
+                JOIN bills bi ON ca.cart_id = bi.bill_id
+                JOIN payments pay ON bi.bill_id = pay.payment_id
                 """;
 
         try (Connection connection = DBConnection.getConnection();

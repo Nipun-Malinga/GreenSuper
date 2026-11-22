@@ -13,7 +13,7 @@ public class CartDao {
 
         //Inserting data into cart table.
         String SQL = """
-                INSERT INTO cart (customer_id, total_price)
+                INSERT INTO carts (customer_id, total_price)
                 VALUES (?, ?)
                 """;
         try (Connection connection = DBConnection.getConnection();
@@ -30,7 +30,7 @@ public class CartDao {
 
                         //Inserting data into cart_item table.
                         String SQL_CartItem = """
-                                INSERT INTO cart_item (cart_id, product_id, bought_quantity)
+                                INSERT INTO cart_items (cart_id, product_id, bought_quantity)
                                 VALUES (?, ?, ?)
                                 """;
                         for(var cartItem : cartItemList) {
@@ -43,7 +43,7 @@ public class CartDao {
 
                                     //Inserting data into bill table.
                                     String SQL_Bill = """
-                                            INSERT INTO bill (cart_id, payment_status)
+                                            INSERT INTO bills (cart_id, payment_status)
                                             VALUES (?, ?)
                                             """;
                                     try(PreparedStatement inserting_to_bill = connection.prepareStatement(SQL_Bill, Statement.RETURN_GENERATED_KEYS)) {
@@ -59,7 +59,7 @@ public class CartDao {
 
                                                     //Inserting data into payment table.
                                                     String SQL_Payment = """
-                                                            INSERT INTO payment (transaction_id, bill_id, payment_date, amount)
+                                                            INSERT INTO payments (transaction_id, bill_id, payment_date, amount)
                                                             VALUES (?, ?, ?, ?)
                                                             """;
                                                     try(PreparedStatement inserting_to_payment = connection.prepareStatement(SQL_Payment)) {
@@ -92,7 +92,7 @@ public class CartDao {
         int lastBillID = 0;
         String SQL = """
                 SELECT bill_id
-                FROM bill
+                FROM bills
                 ORDER BY bill_id DESC
                 LIMIT 1
                 """;
@@ -110,7 +110,7 @@ public class CartDao {
 
     public double getAllSalesAmount() {
 
-        String SQL = "SELECT SUM(amount) FROM payment";
+        String SQL = "SELECT SUM(amount) FROM payments";
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
@@ -127,7 +127,7 @@ public class CartDao {
 
     public int getAllCompletedOrders() {
 
-        String SQL = "SELECT COUNT(*) FROM bill";
+        String SQL = "SELECT COUNT(*) FROM bills";
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {

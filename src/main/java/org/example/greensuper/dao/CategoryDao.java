@@ -31,7 +31,7 @@ public class CategoryDao {
                     int image_id = generatedKeys.getInt(1);
 
                     String SQL_Category = """
-                            INSERT INTO category (category_type, image_id)
+                            INSERT INTO categories (category_type, image_id)
                             VALUES (?, ?)
                             """;
 
@@ -53,49 +53,22 @@ public class CategoryDao {
 
     public boolean removeCategory(Category category) {
 
-        String SQL_delete_cart_item = """
-                DELETE FROM cart_item
-                WHERE product_id IN (
-                    SELECT product_id
-                    FROM product
-                    WHERE category_id = ?
-                )
-                """;
-        String SQL_delete_products = """
-                DELETE FROM product
-                WHERE category_id = ?
-                """;
-        String SQL_delete_category = """
-                DELETE FROM category
+        // products and their cart_items are removed by ON DELETE CASCADE.
+        String SQL = """
+                DELETE FROM categories
                 WHERE category_id = ?
                 """;
 
-        try (Connection connection = DBConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SQL_delete_cart_item)) {
+        try (Connection connection = DBConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             // Collected first: once the rows below are deleted, these ids can no longer be looked up.
             List<Integer> imageIds = getCategoryImageIds(connection, category.getCategoryId());
 
             preparedStatement.setInt(1, category.getCategoryId());
 
             if (preparedStatement.executeUpdate() > 0) {
-                System.out.println("Cart Item Deleted SuccessFully");
+                ImageDao.deleteImageRows(connection, imageIds);
+                return true;
             }
-            try (PreparedStatement deleteProduct = connection.prepareStatement(SQL_delete_products)) {
-                deleteProduct.setInt(1, category.getCategoryId());
-
-                if (deleteProduct.executeUpdate() > 0) {
-                    System.out.println("Products Deleted Successfully");
-                }
-            }
-            try (PreparedStatement deleteCategory = connection.prepareStatement(SQL_delete_category)) {
-                deleteCategory.setInt(1, category.getCategoryId());
-
-                if (deleteCategory.executeUpdate() > 0) {
-                    System.out.println("Category Successfully Deleted from the database");
-                    ImageDao.deleteImageRows(connection, imageIds);
-                    return true;
-                }
-            }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -104,12 +77,12 @@ public class CategoryDao {
 
     public boolean updateCategory(Category category) {
         String SQL = """
-                UPDATE category
-                JOIN images ON category.category_id = images.image_id
+                UPDATE categories
+                JOIN images ON categories.category_id = images.image_id
                 SET
-                    category.category_type = ?,
+                    categories.category_type = ?,
                     images.image_name = ?
-                WHERE category.category_id = ?
+                WHERE categories.category_id = ?
                 """;
 
         System.out.println(category.getCategoryType() + category.getImageName());
@@ -137,7 +110,7 @@ public class CategoryDao {
                     ca.category_id,
                     ca.category_type,
                     img.image_name
-                FROM category ca
+                FROM categories ca
                 JOIN images img ON ca.image_id = img.image_id
                 WHERE category_id = ?
                 """;
@@ -167,7 +140,7 @@ public class CategoryDao {
                     ca.category_id,
                     ca.category_type,
                     img.image_name
-                FROM category ca
+                FROM categories ca
                 JOIN images img ON ca.image_id = img.image_id
                 """;
         try (Connection connection = DBConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(SQL)) {
@@ -187,7 +160,7 @@ public class CategoryDao {
     private void isCategoryExists(String categoryType) {
         String SQL = """
                 SELECT 1
-                FROM category
+                FROM categories
                 WHERE LOWER(TRIM(category_type)) = LOWER(TRIM(?))
                 LIMIT 1
                 """;
@@ -207,12 +180,12 @@ public class CategoryDao {
     private List<Integer> getCategoryImageIds(Connection connection, int categoryId) throws SQLException {
         String SQL = """
                 SELECT image_id
-                FROM category
+                FROM categories
                 WHERE category_id = ?
                   AND image_id IS NOT NULL
                 UNION
                 SELECT image_id
-                FROM product
+                FROM products
                 WHERE category_id = ?
                   AND image_id IS NOT NULL
                 """;

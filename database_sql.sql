@@ -3,7 +3,7 @@ USE green_super_database;
 
 -- Customer Side
 
-CREATE TABLE customer (
+CREATE TABLE customers (
     customer_id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE customer_address (
     city VARCHAR(255) NOT NULL,
     street VARCHAR(255) NOT NULL,
     home_number VARCHAR(255) NOT NULL,
-    FOREIGN KEY(customer_id) REFERENCES customer(customer_id),
+    FOREIGN KEY(customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE,
     PRIMARY KEY(address_id)
 );
 
@@ -26,17 +26,17 @@ CREATE TABLE customer_passwords (
     password_id INT NOT NULL AUTO_INCREMENT,
     customer_id INT,
     hashed_password VARCHAR(255) NOT NULL,
-    FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE,
     PRIMARY KEY (password_id)
 );
 
-CREATE TABLE customer_feedback (
+CREATE TABLE customer_feedbacks (
     feedback_id INT NOT NULL AUTO_INCREMENT,
     customer_id INT,
     bill_id INT,
     feedback TEXT,
     feedback_date DATE,
-    FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE SET NULL,
     PRIMARY KEY (feedback_id)
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE images (
     PRIMARY KEY (image_id)
 );
 
-CREATE TABLE category (
+CREATE TABLE categories (
     category_id INT NOT NULL AUTO_INCREMENT,
     category_type VARCHAR(255),
     image_id INT,
@@ -56,7 +56,7 @@ CREATE TABLE category (
     PRIMARY KEY (category_id)
 );
 
-CREATE TABLE product (
+CREATE TABLE products (
     product_id INT NOT NULL AUTO_INCREMENT,
     category_id INT,
     product_name VARCHAR(255) NOT NULL,
@@ -65,55 +65,55 @@ CREATE TABLE product (
     quantity INT NOT NULL,
     is_in_stock boolean,
     image_id INT,
-    FOREIGN KEY (category_id) REFERENCES category (category_id),
+    FOREIGN KEY (category_id) REFERENCES categories (category_id) ON DELETE CASCADE,
     FOREIGN KEY (image_id) REFERENCES images (image_id),
     PRIMARY KEY (product_id)
 );
 
 -- Cart
 
-CREATE TABLE cart (
+CREATE TABLE carts (
     cart_id INT NOT NULL AUTO_INCREMENT,
     customer_id INT,
     total_price double(10, 2) NOT NULL,
     PRIMARY KEY (cart_id)
 );
 
-CREATE TABLE cart_item (
+CREATE TABLE cart_items (
     cart_item_id INT NOT NULL AUTO_INCREMENT,
     cart_id INT,
     product_id INT,
     bought_quantity INT,
-    FOREIGN KEY (cart_id) REFERENCES cart (cart_id),
-    FOREIGN KEY (product_id) REFERENCES product (product_id),
+    FOREIGN KEY (cart_id) REFERENCES carts (cart_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE,
     PRIMARY KEY (cart_item_id)
 );
 
 -- Bill
 
-CREATE TABle bill (
+CREATE TABLE bills (
     bill_id INT NOT NULL AUTO_INCREMENT,
     cart_id INT,
     payment_status VARCHAR(255),
-    FOREIGN KEY (cart_id) REFERENCES cart (cart_id),
+    FOREIGN KEY (cart_id) REFERENCES carts (cart_id),
     PRIMARY KEY (bill_id)
 );
 
-CREATE TABLE payment (
+CREATE TABLE payments (
     payment_id INT AUTO_INCREMENT NOT NULL,
     transaction_id VARCHAR(50),
     bill_id INT,
     payment_date DATE,
     amount DOUBLE(10, 2),
-    FOREIGN KEY (bill_id) REFERENCES bill (bill_id),
+    FOREIGN KEY (bill_id) REFERENCES bills (bill_id),
     PRIMARY KEY (payment_id)
 );
 
 -- Admin
 
-CREATE TABLE admin (
+CREATE TABLE admins (
     admin_id INT AUTO_INCREMENT NOT NULL,
     admin_email VARCHAR(255) NOT NULL,
     admin_hashed_password VARCHAR(255) NOT NULL,
     PRIMARY KEY (admin_id)
-)
+);

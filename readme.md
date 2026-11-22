@@ -92,6 +92,11 @@ export DB_URL="jdbc:mysql://localhost:3306/your_database_name"
 export DB_USER="your_database_username"
 export DB_PASS="your_database_password"
 
+# Initial admin: created on startup if no admin with this email exists yet.
+# Changing these later does not update an existing admin.
+export ADMIN_EMAIL="admin@example.com"
+export ADMIN_PASSWORD="change_me"
+
 # Image upload folder: OUTSIDE Tomcat's webapps, so uploads survive redeploys.
 # Must contain product/ and category/ subfolders (`task uploads:init` creates them).
 export IMAGE_UPLOAD_PATH="/absolute/path/to/greensuper-uploads"
