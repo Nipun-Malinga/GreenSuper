@@ -12,7 +12,7 @@
 
         <ul class="hidden w-full flex-col gap-1 text-sm font-medium peer-checked:flex lg:flex lg:w-auto lg:flex-row lg:items-center lg:gap-1">
             <li><a href="index.jsp" class="block rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700">Home</a></li>
-            <li><a href="index.jsp#categories" class="block rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700">Shop</a></li>
+            <li><a href="categories.jsp" class="block rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700">Categories</a></li>
             <li><a href="cart.jsp" class="flex items-center gap-2 rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700"><i class="fa fa-cart-shopping"></i> Cart</a></li>
             <li><a href="about.jsp" class="block rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700">About Us</a></li>
             <li><a href="contact.jsp" class="block rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700">Contact</a></li>

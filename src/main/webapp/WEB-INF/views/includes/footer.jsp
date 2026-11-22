@@ -1,5 +1,5 @@
 <footer class="mt-auto bg-slate-900 text-slate-300">
-    <div class="container-page grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="container-page grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-3">
         <div>
             <img src="./images/main/logo/logo.png" alt="Green Super" class="h-14 w-auto rounded-xl bg-white px-3 py-2">
             <p class="mt-4 text-sm text-slate-400">Fresh, responsibly sourced groceries delivered to your door.</p>
@@ -13,15 +13,6 @@
                 <li><a class="hover:text-brand-400" href="./about.jsp">About Us</a></li>
                 <li><a class="hover:text-brand-400" href="./feedback.jsp">Feedbacks</a></li>
                 <li><a class="hover:text-brand-400" href="./terms_and_conditions.jsp">Terms &amp; Conditions</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4 class="text-sm font-semibold tracking-wide text-white uppercase">Categories</h4>
-            <ul class="mt-4 space-y-2 text-sm">
-                <li><a class="hover:text-brand-400" href="./index.jsp#categories">Vegetables</a></li>
-                <li><a class="hover:text-brand-400" href="./index.jsp#categories">Fish &amp; Meat</a></li>
-                <li><a class="hover:text-brand-400" href="./index.jsp#categories">Sweets</a></li>
-                <li><a class="hover:text-brand-400" href="./index.jsp#categories">Dairy Products</a></li>
             </ul>
         </div>
         <div>

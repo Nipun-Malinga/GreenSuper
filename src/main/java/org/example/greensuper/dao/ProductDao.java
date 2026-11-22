@@ -218,6 +218,39 @@ public class ProductDao {
         return productList;
     }
 
+    // Newest in-stock products, for the home page. Used in index.jsp
+    public List<Product> getLatestProducts(int limit) {
+        String SQL = "SELECT pr.product_id, pr.category_id, pr.product_name, pr.description, pr.price, pr.quantity, pr.is_in_stock, img.image_name " +
+                     "FROM product pr " +
+                     "JOIN images img ON pr.image_id = img.image_id " +
+                     "WHERE pr.quantity > 0 " +
+                     "ORDER BY pr.product_id DESC " +
+                     "LIMIT ?";
+
+        List<Product> productList = new ArrayList<>();
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setInt(1, limit);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    productList.add(new Product(
+                            resultSet.getInt(1),
+                            resultSet.getInt(2),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
+                            resultSet.getDouble(5),
+                            resultSet.getInt(6),
+                            resultSet.getBoolean(7),
+                            resultSet.getString(8)
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("An error occurred while fetching latest products from the database.", e);
+        }
+        return productList;
+    }
+
     //Fetching Product items for cart.
     public List<CartItem> getForCart(List<CartItem> cartItemList) {
         List<CartItem> cartItems = new ArrayList<>();

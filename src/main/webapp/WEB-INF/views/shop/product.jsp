@@ -22,13 +22,13 @@
         <div class="mx-auto max-w-md text-center">
             <img src="images/main/empty_category.png" alt="" class="mx-auto w-56">
             <h2 class="mt-6 text-xl font-semibold">Sorry! There is no item in this category right now.</h2>
-            <a href="index.jsp#categories" class="btn btn-primary mt-6">Browse other categories</a>
+            <a href="categories.jsp" class="btn btn-primary mt-6">Browse other categories</a>
         </div>
 <%
 } else {
 %>
     <section class="container-page py-10">
-    <nav class="text-sm text-slate-500"><a href="index.jsp" class="hover:text-brand-700">Home</a> <span class="mx-1">/</span> <span class="text-slate-700"><%= category.getCategoryType() %></span></nav>
+    <nav class="text-sm text-slate-500"><a href="index.jsp" class="hover:text-brand-700">Home</a> <span class="mx-1">/</span> <a href="categories.jsp" class="hover:text-brand-700">Categories</a> <span class="mx-1">/</span> <span class="text-slate-700"><%= category.getCategoryType() %></span></nav>
     <h1 class="mt-2 text-3xl font-bold"><%= category.getCategoryType() %></h1>
     <div class="mt-8 grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
         <% for (var product : productList) { %>

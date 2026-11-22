@@ -104,7 +104,7 @@
     <div class="mx-auto max-w-md text-center">
         <img src="images/main/empty_cart.svg" alt="" class="mx-auto w-64">
         <h2 class="mt-6 text-xl font-semibold">Oops! It looks like your cart is empty</h2>
-        <a href="index.jsp#categories" class="btn btn-primary mt-6">Start shopping</a>
+        <a href="categories.jsp" class="btn btn-primary mt-6">Start shopping</a>
     </div>
 </section>
     <%

@@ -26,6 +26,14 @@
         <url-pattern>/index.jsp</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>page-categories</servlet-name>
+        <jsp-file>/WEB-INF/views/shop/categories.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>page-categories</servlet-name>
+        <url-pattern>/categories.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>page-product</servlet-name>
         <jsp-file>/WEB-INF/views/shop/product.jsp</jsp-file>
     </servlet>
