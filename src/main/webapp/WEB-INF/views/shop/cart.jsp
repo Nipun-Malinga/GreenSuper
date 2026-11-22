@@ -14,7 +14,9 @@
 <section class="container-page py-10">
     <div class="flex items-center justify-between">
         <h1 class="text-3xl font-bold">My Shopping Cart</h1>
-        <a class="text-sm font-medium text-brand-700 hover:underline" href="#">Clear Cart</a>
+        <form action="clear-cart" method="post" onsubmit="return confirm('Remove all items from your cart?');">
+            <button type="submit" class="text-sm font-medium text-brand-700 hover:underline">Clear Cart</button>
+        </form>
     </div>
 
     <div class="mt-8 grid gap-8 lg:grid-cols-3">
