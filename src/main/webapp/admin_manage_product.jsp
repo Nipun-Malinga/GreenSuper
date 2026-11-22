@@ -30,7 +30,8 @@
     <main class="p-4 sm:p-8">
         <a href="admin_products.jsp" class="text-sm text-slate-500 hover:text-brand-700"><i class="uil uil-arrow-left"></i> Back to products</a>
         <section class="product-form card mt-4 max-w-2xl p-6 sm:p-8">
-            <form action="productManagement" method="post" enctype="multipart/form-data" class="space-y-5">
+            <form action="productManagement" method="post" enctype="multipart/form-data" class="space-y-5"
+                  data-async-form data-success-url="admin_products.jsp" data-failure-event="productFailedToUpdate">
                 <h1 class="text-2xl font-bold">Update Product</h1>
                 <div class="flex items-center gap-4">
                     <img src="./uploadedImages/product/<%=product.getImageName()%>" alt="" class="size-20 rounded-xl object-cover ring-1 ring-slate-200">
@@ -80,7 +81,8 @@
                     <button type="reset" class="btn btn-outline">Cancel</button>
                 </div>
             </form>
-            <form action="productManagement" method="post" class="mt-8 flex items-center justify-between gap-4 rounded-xl border border-red-200 bg-red-50 p-4">
+            <form action="productManagement" method="post" data-async-form data-success-url="admin_products.jsp" data-failure-event="failedToDeleteProduct"
+                  data-confirm="Delete this product permanently?" class="mt-8 flex items-center justify-between gap-4 rounded-xl border border-red-200 bg-red-50 p-4">
                 <p class="text-sm text-red-700">Delete this product permanently.</p>
                 <input type="hidden" name="productId" value="<%=product.getProductId()%>">
                 <input type="hidden" name="operation" value="delete">

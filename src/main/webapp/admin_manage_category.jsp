@@ -23,7 +23,8 @@
     <main class="p-4 sm:p-8">
         <a href="admin_categories.jsp" class="text-sm text-slate-500 hover:text-brand-700"><i class="uil uil-arrow-left"></i> Back to categories</a>
         <section class="product-form card mt-4 max-w-2xl p-6 sm:p-8">
-            <form action="categoryManagement" method="post" enctype="multipart/form-data" class="space-y-5">
+            <form action="categoryManagement" method="post" enctype="multipart/form-data" class="space-y-5"
+                  data-async-form data-success-url="admin_categories.jsp" data-failure-event="failedToUpdateCategory">
                 <h1 class="text-2xl font-bold">Update Category</h1>
                 <div class="flex items-center gap-4">
                     <img src="uploadedImages/category/<%=category.getImageName()%>" alt="" class="size-20 rounded-xl object-cover ring-1 ring-slate-200">
@@ -50,7 +51,8 @@
             </form>
 
             <!--Delete Category-->
-            <form action="categoryManagement" method="post" class="mt-8 flex items-center justify-between gap-4 rounded-xl border border-red-200 bg-red-50 p-4">
+            <form action="categoryManagement" method="post" data-async-form data-success-url="admin_categories.jsp" data-failure-event="failedToDeleteCategory"
+                  data-confirm="Delete this category and all of its products permanently?" class="mt-8 flex items-center justify-between gap-4 rounded-xl border border-red-200 bg-red-50 p-4">
                 <p class="text-sm text-red-700">Delete this category permanently.</p>
                 <input type="hidden" name="categoryId" value="<%=category.getCategoryId()%>">
                 <input type="hidden" name="operation" value="delete">

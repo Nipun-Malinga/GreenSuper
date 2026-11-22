@@ -18,7 +18,8 @@
     <%@ include file="admin/admin_includes/topbar.jsp"%>
     <main class="p-4 sm:p-8">
         <a href="admin_products.jsp" class="text-sm text-slate-500 hover:text-brand-700"><i class="uil uil-arrow-left"></i> Back to products</a>
-        <form class="product-form card mt-4 max-w-2xl space-y-5 p-6 sm:p-8" action="productManagement" method="post" enctype="multipart/form-data">
+        <form class="product-form card mt-4 max-w-2xl space-y-5 p-6 sm:p-8" action="productManagement" method="post" enctype="multipart/form-data"
+              data-async-form data-success-url="admin_products.jsp" data-failure-event="failedToAddProduct">
             <h1 class="text-2xl font-bold">New Product</h1>
             <div>
                 <label for="product-name" class="label">Product Name</label>
@@ -44,7 +45,7 @@
             <div>
                 <label for="category" class="label">Category</label>
                 <select id="category" name="category" class="input" required>
-                    <option selected>Select Category</option>
+                    <option value="" selected disabled>Select Category</option>
                     <% for (var category : categoryList) { %>
                     <option value="<%=category.getCategoryId()%>"><%=category.getCategoryType()%></option>
                     <% } %>

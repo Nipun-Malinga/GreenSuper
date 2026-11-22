@@ -126,6 +126,14 @@
   .admin-link i {
     @apply text-xl;
   }
+  /* Current page, set by js/admin_nav.js */
+  .admin-link[aria-current="page"] {
+    @apply bg-brand-50 text-brand-700;
+  }
+  /* Content area while js/admin_nav.js loads the next page */
+  .dashboard[aria-busy="true"] > :not(.top) {
+    @apply pointer-events-none opacity-50 transition-opacity;
+  }
   .dashboard {
     @apply ml-20 min-h-screen transition-[margin] duration-300 md:ml-64;
   }

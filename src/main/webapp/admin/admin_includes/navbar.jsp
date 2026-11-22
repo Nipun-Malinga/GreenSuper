@@ -19,3 +19,12 @@
         </ul>
     </div>
 </nav>
+<script>
+    // Apply the saved collapsed state before the first paint, so the sidebar
+    // doesn't render open and then animate shut on every page load.
+    try {
+        if (localStorage.getItem("status") === "close") {
+            document.currentScript.previousElementSibling.classList.add("close");
+        }
+    } catch (e) { /* storage unavailable: keep the default (open) */ }
+</script>

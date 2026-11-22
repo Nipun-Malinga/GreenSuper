@@ -13,7 +13,8 @@
     <%@ include file="admin/admin_includes/topbar.jsp"%>
     <main class="p-4 sm:p-8">
         <a href="admin_categories.jsp" class="text-sm text-slate-500 hover:text-brand-700"><i class="uil uil-arrow-left"></i> Back to categories</a>
-        <form class="product-form card mt-4 max-w-2xl space-y-5 p-6 sm:p-8" method="post" action="categoryManagement" enctype="multipart/form-data">
+        <form class="product-form card mt-4 max-w-2xl space-y-5 p-6 sm:p-8" method="post" action="categoryManagement" enctype="multipart/form-data"
+              data-async-form data-success-url="admin_categories.jsp" data-failure-event="failedToAddCategory">
             <h1 class="text-2xl font-bold">New Category</h1>
 
             <input type="hidden" name="operation" value="add" readonly>
