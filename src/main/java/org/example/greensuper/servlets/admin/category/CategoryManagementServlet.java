@@ -6,17 +6,24 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.example.greensuper.dao.CategoryDao;
 import org.example.greensuper.dao.AlreadyExistsException;
+import org.example.greensuper.dao.ImageDao;
+import org.example.greensuper.dao.ProductDao;
 import org.example.greensuper.models.Category;
 import org.example.greensuper.models.Image;
+import org.example.greensuper.models.Product;
 import org.example.greensuper.utils.FileHandling;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 @WebServlet("/categoryManagement")
 @MultipartConfig
 public class CategoryManagementServlet extends HttpServlet {
     CategoryDao categoryDao = new CategoryDao();
+    ProductDao productDao = new ProductDao();
+    ImageDao imageDao = new ImageDao();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -88,7 +95,16 @@ public class CategoryManagementServlet extends HttpServlet {
                     System.out.println(categoryId);
                     category.setCategoryId(categoryId);
 
+                    // Read the image names before the rows are deleted.
+                    String categoryImageName = categoryDao.getCategory(categoryId).getImageName();
+                    List<Product> categoryProducts = productDao.getProducts(category);
+
                     if (categoryDao.removeCategory(category)) {
+                        deleteUnusedImage(uploadPath, categoryImageName, handling);
+                        String productUploadPath = System.getenv("IMAGE_UPLOAD_PATH") + "/product";
+                        for (Product categoryProduct : categoryProducts) {
+                            deleteUnusedImage(productUploadPath, categoryProduct.getImageName(), handling);
+                        }
                         writer.write("categoryDeleted");
                         resp.sendRedirect("admin_categories.jsp");
                     } else {
@@ -105,5 +121,12 @@ public class CategoryManagementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.sendRedirect("./admin_login.jsp");
+    }
+
+    // Removes the file unless another image row still points at the same file name.
+    private void deleteUnusedImage(String path, String imageName, FileHandling handling) {
+        if (imageName != null && !imageDao.isImageInUse(imageName)) {
+            handling.deleteFile(path, imageName);
+        }
     }
 }

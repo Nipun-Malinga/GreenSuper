@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.example.greensuper.dao.AlreadyExistsException;
+import org.example.greensuper.dao.ImageDao;
 import org.example.greensuper.dao.ProductDao;
 import org.example.greensuper.models.Image;
 import org.example.greensuper.models.Product;
@@ -17,6 +18,7 @@ import java.io.PrintWriter;
 @MultipartConfig
 public class ProductManagementServlet extends HttpServlet {
     ProductDao productDao = new ProductDao();
+    ImageDao imageDao = new ImageDao();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -105,7 +107,11 @@ public class ProductManagementServlet extends HttpServlet {
 
                     product.setProductId(deleteProductID);
 
+                    // Read the image name before the row is deleted.
+                    String productImageName = productDao.getSingleProduct(deleteProductID).getImageName();
+
                     if (productDao.removeProduct(product)) {
+                        deleteUnusedImage(uploadPath, productImageName, handling);
                         writer.write("productDeleted");
                         resp.sendRedirect("admin_products.jsp");
                     } else {
@@ -123,4 +129,10 @@ public class ProductManagementServlet extends HttpServlet {
         resp.sendRedirect("./admin_login.jsp");
     }
 
+    // Removes the file unless another image row still points at the same file name.
+    private void deleteUnusedImage(String path, String imageName, FileHandling handling) {
+        if (imageName != null && !imageDao.isImageInUse(imageName)) {
+            handling.deleteFile(path, imageName);
+        }
+    }
 }

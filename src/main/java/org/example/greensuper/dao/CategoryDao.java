@@ -54,6 +54,9 @@ public class CategoryDao {
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_delete_cart_item)) {
+            // Collected first: once the rows below are deleted, these ids can no longer be looked up.
+            List<Integer> imageIds = getCategoryImageIds(connection, category.getCategoryId());
+
             preparedStatement.setInt(1, category.getCategoryId());
 
             if(preparedStatement.executeUpdate() > 0) {
@@ -71,6 +74,7 @@ public class CategoryDao {
 
                 if(deleteCategory.executeUpdate() > 0) {
                     System.out.println("Category Successfully Deleted from the database");
+                    ImageDao.deleteImageRows(connection, imageIds);
                     return true;
                 }
             }
@@ -161,5 +165,22 @@ public class CategoryDao {
         } catch (SQLException e) {
             throw new RuntimeException("An error occurred while checking for an existing category.", e);
         }
+    }
+
+    // Image ids of the category itself and of every product in it.
+    private List<Integer> getCategoryImageIds(Connection connection, int categoryId) throws SQLException {
+        String SQL = "SELECT image_id FROM category WHERE category_id = ? AND image_id IS NOT NULL " +
+                     "UNION SELECT image_id FROM product WHERE category_id = ? AND image_id IS NOT NULL";
+        List<Integer> imageIds = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setInt(1, categoryId);
+            preparedStatement.setInt(2, categoryId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    imageIds.add(resultSet.getInt(1));
+                }
+            }
+        }
+        return imageIds;
     }
 }

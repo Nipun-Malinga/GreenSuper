@@ -47,6 +47,24 @@ public class FileHandling {
         return Files.exists(destinationPath);
     }
 
+    // Deletes a previously uploaded file. Returns false if there was nothing to delete.
+    public boolean deleteFile(String path, String fileName) {
+        if (fileName == null || fileName.isBlank()) {
+            return false;
+        }
+        Path directory = Paths.get(path).normalize();
+        Path target = directory.resolve(fileName).normalize();
+        if (!target.getParent().equals(directory)) {
+            return false; // never delete outside the upload folder
+        }
+        try {
+            return Files.deleteIfExists(target);
+        } catch (IOException e) {
+            System.out.println("Could not delete file: " + target + " (" + e.getMessage() + ")");
+            return false;
+        }
+    }
+
     public boolean isFileSelected(Part file) {
         return file.getSize() > 0;
     }

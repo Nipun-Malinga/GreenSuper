@@ -54,9 +54,13 @@ public class ProductDao {
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+
+            List<Integer> imageIds = getProductImageIds(connection, product.getProductId());
+
             preparedStatement.setInt(1, product.getProductId());
 
             if(preparedStatement.executeUpdate() > 0) {
+                ImageDao.deleteImageRows(connection, imageIds);
                 return true;
             }
         } catch (SQLException e) {
@@ -294,5 +298,19 @@ public class ProductDao {
         } catch (SQLException e) {
             throw new RuntimeException("An error occurred while checking for an existing product.", e);
         }
+    }
+
+    private List<Integer> getProductImageIds(Connection connection, int productId) throws SQLException {
+        String SQL = "SELECT image_id FROM product WHERE product_id = ? AND image_id IS NOT NULL";
+        List<Integer> imageIds = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setInt(1, productId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    imageIds.add(resultSet.getInt(1));
+                }
+            }
+        }
+        return imageIds;
     }
 }
