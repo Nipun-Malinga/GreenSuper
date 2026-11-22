@@ -226,8 +226,7 @@ e.g. `<%@ include file="/WEB-INF/views/includes/header.jsp" %>`.
 
 Admin uploads are saved by the servlets to `$IMAGE_UPLOAD_PATH/product` and `$IMAGE_UPLOAD_PATH/category`.
 `src/main/webapp/META-INF/context.xml` mounts that folder at `/uploadedImages`, which is where the pages
-load images from, so uploads show up immediately and are not wiped when the WAR is redeployed. Images
-bundled in `src/main/webapp/uploadedImages` are still served when a file isn't in the upload folder.
+load images from, so uploads show up immediately and are not wiped when the WAR is redeployed.
 
 Both `IMAGE_UPLOAD_PATH` and the `CATALINA_OPTS` line must be in `setenv.sh` (see step 5); without the
 `-Dgreensuper.upload.dir` property Tomcat can't start the app. Restart Tomcat after changing them.

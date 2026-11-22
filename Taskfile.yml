@@ -119,7 +119,6 @@ tasks:
         dir=$(. "{{.TOMCAT}}/bin/setenv.sh" && printf '%s' "$IMAGE_UPLOAD_PATH")
         test -n "$dir" || { echo "IMAGE_UPLOAD_PATH is empty in bin/setenv.sh"; exit 1; }
         mkdir -p "$dir/product" "$dir/category"
-        cp -n src/main/webapp/uploadedImages/category/* "$dir/category/" 2>/dev/null || true
         echo "Upload folders ready in $dir"
 
   # ---------- tomcat ----------

@@ -4,7 +4,6 @@
 
     The servlets save uploads to $IMAGE_UPLOAD_PATH/{product,category}; the pages load them from
     /uploadedImages/{product,category}/. This mounts that folder at /uploadedImages.
-    Files not found there fall back to the images bundled in src/main/webapp/uploadedImages.
 
     Tomcat needs the folder as a system property; add this to <tomcat>/bin/setenv.sh
     (after IMAGE_UPLOAD_PATH):
