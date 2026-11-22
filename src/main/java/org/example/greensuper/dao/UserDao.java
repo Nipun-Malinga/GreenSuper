@@ -14,7 +14,10 @@ public class UserDao {
     public boolean registerUser(Customer customer) {
 
         // Storing Customer basic details.
-        String SQL = "INSERT INTO customer (first_name, last_name, email, phone_number) VALUES (?, ?, ?, ?)";
+        String SQL = """
+                INSERT INTO customer (first_name, last_name, email, phone_number)
+                VALUES (?, ?, ?, ?)
+                """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, customer.getFirstName());
@@ -31,7 +34,10 @@ public class UserDao {
                         System.out.println(customerID);
 
                         // Storing Customer Password.
-                        String SQL_Password = "INSERT INTO customer_passwords (customer_id, hashed_password) VALUES (?, ?)";
+                        String SQL_Password = """
+                                INSERT INTO customer_passwords (customer_id, hashed_password)
+                                VALUES (?, ?)
+                                """;
                         try(PreparedStatement insertPassword = connection.prepareStatement(SQL_Password)) {
                             insertPassword.setInt(1, customerID);
                             insertPassword.setString(2, customer.getPassword());
@@ -39,7 +45,10 @@ public class UserDao {
                             if(insertPassword.executeUpdate() > 0) {
 
                                 // Storing Customer Address.
-                                String SQL_Address = "INSERT INTO customer_address (customer_id, city, street, home_number) VALUES (?, ?, ?, ?)";
+                                String SQL_Address = """
+                                        INSERT INTO customer_address (customer_id, city, street, home_number)
+                                        VALUES (?, ?, ?, ?)
+                                        """;
                                 try(PreparedStatement insertAddress = connection.prepareStatement(SQL_Address)) {
                                     insertAddress.setInt(1, customerID);
                                     insertAddress.setString(2, customer.getCity());
@@ -66,7 +75,12 @@ public class UserDao {
     public boolean userLogin(Customer customer) {
         DecryptionUtil decryptionUtil = new DecryptionUtil();
 
-        String SQL = "SELECT cus_pass.hashed_password FROM customer_passwords cus_pass JOIN customer c ON cus_pass.customer_id = c.customer_id WHERE c.email = ?";
+        String SQL = """
+                SELECT cus_pass.hashed_password
+                FROM customer_passwords cus_pass
+                JOIN customer c ON cus_pass.customer_id = c.customer_id
+                WHERE c.email = ?
+                """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQL)) {
             ps.setString(1, customer.getEmail());
@@ -86,7 +100,11 @@ public class UserDao {
     public List<Customer> fetchAllCustomers() {
         List<Customer> customerList = new ArrayList<>();
 
-        String SQL = "SELECT * FROM customer cus JOIN customer_address cus_addr ON cus.customer_id = cus_addr.customer_id ";
+        String SQL = """
+                SELECT *
+                FROM customer cus
+                JOIN customer_address cus_addr ON cus.customer_id = cus_addr.customer_id
+                """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -114,7 +132,12 @@ public class UserDao {
     //Fetching a specific user details from the database.
     public Customer getUserDetails(String email) {
 
-        String SQL = "SELECT * FROM customer JOIN customer_address ON customer.customer_id = customer_address.customer_id WHERE customer.email = ?";
+        String SQL = """
+                SELECT *
+                FROM customer
+                JOIN customer_address ON customer.customer_id = customer_address.customer_id
+                WHERE customer.email = ?
+                """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setString(1, email);
@@ -157,7 +180,10 @@ public class UserDao {
     public boolean addCustomerFeedback(Feedback feedback) {
         LocalDate localDate = LocalDate.now();
 
-        String SQL = "INSERT INTO customer_feedback (customer_id, bill_id, feedback, feedback_date) VALUES (?, ?, ?, ?)";
+        String SQL = """
+                INSERT INTO customer_feedback (customer_id, bill_id, feedback, feedback_date)
+                VALUES (?, ?, ?, ?)
+                """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setInt(1, feedback.getCustomer_id());
@@ -178,7 +204,16 @@ public class UserDao {
     public List<Feedback> getAllCustomerFeedbacks() {
         List<Feedback> feedbackList = new ArrayList<>();
 
-        String SQL = "SELECT cus.first_name, cus.last_name, cus_f.bill_id, cus_f.feedback_date, cus_f.feedback FROM customer_feedback cus_f JOIN customer cus ON cus_f.customer_id = cus.customer_id";
+        String SQL = """
+                SELECT
+                    cus.first_name,
+                    cus.last_name,
+                    cus_f.bill_id,
+                    cus_f.feedback_date,
+                    cus_f.feedback
+                FROM customer_feedback cus_f
+                JOIN customer cus ON cus_f.customer_id = cus.customer_id
+                """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();

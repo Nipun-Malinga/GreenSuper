@@ -13,7 +13,11 @@ import java.util.List;
 public class Bill_InfoDao {
     public boolean isBillValid(Bill bill) {
 
-        String SQL_billValidation = "SELECT bill_id FROM bill WHERE bill_id = ?";
+        String SQL_billValidation = """
+                SELECT bill_id
+                FROM bill
+                WHERE bill_id = ?
+                """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_billValidation)){
             preparedStatement.setInt(1, bill.getBillId());
@@ -32,11 +36,18 @@ public class Bill_InfoDao {
     public List<Order> getAllOrderDetails() {
         List<Order> orderList = new ArrayList<>();
 
-        String SQL = "select bi.bill_id, cu.customer_id, pay.payment_date, pay.amount, bi.payment_status  " +
-                "from customer cu  " +
-                "JOIN cart ca ON cu.customer_id = ca.customer_id " +
-                "join bill bi on ca.cart_id = bi.bill_id " +
-                "join payment pay on bi.bill_id = pay.payment_id;";
+        String SQL = """
+                SELECT
+                    bi.bill_id,
+                    cu.customer_id,
+                    pay.payment_date,
+                    pay.amount,
+                    bi.payment_status
+                FROM customer cu
+                JOIN cart ca ON cu.customer_id = ca.customer_id
+                JOIN bill bi ON ca.cart_id = bi.bill_id
+                JOIN payment pay ON bi.bill_id = pay.payment_id
+                """;
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {

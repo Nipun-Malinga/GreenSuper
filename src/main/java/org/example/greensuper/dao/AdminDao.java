@@ -11,7 +11,11 @@ import java.sql.SQLException;
 public class AdminDao {
     public boolean isValidAdmin(Admin admin) {
         DecryptionUtil util = new DecryptionUtil();
-        String SQL = "SELECT admin_hashed_password FROM admin WHERE admin_email = ?";
+        String SQL = """
+                SELECT admin_hashed_password
+                FROM admin
+                WHERE admin_email = ?
+                """;
 
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {

@@ -12,7 +12,10 @@ public class CartDao {
         LocalDate date = LocalDate.now();
 
         //Inserting data into cart table.
-        String SQL = "INSERT INTO cart (customer_id, total_price) VALUES (?, ?)";
+        String SQL = """
+                INSERT INTO cart (customer_id, total_price)
+                VALUES (?, ?)
+                """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, customer.getCustomerId());
@@ -26,7 +29,10 @@ public class CartDao {
                         System.out.println("Cart table updated");
 
                         //Inserting data into cart_item table.
-                        String SQL_CartItem = "INSERT INTO cart_item (cart_id, product_id, bought_quantity) VALUES (?, ?, ?)";
+                        String SQL_CartItem = """
+                                INSERT INTO cart_item (cart_id, product_id, bought_quantity)
+                                VALUES (?, ?, ?)
+                                """;
                         for(var cartItem : cartItemList) {
                             try(PreparedStatement cart_item  = connection.prepareStatement(SQL_CartItem)) {
                                     cart_item.setInt(1, cart_id);
@@ -36,7 +42,10 @@ public class CartDao {
                                     System.out.println("Cart_Item table updated");
 
                                     //Inserting data into bill table.
-                                    String SQL_Bill = "INSERT INTO bill (cart_id, payment_status) VALUES (?, ?)";
+                                    String SQL_Bill = """
+                                            INSERT INTO bill (cart_id, payment_status)
+                                            VALUES (?, ?)
+                                            """;
                                     try(PreparedStatement inserting_to_bill = connection.prepareStatement(SQL_Bill, Statement.RETURN_GENERATED_KEYS)) {
                                         inserting_to_bill.setInt(1, cart_id);
                                         inserting_to_bill.setString(2, paymentStatus);
@@ -49,7 +58,10 @@ public class CartDao {
                                                     int bill_Id = bill_id_key.getInt(1);
 
                                                     //Inserting data into payment table.
-                                                    String SQL_Payment = "INSERT INTO payment (transaction_id, bill_id, payment_date, amount) VALUES (?, ?, ?, ?)";
+                                                    String SQL_Payment = """
+                                                            INSERT INTO payment (transaction_id, bill_id, payment_date, amount)
+                                                            VALUES (?, ?, ?, ?)
+                                                            """;
                                                     try(PreparedStatement inserting_to_payment = connection.prepareStatement(SQL_Payment)) {
                                                         inserting_to_payment.setString(1, transaction_id);
                                                         inserting_to_payment.setInt(2, bill_Id);
@@ -78,7 +90,12 @@ public class CartDao {
     public int getBillId() {
 
         int lastBillID = 0;
-        String SQL = "SELECT bill_id FROM bill ORDER BY bill_id DESC LIMIT 1";
+        String SQL = """
+                SELECT bill_id
+                FROM bill
+                ORDER BY bill_id DESC
+                LIMIT 1
+                """;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
