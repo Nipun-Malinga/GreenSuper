@@ -29,6 +29,10 @@
             "The database rejected the change (for example, a missing or invalid category).",
             "The product image could not be saved to the upload folder. Check that IMAGE_UPLOAD_PATH exists and is writable.",
     };
+    String[] duplicateCauses = {
+            "Names are compared without regard to upper/lower case or extra spaces.",
+            "Use a different name, or edit the existing one instead."
+    };
     String[] categoryCauses = {
             "The database rejected the change (for example, a duplicate or empty name).",
             "The category image could not be saved to the upload folder. Check that IMAGE_UPLOAD_PATH exists and is writable.",
@@ -41,6 +45,12 @@
                 message = "The new product was not saved.";
                 backUrl = "admin_products.jsp"; backLabel = "Back to Products";
                 causes = productCauses;
+                break;
+            case "productAlreadyExists":
+                title = "Product already exists";
+                message = "A product with this name is already in the selected category, so nothing was added.";
+                backUrl = "admin_products.jsp"; backLabel = "Back to Products";
+                causes = duplicateCauses;
                 break;
             case "productFailedToUpdate":
                 title = "Couldn't update the product";
@@ -62,6 +72,12 @@
                 message = "The new category was not saved.";
                 backUrl = "admin_categories.jsp"; backLabel = "Back to Categories";
                 causes = categoryCauses;
+                break;
+            case "categoryAlreadyExists":
+                title = "Category already exists";
+                message = "A category with this name is already in the system, so nothing was added.";
+                backUrl = "admin_categories.jsp"; backLabel = "Back to Categories";
+                causes = duplicateCauses;
                 break;
             case "failedToUpdateCategory":
                 title = "Couldn't update the category";

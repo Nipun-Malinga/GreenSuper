@@ -1,13 +1,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.example.greensuper.models.Category" %>
+<%@ page import="org.example.greensuper.dao.CategoryDao" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%
-    if (session.getAttribute("categories") == null) {
-        response.sendRedirect("mainView");
-    } else {
-        @SuppressWarnings("unchecked")
-        List<Category> categoryList = (List<Category>) session.getAttribute("categories");
+    // Always read categories from the database so newly added ones show up immediately.
+    List<Category> categoryList = new CategoryDao().getAllCategories();
 %>
 
 <%@ include file="/WEB-INF/views/includes/header.jsp"%>
@@ -60,7 +58,7 @@
         </div>
         <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         <% for (var category : categoryList) { %>
-            <a href="product?categoryId=<%=category.getCategoryId()%>" class="group card overflow-hidden transition hover:-translate-y-1 hover:shadow-md">
+            <a href="product.jsp?categoryId=<%=category.getCategoryId()%>" class="group card overflow-hidden transition hover:-translate-y-1 hover:shadow-md">
                 <div class="aspect-square overflow-hidden bg-slate-100">
                     <img src="./uploadedImages/category/<%=category.getImageName()%>" class="size-full object-cover transition duration-300 group-hover:scale-105" alt="" />
                 </div>
@@ -77,6 +75,3 @@
     </section>
 </main>
 <%@ include file="/WEB-INF/views/includes/footer.jsp"%>
-<%
-    }
-%>

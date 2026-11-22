@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.example.greensuper.dao.CategoryDao;
+import org.example.greensuper.dao.AlreadyExistsException;
 import org.example.greensuper.models.Category;
 import org.example.greensuper.models.Image;
 import org.example.greensuper.utils.FileHandling;
@@ -33,15 +34,21 @@ public class CategoryManagementServlet extends HttpServlet {
                     String newCategory = req.getParameter("category");
                     Part categoryImage = req.getPart("image");
 
-                    String imageName = handling.getFileName(categoryImage);
+                    category.setCategoryType(newCategory == null ? null : newCategory.trim());
 
-                    category.setCategoryType(newCategory);
+                    // Save the image as "<category name>.<ext>" both in the DB and in the upload folder.
+                    String imageName = handling.buildFileName(category.getCategoryType(), categoryImage);
                     image.setImageName(imageName);
 
-                    if (categoryDao.addCategory(category, image) && handling.moveFile(uploadPath, categoryImage)) {
-                        writer.write("categoryAddedSuccessfully");
-                    } else {
-                        writer.write("failedToAddCategory");
+                    try {
+                        if (categoryDao.addCategory(category, image) && handling.moveFile(uploadPath, categoryImage, imageName)) {
+                            writer.write("categoryAddedSuccessfully");
+                        } else {
+                            writer.write("failedToAddCategory");
+                        }
+                    } catch (AlreadyExistsException e) {
+                        // admin_forms.js routes this token to admin_failed.jsp
+                        writer.write("categoryAlreadyExists");
                     }
                     break;
                 case "update":
@@ -53,10 +60,10 @@ public class CategoryManagementServlet extends HttpServlet {
                     category.setCategoryType(update_categoryName);
 
                     if (handling.isFileSelected(update_image)) {
-                        String update_imageName = handling.getFileName(update_image);
+                        String update_imageName = handling.buildFileName(update_categoryName, update_image);
                         category.setImageName(update_imageName);
 
-                        if (categoryDao.updateCategory(category) && handling.moveFile(uploadPath, update_image)) {
+                        if (categoryDao.updateCategory(category) && handling.moveFile(uploadPath, update_image, update_imageName)) {
                             writer.write("categoryUpdated");
                         } else {
                             writer.write("failedToUpdateCategory");

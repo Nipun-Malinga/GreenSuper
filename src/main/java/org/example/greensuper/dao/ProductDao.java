@@ -11,7 +11,8 @@ import java.util.List;
 
 public class ProductDao {
     public boolean addProduct(Product product, Image image) {
-        //Testing (Debug)
+        isProductExists(product.getProductName(), product.getCategoryId());
+
         String SQL = "INSERT INTO images(image_name) VALUES (?)";
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -43,7 +44,7 @@ public class ProductDao {
                 }
             }
         } catch (SQLException ex) {
-            throw new RuntimeException("An error occurred while adding product into the database.");
+            throw new RuntimeException("An error occurred while adding product into the database.", ex);
         }
         return false;
     }
@@ -275,5 +276,23 @@ public class ProductDao {
             throw new RuntimeException("An error occurred while calculating cart amount.");
         }
         return totalAmount;
+    }
+
+    // Throws AlreadyExistsException if a product with the same name (ignoring case and
+    // surrounding spaces) is already in the same category.
+    private void isProductExists(String productName, int categoryId) {
+        String SQL = "SELECT 1 FROM product WHERE category_id = ? AND LOWER(TRIM(product_name)) = LOWER(TRIM(?)) LIMIT 1";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setInt(1, categoryId);
+            preparedStatement.setString(2, productName);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    throw new AlreadyExistsException("Product '" + productName + "' already exists in this category.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("An error occurred while checking for an existing product.", e);
+        }
     }
 }

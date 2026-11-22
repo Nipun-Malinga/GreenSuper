@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.example.greensuper.dao.AlreadyExistsException;
 import org.example.greensuper.dao.ProductDao;
 import org.example.greensuper.models.Image;
 import org.example.greensuper.models.Product;
@@ -42,7 +43,7 @@ public class ProductManagementServlet extends HttpServlet {
 
                     String imageName = handling.getFileName(productImage);
 
-                    product.setProductName(productName);
+                    product.setProductName(productName == null ? null : productName.trim());
                     product.setDescription(description);
                     product.setPrice(price);
                     product.setQuantity(quantity);
@@ -51,10 +52,15 @@ public class ProductManagementServlet extends HttpServlet {
 
                     image.setImageName(imageName);
 
-                    if (productDao.addProduct(product, image) && handling.moveFile(uploadPath, productImage)) {
-                        writer.write("productAddedSuccessfully");
-                    } else {
-                        writer.write("failedToAddProduct");
+                    try {
+                        if (productDao.addProduct(product, image) && handling.moveFile(uploadPath, productImage)) {
+                            writer.write("productAddedSuccessfully");
+                        } else {
+                            writer.write("failedToAddProduct");
+                        }
+                    } catch (AlreadyExistsException e) {
+                        // admin_forms.js routes this token to admin_failed.jsp
+                        writer.write("productAlreadyExists");
                     }
                     break;
                 case "update":

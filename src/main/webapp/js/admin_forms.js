@@ -17,7 +17,8 @@
     ];
     const FAILURE_TOKENS = [
         'failedToAddProduct', 'productFailedToUpdate', 'failedToDeleteProduct',
-        'failedToAddCategory', 'failedToUpdateCategory', 'failedToDeleteCategory'
+        'failedToAddCategory', 'failedToUpdateCategory', 'failedToDeleteCategory',
+        'productAlreadyExists', 'categoryAlreadyExists'
     ];
 
     // Keeps the sidebar on screen when js/admin_nav.js is loaded; falls back to a full load.

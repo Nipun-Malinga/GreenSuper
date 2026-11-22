@@ -10,8 +10,7 @@ import java.util.List;
 public class CategoryDao {
     //Add category image with details.
     public boolean addCategory(Category category, Image image) {
-        // Testing(Debug)
-        System.out.println(category.getCategoryType() + " " + image.getImageName());
+        isCategoryExists(category.getCategoryType());
 
         boolean imageStored = false;
         boolean categoryStored = false;
@@ -42,7 +41,7 @@ public class CategoryDao {
                 }
             }
         } catch (SQLException ex) {
-            throw new RuntimeException("An error occurred while inserting product details to the database....");
+            throw new RuntimeException("An error occurred while inserting category details to the database....", ex);
         }
         return imageStored && categoryStored;
     }
@@ -145,5 +144,22 @@ public class CategoryDao {
         }
 
         return categoryList;
+    }
+
+    // Throws AlreadyExistsException if a category with the same name (ignoring case and
+    // surrounding spaces) is already in the database.
+    private void isCategoryExists(String categoryType) {
+        String SQL = "SELECT 1 FROM category WHERE LOWER(TRIM(category_type)) = LOWER(TRIM(?)) LIMIT 1";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setString(1, categoryType);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    throw new AlreadyExistsException("Category '" + categoryType + "' already exists.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("An error occurred while checking for an existing category.", e);
+        }
     }
 }
