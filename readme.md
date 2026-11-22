@@ -16,9 +16,34 @@ A Java servlet-based e-commerce web application built for online shopping functi
 Before running this application, ensure you have the following installed:
 
 - **Java Development Kit (JDK)** - Version 8 or higher
-- **Apache Tomcat Server** - Version 9.0 or higher
+- **Apache Tomcat Server** - Version 10.0 or higher (the app uses Jakarta Servlet 5)
 - **MySQL Database** (or compatible database)
 - **Git** - For cloning the repository
+
+## Quick start with Task
+
+[Task](https://taskfile.dev) wraps the build and Tomcat steps below (after the one-time database,
+`setenv.sh` and Tomcat setup in *Installation & Setup*).
+
+```bash
+cp .env.example .env     # then set TOMCAT_HOME (and TOMCAT_PORT / APP_CONTEXT if needed)
+task up                  # build if needed, deploy to Tomcat, start it, wait until it answers
+```
+
+| Task | What it does |
+|------|--------------|
+| `task up` | Build (skipped if nothing changed), deploy the WAR, start Tomcat |
+| `task sync` | **Fast loop for JSP/CSS/JS edits**: rebuilds CSS if needed and copies `src/main/webapp` into the running app. No Maven, no redeploy; JSPs recompile on the next request |
+| `task sync:java` | Compile Java and push the classes into the running app (Tomcat reloads it) |
+| `task deploy` | Build if needed and copy the WAR to `$TOMCAT_HOME/webapps/$APP_CONTEXT.war` (hot redeploy) |
+| `task start` / `stop` / `restart` | Control Tomcat in the background (uses `bin/setenv.sh`) |
+| `task run` | Run Tomcat in the foreground with logs in the terminal |
+| `task status` / `logs` / `open` | Is it running? Follow `catalina.out`. Open the store in the browser |
+| `task css:watch` | Rebuild Tailwind on every change |
+| `task undeploy` / `clean` | Remove the app from Tomcat (asks first) / delete `target/` |
+
+`.env` holds only local, non-secret settings and is git-ignored. Database and PayPal credentials stay
+in `$TOMCAT_HOME/bin/setenv.sh`.
 
 ## Installation & Setup
 
@@ -67,8 +92,11 @@ export DB_URL="jdbc:mysql://localhost:3306/your_database_name"
 export DB_USER="your_database_username"
 export DB_PASS="your_database_password"
 
-#Image Upload Location
-export IMAGE_UPLOAD_PATH="your_preferred_path"
+# Image upload folder: OUTSIDE Tomcat's webapps, so uploads survive redeploys.
+# Must contain product/ and category/ subfolders (`task uploads:init` creates them).
+export IMAGE_UPLOAD_PATH="/absolute/path/to/greensuper-uploads"
+# Lets Tomcat serve that folder at /uploadedImages (see src/main/webapp/META-INF/context.xml)
+export CATALINA_OPTS="$CATALINA_OPTS -Dgreensuper.upload.dir=$IMAGE_UPLOAD_PATH"
 
 # Green Super PayPal Payment Configs
 export PAYPAL_CLIENT_ID="your_paypal_client_id"
@@ -157,15 +185,47 @@ http://localhost:8080
 ### Project Structure
 ```
 project-root/
+├── frontend/tailwind/      Tailwind entry point (theme + shared components)
+├── scripts/build-css.sh    builds src/main/webapp/css/app.css
 ├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   └── webapp/
-│   └── test/
-├── WEB-INF/
+│   └── main/
+│       ├── java/           servlets, DAOs, filters, models
+│       └── webapp/
+│           ├── WEB-INF/    web.xml + views/ (all JSPs)
+│           ├── css/ js/ images/
+├── database_sql.sql
 ├── README.md
 └── [other project files]
 ```
+
+### JSP views
+
+All pages live in `src/main/webapp/WEB-INF/views/`, grouped by area:
+
+```
+WEB-INF/views/
+├── shop/       index, product, cart, about, contact, feedback, terms_and_conditions
+├── auth/       login, registration
+├── payment/    approve, success, canceled, failed
+├── admin/      login, dashboard, products, categories, customers, orders, add/manage forms, failed
+└── includes/   shared header/navbar/footer fragments (includes/admin/ for the admin shell)
+```
+
+Files under `WEB-INF` can't be requested directly. `WEB-INF/web.xml` publishes each page at its
+original URL (e.g. `/cart.jsp` → `views/shop/cart.jsp`, `/admin_products.jsp` → `views/admin/products.jsp`),
+so servlet redirects, PayPal return URLs and links are unchanged. **To add a page**, create it under
+`views/` and add a `servlet` + `servlet-mapping` pair in `web.xml`. Static includes use absolute paths,
+e.g. `<%@ include file="/WEB-INF/views/includes/header.jsp" %>`.
+
+### Image uploads
+
+Admin uploads are saved by the servlets to `$IMAGE_UPLOAD_PATH/product` and `$IMAGE_UPLOAD_PATH/category`.
+`src/main/webapp/META-INF/context.xml` mounts that folder at `/uploadedImages`, which is where the pages
+load images from, so uploads show up immediately and are not wiped when the WAR is redeployed. Images
+bundled in `src/main/webapp/uploadedImages` are still served when a file isn't in the upload folder.
+
+Both `IMAGE_UPLOAD_PATH` and the `CATALINA_OPTS` line must be in `setenv.sh` (see step 5); without the
+`-Dgreensuper.upload.dir` property Tomcat can't start the app. Restart Tomcat after changing them.
 
 ### Frontend styling (Tailwind CSS)
 

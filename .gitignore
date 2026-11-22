@@ -38,3 +38,7 @@ build/
 .DS_Store
 ### Frontend tooling ###
 .tools/
+
+### Local settings ###
+.env
+.task/

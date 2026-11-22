@@ -1,0 +1,202 @@
+# Task runner for Green Super — https://taskfile.dev
+# Local settings (Tomcat path, port, context) come from .env; copy .env.example to start.
+#
+#   task up         build (if needed), deploy, start Tomcat and wait until it responds
+#   task sync       fast loop for JSP/CSS/JS edits: no Maven, no redeploy
+#   task --list     everything else
+version: "3"
+
+dotenv: [".env"]
+
+vars:
+  TOMCAT: '{{trimSuffix "/" (default "" .TOMCAT_HOME)}}'
+  PORT: '{{default "8080" .TOMCAT_PORT}}'
+  CONTEXT: '{{default "ROOT" .APP_CONTEXT}}'
+  WAR: target/GreenSuper-1.0-SNAPSHOT.war
+  DEPLOY_DIR: "{{.TOMCAT}}/webapps/{{.CONTEXT}}"
+  URL: 'http://localhost:{{.PORT}}/{{if ne .CONTEXT "ROOT"}}{{.CONTEXT}}/{{end}}'
+  # Matches this Tomcat's JVM only (catalina.sh passes -Dcatalina.base=<path>).
+  TOMCAT_PROC: '-Dcatalina\.base={{.TOMCAT}}( |$)'
+
+tasks:
+  default:
+    desc: List available tasks
+    silent: true
+    cmds:
+      - task --list
+
+  # ---------- build ----------
+
+  css:
+    desc: Build the Tailwind CSS (skipped when JSP/JS/theme files are unchanged)
+    sources:
+      - frontend/tailwind/input.css
+      - src/main/webapp/**/*.jsp
+      - src/main/webapp/js/**/*.js
+    generates:
+      - src/main/webapp/css/app.css
+    cmds:
+      - scripts/build-css.sh
+
+  css:watch:
+    desc: Rebuild the Tailwind CSS on every change
+    cmds:
+      - scripts/build-css.sh --watch
+
+  build:
+    desc: Build the WAR (skipped when nothing changed since the last build)
+    deps: [css]
+    sources:
+      - pom.xml
+      - src/main/java/**/*
+      - src/main/resources/**/*
+      - src/main/webapp/**/*
+    generates:
+      - "{{.WAR}}"
+    cmds:
+      - sh mvnw -q -B package -DskipTests
+
+  clean:
+    desc: Delete Maven build output
+    cmds:
+      - sh mvnw -q -B clean
+
+  # ---------- deploy ----------
+
+  deploy:
+    desc: Build if needed, then copy the WAR to Tomcat as <APP_CONTEXT>.war (Tomcat hot-redeploys it)
+    deps: [build]
+    preconditions:
+      - &tomcat-check
+        sh: test -x "{{.TOMCAT}}/bin/catalina.sh"
+        msg: "TOMCAT_HOME is not set or not a Tomcat install ('{{.TOMCAT}}'). Set it in .env (see .env.example)."
+    cmds:
+      # copy then rename, so Tomcat never sees a half-written WAR
+      - cp "{{.WAR}}" "{{.TOMCAT}}/webapps/.{{.CONTEXT}}.war.tmp"
+      - mv "{{.TOMCAT}}/webapps/.{{.CONTEXT}}.war.tmp" "{{.TOMCAT}}/webapps/{{.CONTEXT}}.war"
+      - echo "Deployed {{.WAR}} -> {{.TOMCAT}}/webapps/{{.CONTEXT}}.war ({{.URL}})"
+
+  undeploy:
+    desc: Remove the deployed app (WAR and unpacked folder) from Tomcat
+    prompt: "Remove {{.CONTEXT}}.war and {{.CONTEXT}}/ from {{.TOMCAT}}/webapps?"
+    preconditions: [*tomcat-check]
+    cmds:
+      - rm -f "{{.TOMCAT}}/webapps/{{.CONTEXT}}.war"
+      - rm -rf "{{.DEPLOY_DIR}}"
+
+  sync:
+    desc: "Fast dev loop: copy JSP/CSS/JS/images into the running app without rebuilding the WAR"
+    deps: [css]
+    preconditions:
+      - *tomcat-check
+      - sh: test -d "{{.DEPLOY_DIR}}/WEB-INF"
+        msg: "{{.DEPLOY_DIR}} isn't deployed yet. Run 'task up' once first."
+    cmds:
+      # no --delete: keeps files the app wrote at runtime (e.g. uploaded images)
+      - rsync -a --itemize-changes src/main/webapp/ "{{.DEPLOY_DIR}}/"
+      - echo "Synced to {{.DEPLOY_DIR}}; JSPs recompile on next request."
+
+  sync:java:
+    desc: Compile Java and push the classes into the running app (Tomcat reloads the context)
+    preconditions:
+      - *tomcat-check
+      - sh: test -d "{{.DEPLOY_DIR}}/WEB-INF"
+        msg: "{{.DEPLOY_DIR}} isn't deployed yet. Run 'task up' once first."
+    cmds:
+      - sh mvnw -q -B compile
+      - rsync -a target/classes/ "{{.DEPLOY_DIR}}/WEB-INF/classes/"
+      # touching web.xml (a watched resource) makes Tomcat reload the webapp
+      - touch "{{.DEPLOY_DIR}}/WEB-INF/web.xml"
+
+  uploads:init:
+    desc: Create the image upload folders ($IMAGE_UPLOAD_PATH/product and /category, path read from bin/setenv.sh)
+    preconditions:
+      - *tomcat-check
+      - sh: grep -q "greensuper.upload.dir" "{{.TOMCAT}}/bin/setenv.sh"
+        msg: "bin/setenv.sh doesn't pass the upload folder to Tomcat yet; see the 'Image uploads' section in readme.md."
+    cmds:
+      - |
+        dir=$(. "{{.TOMCAT}}/bin/setenv.sh" && printf '%s' "$IMAGE_UPLOAD_PATH")
+        test -n "$dir" || { echo "IMAGE_UPLOAD_PATH is empty in bin/setenv.sh"; exit 1; }
+        mkdir -p "$dir/product" "$dir/category"
+        cp -n src/main/webapp/uploadedImages/category/* "$dir/category/" 2>/dev/null || true
+        echo "Upload folders ready in $dir"
+
+  # ---------- tomcat ----------
+
+  start:
+    desc: Start Tomcat in the background (uses bin/setenv.sh) and wait until it answers
+    preconditions: [*tomcat-check]
+    status:
+      - pgrep -f -- '{{.TOMCAT_PROC}}' > /dev/null
+    cmds:
+      - '"{{.TOMCAT}}/bin/catalina.sh" start'
+      - task: wait
+
+  stop:
+    desc: Stop Tomcat (graceful, up to 20s)
+    preconditions: [*tomcat-check]
+    status:
+      - "! pgrep -f -- '{{.TOMCAT_PROC}}' > /dev/null"
+    cmds:
+      - '"{{.TOMCAT}}/bin/catalina.sh" stop 20'
+
+  restart:
+    desc: Restart Tomcat
+    cmds:
+      - task: stop
+      - task: start
+
+  run:
+    desc: Run Tomcat in the foreground with logs in this terminal (Ctrl+C to stop)
+    preconditions: [*tomcat-check]
+    interactive: true
+    cmds:
+      - '"{{.TOMCAT}}/bin/catalina.sh" run'
+
+  status:
+    desc: Show whether Tomcat is running and the app responds
+    silent: true
+    preconditions: [*tomcat-check]
+    cmds:
+      - |
+        if pgrep -f -- '{{.TOMCAT_PROC}}' > /dev/null; then
+          echo "Tomcat: running ({{.TOMCAT}})"
+          code=$(curl -s -o /dev/null -w '%{http_code}' "{{.URL}}" || true)
+          echo "App:    {{.URL}} -> HTTP $code"
+        else
+          echo "Tomcat: stopped ({{.TOMCAT}})"
+        fi
+
+  logs:
+    desc: Follow Tomcat's catalina.out
+    preconditions: [*tomcat-check]
+    interactive: true
+    cmds:
+      - tail -n 100 -f "{{.TOMCAT}}/logs/catalina.out"
+
+  wait:
+    internal: true
+    silent: true
+    cmds:
+      - |
+        printf "Waiting for {{.URL}} "
+        for i in $(seq 1 60); do
+          if curl -s -o /dev/null "{{.URL}}"; then echo " up"; exit 0; fi
+          printf "."; sleep 1
+        done
+        echo " no response after 60s; check 'task logs'"; exit 1
+
+  # ---------- all-in-one ----------
+
+  up:
+    desc: Build (if needed), deploy and start Tomcat, then print the URL
+    cmds:
+      - task: deploy
+      - task: start
+      - echo "Store {{.URL}}   Admin {{.URL}}admin_login.jsp"
+
+  open:
+    desc: Open the store in the browser
+    cmds:
+      - xdg-open "{{.URL}}" > /dev/null 2>&1 || echo "{{.URL}}"

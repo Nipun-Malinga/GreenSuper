@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Serves uploaded product/category images from outside the webapp, so they survive redeploys.
+
+    The servlets save uploads to $IMAGE_UPLOAD_PATH/{product,category}; the pages load them from
+    /uploadedImages/{product,category}/. This mounts that folder at /uploadedImages.
+    Files not found there fall back to the images bundled in src/main/webapp/uploadedImages.
+
+    Tomcat needs the folder as a system property; add this to <tomcat>/bin/setenv.sh
+    (after IMAGE_UPLOAD_PATH):
+        export CATALINA_OPTS="$CATALINA_OPTS -Dgreensuper.upload.dir=$IMAGE_UPLOAD_PATH"
+-->
+<Context>
+    <Resources>
+        <PreResources className="org.apache.catalina.webresources.DirResourceSet"
+                      base="${greensuper.upload.dir}"
+                      webAppMount="/uploadedImages"/>
+    </Resources>
+</Context>
