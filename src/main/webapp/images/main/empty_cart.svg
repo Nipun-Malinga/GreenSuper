@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 200" fill="none" role="img" aria-labelledby="t">
+  <title id="t">Empty shopping cart</title>
+
+  <!-- soft background -->
+  <circle cx="122" cy="96" r="78" fill="#effef1"/>
+  <circle cx="122" cy="96" r="60" fill="#d9fbdf" opacity=".55"/>
+
+  <!-- sparkles -->
+  <path d="M30 82v12M24 88h12" stroke="#7deb94" stroke-width="3" stroke-linecap="round"/>
+  <path d="M196 40v9M191.5 44.5h9" stroke="#7deb94" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="204" cy="118" r="4" fill="#b5f5c1"/>
+  <circle cx="36" cy="120" r="3" fill="#b5f5c1"/>
+
+  <!-- ground shadow -->
+  <ellipse cx="124" cy="176" rx="64" ry="6" fill="#0f172a" opacity=".08"/>
+
+  <!-- cart handle -->
+  <path d="M44 56h18c3.2 0 6 2.2 6.8 5.3L90 140" stroke="#334155" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- basket -->
+  <path d="M72 74h112.5c4.3 0 7.4 4.1 6.2 8.2l-13.4 46.4a10 10 0 0 1-9.6 7.2H93.5a10 10 0 0 1-9.7-7.6L72 74Z"
+        fill="#ffffff" stroke="#0b9c2d" stroke-width="6" stroke-linejoin="round"/>
+  <!-- basket grid -->
+  <path d="M106 80l4 50M138 80v50M168 80l-5 50M80 104h103" stroke="#b5f5c1" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- frame bar + wheels -->
+  <path d="M90 140c-1.2 6 3 10 8.5 10H172" stroke="#334155" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="102" cy="166" r="10" fill="#ffffff" stroke="#334155" stroke-width="6"/>
+  <circle cx="162" cy="166" r="10" fill="#ffffff" stroke="#334155" stroke-width="6"/>
+
+  <!-- little leaf (brand) peeking from the empty basket -->
+  <path d="M150 74c0-18 12-28 28-28 0 17-11 28-28 28Z" fill="#16bf3b"/>
+  <path d="M150 74c6-9 13-15 22-20" stroke="#0d7b27" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

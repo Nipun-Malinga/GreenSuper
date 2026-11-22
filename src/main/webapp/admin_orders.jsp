@@ -16,22 +16,12 @@
 %>
 
 <section class="dashboard">
-    <div class="top">
-        <i class="uil uil-bars sidebar-toggle"></i>
+    <%@ include file="admin/admin_includes/topbar.jsp" %>
 
-        <div class="search-box">
-            <i class="uil uil-search"></i>
-            <input type="text" placeholder="Search here...">
-        </div>
-    </div>
-    <br /><br /><br /><br/>
-
-    <main class="table">
-        <section class="table__header">
-            <h1>Orders</h1>
-        </section>
-        <section class="table__body">
-            <table>
+    <main class="p-4 sm:p-8">
+        <h1 class="text-2xl font-bold">Orders</h1>
+        <div class="card mt-6 overflow-x-auto">
+            <table class="table-base">
                 <thead>
                 <tr>
                     <th>Bill ID</th>
@@ -47,18 +37,18 @@
                         for (var order : orderList) {
                 %>
                 <tr>
-                    <td><%=order.getBillId()%></td>
+                    <td class="font-medium text-slate-900">#<%=order.getBillId()%></td>
                     <td><%=order.getCustomerId()%></td>
-                    <td><%=order.getDate()%></td>
-                    <td><strong><%=order.getBillTotal()%></strong></td>
-                    <td><%=order.getStatus()%></td>
+                    <td class="whitespace-nowrap"><%=order.getDate()%></td>
+                    <td><strong class="text-slate-900"><%=order.getBillTotal()%></strong></td>
+                    <td><span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700"><%=order.getStatus()%></span></td>
                 </tr>
                 <%      }
                     }
                 %>
                 </tbody>
             </table>
-        </section>
+        </div>
     </main>
 </section>
 

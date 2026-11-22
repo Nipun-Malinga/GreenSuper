@@ -7,29 +7,31 @@
     }
 %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category Form</title>
-    <link rel="stylesheet" href="css/admin/addProduct.css">
-</head>
-<body>
-<form class="product-form" method="post" action="categoryManagement" enctype="multipart/form-data">
-    <h1>New Category</h1>
+<%@ include file="admin/admin_includes/header.jsp"%>
+<%@ include file="admin/admin_includes/navbar.jsp"%>
+<section class="dashboard">
+    <%@ include file="admin/admin_includes/topbar.jsp"%>
+    <main class="p-4 sm:p-8">
+        <a href="admin_categories.jsp" class="text-sm text-slate-500 hover:text-brand-700"><i class="uil uil-arrow-left"></i> Back to categories</a>
+        <form class="product-form card mt-4 max-w-2xl space-y-5 p-6 sm:p-8" method="post" action="categoryManagement" enctype="multipart/form-data">
+            <h1 class="text-2xl font-bold">New Category</h1>
 
-    <label>
-        <input type="hidden" name="operation" value="add" readonly>
-    </label>
+            <input type="hidden" name="operation" value="add" readonly>
 
-    <label for="product-name">Category Name</label>
-    <input type="text" id="product-name" name="category" required>
+            <div>
+                <label for="product-name" class="label">Category Name</label>
+                <input type="text" id="product-name" name="category" class="input" required>
+            </div>
 
-    <label for="product-image">Category Image</label>
-    <input type="file" id="product-image" name="image" required accept="image/jpeg, image/png"><br><br>
+            <div>
+                <label for="product-image" class="label">Category Image</label>
+                <input type="file" id="product-image" name="image" class="input" required accept="image/jpeg, image/png">
+            </div>
 
-    <button type="submit">Submit</button>
-</form>
-</body>
-</html>
+            <div class="flex gap-3 pt-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </main>
+</section>
+<%@ include file="admin/admin_includes/end.jsp"%>

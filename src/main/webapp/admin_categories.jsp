@@ -15,26 +15,15 @@
 %>
 
 <section class="dashboard">
-    <div class="top">
-        <i class="uil uil-bars sidebar-toggle"></i>
+    <%@ include file="admin/admin_includes/topbar.jsp"%>
 
-        <div class="search-box">
-            <i class="uil uil-search"></i>
-            <input type="text" placeholder="Search here...">
+    <main class="p-4 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <h1 class="text-2xl font-bold">Categories</h1>
+            <a href="admin_add_category.jsp" class="btn btn-primary"><i class="uil uil-plus-circle text-lg"></i> Add Category</a>
         </div>
-    </div><br><br><br><br>
-
-    <main class="table">
-        <section class="table__header">
-            <h1>Categories</h1>
-            <ul class="nav-links">
-                <a href="admin_add_category.jsp">
-                    <i class="uil uil-plus-circle"></i>
-                    <span class="link-name">Add Category</span>
-                </a></ul>
-        </section>
-        <section class="table__body">
-            <table>
+        <div class="card mt-6 overflow-x-auto">
+            <table class="table-base">
                 <thead>
                 <tr>
                     <th>Category ID</th>
@@ -50,10 +39,10 @@
                         for(var category : categoryList ) {
                 %>
                 <tr>
-                    <td><%=category.getCategoryId()%></td>
-                    <td><%=category.getCategoryType()%></td>
-                    <td><img src="uploadedImages/category/<%=category.getImageName()%>" alt=""></td>
-                    <td><a href="admin_manage_category.jsp?categoryId=<%=category.getCategoryId()%>">Manage</a></td>
+                    <td class="text-slate-500">#<%=category.getCategoryId()%></td>
+                    <td class="font-medium text-slate-900"><%=category.getCategoryType()%></td>
+                    <td><img src="uploadedImages/category/<%=category.getImageName()%>" alt="" class="size-12 rounded-lg object-cover"></td>
+                    <td><a href="admin_manage_category.jsp?categoryId=<%=category.getCategoryId()%>" class="btn btn-outline px-3 py-1.5">Manage</a></td>
                 </tr>
                 <%
                         }
@@ -62,7 +51,7 @@
                 </tbody>
 
             </table>
-        </section>
+        </div>
     </main>
 </section>
 

@@ -12,48 +12,60 @@
         CategoryDao categoryDao = new CategoryDao();
         List<Category> categoryList = categoryDao.getAllCategories();
 %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Form</title>
-    <link rel="stylesheet" href="./css/admin/addProduct.css">
-</head>
-<body>
+<%@ include file="admin/admin_includes/header.jsp"%>
+<%@ include file="admin/admin_includes/navbar.jsp"%>
+<section class="dashboard">
+    <%@ include file="admin/admin_includes/topbar.jsp"%>
+    <main class="p-4 sm:p-8">
+        <a href="admin_products.jsp" class="text-sm text-slate-500 hover:text-brand-700"><i class="uil uil-arrow-left"></i> Back to products</a>
+        <form class="product-form card mt-4 max-w-2xl space-y-5 p-6 sm:p-8" action="productManagement" method="post" enctype="multipart/form-data">
+            <h1 class="text-2xl font-bold">New Product</h1>
+            <div>
+                <label for="product-name" class="label">Product Name</label>
+                <input type="text" id="product-name" name="product" class="input" required>
+            </div>
 
-<form class="product-form" action="productManagement" method="post" enctype="multipart/form-data">
-    <h1>New Product</h1>
-    <label for="product-name">Product Name</label>
-    <input type="text" id="product-name" name="product" required>
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                    <label for="product-price" class="label">Product Price</label>
+                    <input type="number" id="product-price" name="price" class="input" step="0.01" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                </div>
+                <div>
+                    <label for="product-quantity" class="label">Product Quantity</label>
+                    <input type="number" id="product-quantity" name="quantity" class="input" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                </div>
+            </div>
 
-    <label for="product-price">Product Price</label>
-    <input type="number" id="product-price" name="price" step="0.01" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+            <div>
+                <label for="product-image" class="label">Product Image</label>
+                <input type="file" id="product-image" name="image" class="input" accept="image/jpeg, image/png" required>
+            </div>
 
-    <label for="product-quantity">Product Quantity</label>
-    <input type="number" id="product-quantity" name="quantity" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+            <div>
+                <label for="category" class="label">Category</label>
+                <select id="category" name="category" class="input" required>
+                    <option selected>Select Category</option>
+                    <% for (var category : categoryList) { %>
+                    <option value="<%=category.getCategoryId()%>"><%=category.getCategoryType()%></option>
+                    <% } %>
+                </select>
+            </div>
 
-    <label for="product-image">Product Image</label>
-    <input type="file" id="product-image" name="image" accept="image/jpeg, image/png" required><br><br>
+            <div>
+                <label for="description" class="label">Description</label>
+                <textarea id="description" required name="description" class="input" rows="4" cols="50"></textarea>
+            </div>
 
-    <label for="category">Category</label>
-        <select id="category" name="category" required>
-            <option selected>Select Category</option>
-            <% for (var category : categoryList) { %>
-            <option value="<%=category.getCategoryId()%>"><%=category.getCategoryType()%></option>
-            <% } %>
-        </select>
+            <input type="hidden" name="operation" value="add">
 
-    <label for="description">Description</label>
-    <textarea id="description" required name="description" rows="4" cols="50"></textarea>
-
-    <input type="hidden" name="operation" value="add">
-
-    <button type="submit">Submit</button>
-    <button type="reset">Reset</button>
-</form>
-</body>
-</html>
+            <div class="flex gap-3 pt-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-outline">Reset</button>
+            </div>
+        </form>
+    </main>
+</section>
+<%@ include file="admin/admin_includes/end.jsp"%>
 <%
     }
 %>

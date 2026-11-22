@@ -15,22 +15,12 @@
     List<Customer> customerList = userDao.fetchAllCustomers();
 %>
 <section class="dashboard">
-    <div class="top">
-        <i class="uil uil-bars sidebar-toggle"></i>
+    <%@ include file="admin/admin_includes/topbar.jsp"%>
 
-        <div class="search-box">
-            <i class="uil uil-search"></i>
-            <input type="text" placeholder="Search here..." />
-        </div>
-    </div>
-    <br /><br /><br /><br/>
-
-    <main class="table">
-        <section class="table__header">
-            <h1>Customers</h1>
-        </section>
-        <section class="table__body">
-            <table>
+    <main class="p-4 sm:p-8">
+        <h1 class="text-2xl font-bold">Customers</h1>
+        <div class="card mt-6 overflow-x-auto">
+            <table class="table-base">
                 <thead>
                 <tr>
                     <th>Customer ID</th>
@@ -39,13 +29,15 @@
                     <th>Email Address</th>
                     <th>Phone Number</th>
                 </tr>
+                </thead>
+                <tbody>
                 <%
                     if(customerList != null) {
                         for (var customer : customerList) {
                 %>
                 <tr>
-                    <td><%=customer.getCustomerId()%></td>
-                    <td><%=customer.getFirstName() + " " + customer.getLastName()%></td>
+                    <td class="text-slate-500">#<%=customer.getCustomerId()%></td>
+                    <td class="font-medium text-slate-900"><%=customer.getFirstName() + " " + customer.getLastName()%></td>
                     <td><%=customer.getHomeNumber() + " " + customer.getStreetName() + " " + customer.getCity()%></td>
                     <td><%=customer.getEmail()%></td>
                     <td><%=customer.getPhoneNumber()%></td>
@@ -55,10 +47,9 @@
                         }
                     }
                 %>
-
-                </thead>
+                </tbody>
             </table>
-        </section>
+        </div>
     </main>
 </section>
 

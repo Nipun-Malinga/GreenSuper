@@ -21,89 +21,59 @@
 <%@ include file="admin/admin_includes/navbar.jsp"%>
 
 <section class="dashboard">
-    <div class="top">
-        <i class="uil uil-bars sidebar-toggle"></i>
+    <%@ include file="admin/admin_includes/topbar.jsp"%>
 
-        <div class="search-box">
-            <i class="uil uil-search"></i>
-            <input type="text" placeholder="Search here...">
-        </div>
-    </div>
-
-    <div class="dash-content">
+    <div class="dash-content space-y-8 p-4 sm:p-8">
         <div class="overview">
-            <div class="title">
-                <i class="uil uil-tachometer-fast-alt"></i>
-                <span class="text">Dashboard</span>
-            </div>
+            <h1 class="flex items-center gap-2 text-2xl font-bold">
+                <i class="uil uil-tachometer-fast-alt text-brand-600"></i> Dashboard
+            </h1>
 
-            <div class="boxes">
-                <div class="box box1">
-                    <i class="uil uil-users-alt"></i>
-                    <span class="text">Users</span>
-                    <span class="number"><%=userDao.getUserCount()%></span>
+            <div class="boxes mt-6 grid gap-4 sm:grid-cols-3">
+                <div class="card flex items-center gap-4 p-5">
+                    <span class="grid size-12 place-items-center rounded-xl bg-brand-50 text-2xl text-brand-600"><i class="uil uil-users-alt"></i></span>
+                    <div><p class="text-sm text-slate-500">Users</p><p class="text-2xl font-bold text-slate-900"><%=userDao.getUserCount()%></p></div>
                 </div>
-                <div class="box box2">
-                    <i class="uil uil-usd-circle"></i>
-                    <span class="text">Sales</span>
-                    <span class="number">Rs.<%=cartDao.getAllSalesAmount()%></span>
+                <div class="card flex items-center gap-4 p-5">
+                    <span class="grid size-12 place-items-center rounded-xl bg-amber-50 text-2xl text-amber-600"><i class="uil uil-usd-circle"></i></span>
+                    <div><p class="text-sm text-slate-500">Sales</p><p class="text-2xl font-bold text-slate-900">Rs.<%=cartDao.getAllSalesAmount()%></p></div>
                 </div>
-                <div class="box box3">
-                    <i class="uil uil-share"></i>
-                    <span class="text">Completed Orders</span>
-                    <span class="number"><%=cartDao.getAllCompletedOrders()%></span>
+                <div class="card flex items-center gap-4 p-5">
+                    <span class="grid size-12 place-items-center rounded-xl bg-sky-50 text-2xl text-sky-600"><i class="uil uil-share"></i></span>
+                    <div><p class="text-sm text-slate-500">Completed Orders</p><p class="text-2xl font-bold text-slate-900"><%=cartDao.getAllCompletedOrders()%></p></div>
                 </div>
             </div>
         </div>
 
-        <div class="activity">
-            <div class="title">
-                <i class="uil uil-clock-three"></i>
-                <span class="text">Customer Feedbacks</span>
-            </div>
-
-            <div class="activity-data">
-                <div class="data names">
-                    <span class="data-title">Customer Name</span>
-                    <%
-                        for(var customer_name: feedbackList) {
-                    %>
-                        <span class="data-list"><%=customer_name.getCustomer_name()%></span>
-                    <%
-                        }
-                    %>
-                </div>
-                <div class="data email">
-                    <span class="data-title">Bill ID</span>
-                    <%
-                        for(var bill_id: feedbackList) {
-                    %>
-                    <span class="data-list"><%=bill_id.getBill_id()%></span>
-                    <%
-                        }
-                    %>
-                </div>
-                <div class="data joined">
-                    <span class="data-title">Date</span>
-                    <%
-                        for(var date: feedbackList) {
-                    %>
-                    <span class="data-list"><%=date.getFeedback__date()%></span>
-                    <%
-                        }
-                    %>
-
-                </div>
-                <div class="data type">
-                    <span class="data-title">Feedback</span>
+        <div class="activity card overflow-hidden">
+            <h2 class="flex items-center gap-2 border-b border-slate-100 px-5 py-4 text-lg font-semibold">
+                <i class="uil uil-clock-three text-brand-600"></i> Customer Feedbacks
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="table-base">
+                    <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Bill ID</th>
+                        <th>Date</th>
+                        <th>Feedback</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <%
                         for(var feedback: feedbackList) {
                     %>
-                    <span class="data-list"><%=feedback.getFeedback()%></span>
+                    <tr>
+                        <td class="font-medium text-slate-900"><%=feedback.getCustomer_name()%></td>
+                        <td><%=feedback.getBill_id()%></td>
+                        <td class="whitespace-nowrap"><%=feedback.getFeedback__date()%></td>
+                        <td class="max-w-md"><%=feedback.getFeedback()%></td>
+                    </tr>
                     <%
                         }
                     %>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

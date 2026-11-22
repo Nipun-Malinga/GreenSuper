@@ -7,21 +7,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./css/payment_massage_style.css">
+    <%@ include file="/includes/css.jsp" %>
+    <title>Payment Successful</title>
 </head>
-<body>
-<div class="container">
-
-    <div class="popup">
-        <img src="images/main/404-tick.png" alt="">
-        <h2>Thank You!</h2>
-        <p>Your payment has successfully received. The Bill is sent to you via an email.</p>
-        <p>"You will be redirected to the cart page in 10 seconds.</p>
-        <button id="continue" type="button" >Continue Browsing</button>
-    </div>
+<body class="grid min-h-screen place-items-center bg-slate-50 p-4">
+<div class="card w-full max-w-md p-8 text-center">
+    <img src="images/main/404-tick.png" alt="" class="mx-auto size-24 object-contain">
+    <h2 class="mt-6 text-2xl font-bold">Thank You!</h2>
+    <p class="mt-2 text-slate-600">Your payment has successfully received. The Bill is sent to you via an email.</p>
+    <p class="mt-1 text-sm text-slate-500">You will be redirected to the cart page in 10 seconds.</p>
+    <button id="continue" type="button" class="btn btn-primary mt-6 w-full">Continue Browsing</button>
 </div>
 
 <script type="text/javascript">

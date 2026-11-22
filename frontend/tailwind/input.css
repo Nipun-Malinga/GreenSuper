@@ -1,0 +1,135 @@
+/*
+ * Tailwind entry point for the Green Super UI.
+ * Build with: scripts/build-css.sh   (writes src/main/webapp/css/app.css)
+ */
+@import "tailwindcss" source(none);
+
+@source "../../src/main/webapp/**/*.jsp";
+@source "../../src/main/webapp/js/**/*.js";
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand green scale, a calmer take on the original #0dec2b accent */
+  --color-brand-50: #effef1;
+  --color-brand-100: #d9fbdf;
+  --color-brand-200: #b5f5c1;
+  --color-brand-300: #7deb94;
+  --color-brand-400: #3dd85f;
+  --color-brand-500: #16bf3b;
+  --color-brand-600: #0b9c2d;
+  --color-brand-700: #0d7b27;
+  --color-brand-800: #116125;
+  --color-brand-900: #0f4a1d;
+  --color-brand-950: #03300f;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-slate-50 font-sans text-slate-700 antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply text-slate-900;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Buttons: combine .btn with one variant, e.g. class="btn btn-primary" */
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-brand-600 text-white shadow-sm hover:bg-brand-700;
+  }
+  .btn-outline {
+    @apply border border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+  }
+  .btn-dark {
+    @apply bg-slate-900 text-white hover:bg-slate-700;
+  }
+  .btn-danger {
+    @apply bg-red-600 text-white shadow-sm hover:bg-red-700;
+  }
+
+  /* Forms */
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-slate-700;
+  }
+  .input {
+    @apply block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none;
+  }
+  .input[type="file"] {
+    @apply p-2 file:mr-3 file:rounded-md file:border-0 file:bg-brand-50 file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-brand-700 hover:file:bg-brand-100;
+  }
+  /* Toggled by js/validation.js */
+  .input.is-invalid {
+    @apply border-red-500 focus:border-red-500 focus:ring-red-500/20;
+  }
+  .input.is-valid {
+    @apply border-brand-500;
+  }
+  .form-error {
+    @apply text-sm text-red-600 empty:hidden;
+  }
+
+  .card {
+    @apply rounded-2xl bg-white shadow-sm ring-1 ring-slate-200;
+  }
+
+  /* Data tables (cart + admin) */
+  .table-base {
+    @apply w-full text-left text-sm;
+  }
+  .table-base thead th {
+    @apply bg-slate-50 px-4 py-3 text-xs font-semibold tracking-wide text-slate-500 uppercase;
+  }
+  .table-base tbody tr {
+    @apply border-t border-slate-100 hover:bg-slate-50/70;
+  }
+  .table-base td {
+    @apply px-4 py-3 align-middle text-slate-700;
+  }
+
+  /* Native <dialog> popups */
+  .modal {
+    @apply m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl border-0 bg-white p-6 text-slate-700 shadow-2xl backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm;
+  }
+
+  /* ---------- Admin layout ----------
+   * js/script.js toggles the "close" class on the sidebar <nav>
+   * and stores the state in localStorage.
+   */
+  .sidebar {
+    @apply fixed inset-y-0 left-0 z-40 flex w-20 flex-col border-r border-slate-200 bg-white px-3 py-5 transition-[width] duration-300 md:w-64;
+  }
+  .sidebar .link-name,
+  .sidebar .logo_name {
+    @apply hidden whitespace-nowrap md:inline;
+  }
+  .sidebar.close {
+    @apply md:w-20;
+  }
+  .sidebar.close .link-name,
+  .sidebar.close .logo_name {
+    @apply md:hidden;
+  }
+  .admin-link {
+    @apply flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-brand-50 hover:text-brand-700;
+  }
+  .admin-link i {
+    @apply text-xl;
+  }
+  .dashboard {
+    @apply ml-20 min-h-screen transition-[margin] duration-300 md:ml-64;
+  }
+  .sidebar.close ~ .dashboard {
+    @apply md:ml-20;
+  }
+}

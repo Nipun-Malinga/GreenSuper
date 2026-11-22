@@ -1,64 +1,45 @@
-<%--    <footer class="footer">--%>
-<%--        <ul class="list">--%>
-<%--            <li class="list__item"><a class="link li footer__link" href="">Home</a></li>--%>
-<%--            <li class="list__item"><a class="link li footer__link" href="">Categories</a></li>--%>
-<%--            <li class="list__item"><a class="link li footer__link" href="">Contact Us</a></li>--%>
-<%--            <li class="list__item"><a class="link li footer__link" href="">About Us</a></li>--%>
-<%--            <li class="list__item"><a class="link li footer__link" href="">Developer Team</a></li>--%>
-<%--        </ul>--%>
-<%--    <p class="footer__copyright">Copyright &copy; 2023 <span class="footer__highlight">Green Super</span></p>--%>
-<%--    </footer>--%>
-<footer class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="footer-col">
-                <img src="./images/main/logo/paypal.png">
-                <h3>Copyright Â© 2024 Green Super (Pvt) Ltd. <br>All Rights Reserved</h3>
-            </div>
-            <div class="footer-col">
-                <h4>More Info</h4>
-                <ul>
-                    <li><a href="./index.jsp">Home</a></li>
-                    <li><a href="./contact.jsp">Contact Us</a></li>
-                    <li><a href="./about.jsp">About Us</a></li>
-                    <li><a href="./feedback.jsp">Feedbacks</a></li>
-                    <li><a href="./terms_and_conditions.jsp">Terms & Conditions</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Categories</h4>
-                <ul>
-                    <li><a href="#">Vegetables</a></li>
-                    <li><a href="#">Fish & Meat</a></li>
-                    <li><a href="#">Sweets</a></li>
-                    <li><a href="#">Dairy Products</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>follow us</h4>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
+<footer class="mt-auto bg-slate-900 text-slate-300">
+    <div class="container-page grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+            <img src="./images/main/logo/logo.png" alt="Green Super" class="h-14 w-auto rounded-xl bg-white px-3 py-2">
+            <p class="mt-4 text-sm text-slate-400">Fresh, responsibly sourced groceries delivered to your door.</p>
+            <img src="./images/main/logo/paypal.png" alt="Payments secured by PayPal" class="mt-4 h-10 w-auto rounded-lg bg-white px-2 py-1">
+        </div>
+        <div>
+            <h4 class="text-sm font-semibold tracking-wide text-white uppercase">More Info</h4>
+            <ul class="mt-4 space-y-2 text-sm">
+                <li><a class="hover:text-brand-400" href="./index.jsp">Home</a></li>
+                <li><a class="hover:text-brand-400" href="./contact.jsp">Contact Us</a></li>
+                <li><a class="hover:text-brand-400" href="./about.jsp">About Us</a></li>
+                <li><a class="hover:text-brand-400" href="./feedback.jsp">Feedbacks</a></li>
+                <li><a class="hover:text-brand-400" href="./terms_and_conditions.jsp">Terms &amp; Conditions</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-sm font-semibold tracking-wide text-white uppercase">Categories</h4>
+            <ul class="mt-4 space-y-2 text-sm">
+                <li><a class="hover:text-brand-400" href="./index.jsp#categories">Vegetables</a></li>
+                <li><a class="hover:text-brand-400" href="./index.jsp#categories">Fish &amp; Meat</a></li>
+                <li><a class="hover:text-brand-400" href="./index.jsp#categories">Sweets</a></li>
+                <li><a class="hover:text-brand-400" href="./index.jsp#categories">Dairy Products</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-sm font-semibold tracking-wide text-white uppercase">Follow Us</h4>
+            <div class="mt-4 flex gap-3">
+                <a href="#" aria-label="Facebook" class="grid size-10 place-items-center rounded-full bg-slate-800 hover:bg-brand-600 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="X / Twitter" class="grid size-10 place-items-center rounded-full bg-slate-800 hover:bg-brand-600 hover:text-white"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Instagram" class="grid size-10 place-items-center rounded-full bg-slate-800 hover:bg-brand-600 hover:text-white"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
     </div>
+    <div class="border-t border-slate-800">
+        <p class="container-page py-5 text-center text-xs text-slate-500">Copyright &copy; 2024 Green Super (Pvt) Ltd. All Rights Reserved.</p>
+    </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous">
-
-</script>
-    <script
-        src="https://code.jquery.com/jquery-3.7.1.js"
-        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-        crossorigin="anonymous">
-    </script>
-    <script src="./js/main.js"></script>
-    <script src="./js/script.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
+<script src="./js/main.js"></script>
 </body>
 </html>

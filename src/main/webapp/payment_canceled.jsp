@@ -3,22 +3,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./images/main/logo/logo.png" type="image/x-icon">
+    <%@ include file="/includes/css.jsp" %>
     <title>Payment Canceled</title>
-    <link rel="stylesheet" href="css/payment_massage_style.css">
 </head>
-<body>
-<div class="container">
-
-    <div class="popup">
-        <img src="./images/main/OIP.jpeg" alt="">
-        <h2>Payment canceled</h2>
-        <p>Your payment process is successfully canceled</p>
-        <p>"You will be redirected to the cart page in 10 seconds.</p>
-        <a href="cart.jsp"><button id="continue" type="button" >Go Back TO Cart</button></a>
-    </div>
+<body class="grid min-h-screen place-items-center bg-slate-50 p-4">
+<div class="card w-full max-w-md p-8 text-center">
+    <img src="./images/main/OIP.jpeg" alt="" class="mx-auto size-24 rounded-full object-cover">
+    <h2 class="mt-6 text-2xl font-bold">Payment canceled</h2>
+    <p class="mt-2 text-slate-600">Your payment process is successfully canceled</p>
+    <p class="mt-1 text-sm text-slate-500">You will be redirected to the cart page in 10 seconds.</p>
+    <a href="cart.jsp" class="btn btn-primary mt-6 w-full" id="continue">Go Back To Cart</a>
 </div>
 
 <script type="text/javascript">

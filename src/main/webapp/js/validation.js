@@ -1,3 +1,9 @@
+// Toggles the Tailwind validation classes defined in frontend/tailwind/input.css.
+function markField(input, isValid) {
+    input.classList.toggle('is-invalid', !isValid);
+    input.classList.toggle('is-valid', isValid);
+}
+
 function validateRegistration(event) {
     event.preventDefault();
 
@@ -16,10 +22,10 @@ function validateRegistration(event) {
     let valid = false;
     allFields.forEach(function (input) {
         if(input.value.trim() === '') {
-            input.style.border = "1px solid red";
+            markField(input, false);
             valid = false;
         } else {
-            input.style.border = "1px solid green";
+            markField(input, true);
             valid = true;
         }
     })
@@ -44,7 +50,7 @@ function validateRegistration(event) {
                 } else if (response === 'emptyParameters') {
                     allFields.forEach(function (input) {
                         if(input.value.trim() === '') {
-                            input.style.border = "1px solid red";
+                            markField(input, false);
                             valid = false;
                         }
                     })
@@ -67,10 +73,10 @@ function validateAdminLogin(event) {
     allFields.forEach(function (input) {
         if(input.value.trim() === '') {
             if(input.value.trim() === '') {
-                input.style.border = "1px solid red";
+                markField(input, false);
                 valid = false;
             } else {
-                input.style.border = "1px solid green";
+                markField(input, true);
                 valid = true;
             }
         }
@@ -89,7 +95,7 @@ function validateAdminLogin(event) {
             } else if(response === 'emptyParameters') {
                 allFields.forEach(function (input) {
                     if(input.value.trim() === '') {
-                        input.style.border = "1px solid red";
+                        markField(input, false);
                         valid = false;
                     }
                 })
@@ -111,10 +117,10 @@ function validateUserLogin(event) {
     allFields.forEach(function (input) {
         if(input.value.trim() === '') {
             if(input.value.trim() === '') {
-                input.style.border = "1px solid red";
+                markField(input, false);
                 valid = false;
             } else {
-                input.style.border = "1px solid green";
+                markField(input, true);
                 valid = true;
             }
         }
@@ -134,7 +140,7 @@ function validateUserLogin(event) {
             } else if(response === 'emptyParameters') {
                 allFields.forEach(function (input) {
                     if(input.value.trim() === '') {
-                        input.style.border = "1px solid red";
+                        markField(input, false);
                         valid = false;
                     }
                 })

@@ -167,12 +167,26 @@ project-root/
 └── [other project files]
 ```
 
+### Frontend styling (Tailwind CSS)
+
+The UI is styled with Tailwind CSS. The compiled stylesheet `src/main/webapp/css/app.css` is committed,
+so a normal Maven/Tomcat build needs no extra step. Rebuild it whenever you change classes in a JSP/JS file
+or edit `frontend/tailwind/input.css` (theme tokens and shared components like `.btn`, `.input`, `.card`):
+
+```bash
+scripts/build-css.sh          # one-off minified build
+scripts/build-css.sh --watch  # rebuild on change while developing
+```
+
+The script downloads the pinned Tailwind standalone binary into `.tools/` (git-ignored) on first run.
+No Node.js installation is required.
+
 ### Technologies Used
 - Java Servlets
 - JSP (JavaServer Pages)
 - JDBC for database connectivity
 - PayPal SDK for payment processing
-- HTML/CSS/JavaScript for frontend
+- Tailwind CSS v4 (standalone CLI, no Node.js) + vanilla JS/jQuery for the frontend
 - GOOGLE SMTP for emails
 
 ---

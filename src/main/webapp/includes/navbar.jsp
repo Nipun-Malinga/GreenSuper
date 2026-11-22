@@ -1,68 +1,28 @@
-<%--<header>--%>
-<%--    <nav class="nav collapsible">--%>
-<%--        <a aria-label="Green Super Logo" class="nav__brand" href="index.jsp"><img src="images/main/logo/logo.png" alt="" /></a>--%>
-<%--        <svg class="icon icon--white nav__toggler">--%>
-<%--            <use href="./images/icons/sprite.svg#list"></use>--%>
-<%--        </svg>--%>
-<%--        <ul class="list nav__list collapsible__content">--%>
-<%--            <li class="nav__item">--%>
-<%--                <a target="_blank" href="index.jsp">Home</a>--%>
-<%--            </li>--%>
-<%--            <li class="nav__item">--%>
-<%--                <a target="_blank" href="#categories">Categories</a>--%>
-<%--            </li>--%>
-<%--            <li class="nav__item">--%>
-<%--                <a target="_blank" href="cart.jsp">Cart</a>--%>
-<%--            </li>--%>
-<%--            <li class="nav__item">--%>
-<%--                <a target="_blank" href="#">About Us</a>--%>
-<%--            </li>--%>
-<%--            <li class="search">--%>
-<%--                <input class="input input--dark" type="text" placeholder="Search Products" />--%>
-<%--                <button class="input input-search input--dark">Search</button>--%>
-<%--            </li>--%>
-<%--            <li class="nav__item">--%>
-<%--                <%--%>
-<%--                    if(session.getAttribute("auth") == null) {--%>
-<%--                %>--%>
-<%--                <a target="_blank" href="login.jsp">Login | Register</a>--%>
-<%--                <%--%>
-<%--                    } else {--%>
-<%--                        String auth = (String) session.getAttribute("auth");--%>
-<%--                %>--%>
-<%--                    <span><%=auth%><span>--%>
-<%--                    <a href="logout">Logout</a>--%>
-<%--                <%--%>
-<%--                    }--%>
-<%--                %>--%>
-<%--            </li>--%>
-<%--        </ul>--%>
-<%--    </nav>--%>
-<%--</header>--%>
+<header class="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur">
+    <nav class="container-page flex flex-wrap items-center justify-between gap-y-3 py-3" aria-label="Main">
+        <a href="index.jsp" class="flex items-center">
+            <img id="logo" class="h-11 w-auto" src="./images/main/logo/logo.png" alt="Green Super">
+        </a>
 
-
-<header class="navbar">
-    <input type ="checkbox" name ="" id ="chk1">
-    <div class="logo"><img id="logo" class="nav__img" src="./images/main/logo/logo.png" alt=""></div>
-    <ul>
-        <li></li>
-        <li></li>
-        <li><a href="index.jsp" class="active">Home</a></li>
-        <li><a href="#categories">Shop</a></li>
-        <li><a href="cart.jsp">Cart</a></li>
-        <li><a href="about.jsp">About Us</a></li>
-        <li><a href="contact.jsp">Contact</a></li>
-        <li>
-            <% if(session.getAttribute("auth") == null) {%>
-            <a href="login.jsp"> Login / Register</a>
-            <% }else {%>
-            <a href="logout"><i class="fa fa-user"></i> <%=session.getAttribute("auth")%>(Log Out)</li></a>
-            <% }%>
-        </li>
-    </ul>
-    <div class="menu">
-        <label for="chk1">
+        <%-- Mobile menu: CSS-only toggle driven by this checkbox --%>
+        <input type="checkbox" id="chk1" class="peer hidden">
+        <label for="chk1" class="cursor-pointer rounded-lg p-2 text-xl text-slate-700 hover:bg-slate-100 lg:hidden" aria-label="Toggle menu">
             <i class="fa fa-bars"></i>
         </label>
-    </div>
+
+        <ul class="hidden w-full flex-col gap-1 text-sm font-medium peer-checked:flex lg:flex lg:w-auto lg:flex-row lg:items-center lg:gap-1">
+            <li><a href="index.jsp" class="block rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700">Home</a></li>
+            <li><a href="index.jsp#categories" class="block rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700">Shop</a></li>
+            <li><a href="cart.jsp" class="flex items-center gap-2 rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700"><i class="fa fa-cart-shopping"></i> Cart</a></li>
+            <li><a href="about.jsp" class="block rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700">About Us</a></li>
+            <li><a href="contact.jsp" class="block rounded-lg px-3 py-2 text-slate-700 hover:bg-brand-50 hover:text-brand-700">Contact</a></li>
+            <li class="lg:ml-2">
+                <% if(session.getAttribute("auth") == null) {%>
+                <a href="login.jsp" class="btn btn-primary w-full lg:w-auto">Login / Register</a>
+                <% }else {%>
+                <a href="logout" class="btn btn-outline w-full lg:w-auto"><i class="fa fa-user"></i> <%=session.getAttribute("auth")%> (Log Out)</a>
+                <% }%>
+            </li>
+        </ul>
+    </nav>
 </header>

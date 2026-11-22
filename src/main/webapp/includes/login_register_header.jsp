@@ -2,13 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="icon" href="./images/main/logo/logo.png" type="image/x-icon">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="./css/login_and_register.css" />
+    <%@ include file="/includes/css.jsp" %>
     <title>Green Super</title>
 </head>
-<body>
+<body class="grid min-h-screen place-items-center bg-gradient-to-br from-brand-50 via-slate-50 to-brand-100 p-4">

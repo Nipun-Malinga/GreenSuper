@@ -23,57 +23,74 @@
     Product product = productDao.getSingleProduct(productId);
 
 %>
+<%@ include file="admin/admin_includes/header.jsp"%>
+<%@ include file="admin/admin_includes/navbar.jsp"%>
+<section class="dashboard">
+    <%@ include file="admin/admin_includes/topbar.jsp"%>
+    <main class="p-4 sm:p-8">
+        <a href="admin_products.jsp" class="text-sm text-slate-500 hover:text-brand-700"><i class="uil uil-arrow-left"></i> Back to products</a>
+        <section class="product-form card mt-4 max-w-2xl p-6 sm:p-8">
+            <form action="productManagement" method="post" enctype="multipart/form-data" class="space-y-5">
+                <h1 class="text-2xl font-bold">Update Product</h1>
+                <div class="flex items-center gap-4">
+                    <img src="./uploadedImages/product/<%=product.getImageName()%>" alt="" class="size-20 rounded-xl object-cover ring-1 ring-slate-200">
+                    <p class="text-sm text-slate-500">Current image. Leave the file field empty to keep it.</p>
+                </div>
+                <div>
+                    <label for="product-name" class="label">Product Name</label>
+                    <input type="text" id="product-name" name="productName" class="input" value="<%=product.getProductName()%>">
+                </div>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Product Form</title>
-    <link rel="stylesheet" href="css/admin/addProduct.css">
-</head>
-<body>
-<section class="product-form">
-<form action="productManagement" method="post" enctype="multipart/form-data">
-    <h1> Update Product</h1>
-    <label for="product-name">Product Name</label>
-    <input type="text" id="product-name" name="productName" value="<%=product.getProductName()%>">
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <div>
+                        <label for="product-price" class="label">Product Price</label>
+                        <input type="number" id="product-price" name="price" class="input" step="0.01" value="<%=product.getPrice()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+                    </div>
+                    <div>
+                        <label for="product-quantity" class="label">Product Quantity</label>
+                        <input type="number" id="product-quantity" name="quantity" class="input" value="<%=product.getQuantity()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+                    </div>
+                </div>
 
-    <label for="product-price">Product Price</label>
-    <input type="number" id="product-price" name="price" step="0.01" value="<%=product.getPrice()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+                <div>
+                    <label for="product-image" class="label">Product Image</label>
+                    <input type="file" id="product-image" name="image" class="input" accept="image/jpeg, image/png" >
+                </div>
 
-    <label for="product-quantity">Product Quantity</label>
-    <input type="number" id="product-quantity" name="quantity" value="<%=product.getQuantity()%>" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+                <div>
+                    <label for="category" class="label">Category</label>
+                    <select id="category" name="category" class="input">
+                        <option value="<%=product.getCategoryId()%>" selected>Current Category: <%=product.getCategoryName()%></option>
+                        <% for (var category : categoryList) { %>
+                        <option value="<%=category.getCategoryId()%>"><%=category.getCategoryType()%></option>
+                        <% } %>
+                    </select>
+                </div>
 
-    <label for="product-image">Product Image</label>
-    <input type="file" id="product-image" name="image" accept="image/jpeg, image/png" ><br><br>
+                <div>
+                    <label for="description" class="label">Description</label>
+                    <textarea id="description" name="description" class="input" rows="4" cols="50"><%=product.getDescription()%></textarea>
+                </div>
 
-    <label for="category">Category</label>
-    <select id="category" name="category">
-        <option value="<%=product.getCategoryId()%>" selected>Current Category: <%=product.getCategoryName()%></option>
-        <% for (var category : categoryList) { %>
-        <option value="<%=category.getCategoryId()%>"><%=category.getCategoryType()%></option>
-        <% } %>
-    </select>
-
-    <label for="description">Description</label>
-    <textarea id="description" name="description"  rows="4" cols="50"><%=product.getDescription()%></textarea>
-
-    <input type="hidden" value="update" name="operation">
-    <input type="hidden" value="<%=product.getProductId()%>" name="productId">
-    <input type="hidden" value="<%=product.getImageName()%>" name="productImageName">
-    <button type="submit">Update</button>
-    <button type="reset">Cancel</button>
-</form>
-<form action="productManagement" method="post">
-    <input type="hidden" name="productId" value="<%=product.getProductId()%>">
-    <input type="hidden" name="operation" value="delete">
-    <button type="submit"><i class="uil uil-trash-alt"></i>
-        <span class="link-name">Delete</span></button>
-</form>
+                <input type="hidden" value="update" name="operation">
+                <input type="hidden" value="<%=product.getProductId()%>" name="productId">
+                <input type="hidden" value="<%=product.getImageName()%>" name="productImageName">
+                <div class="flex gap-3 pt-2">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="reset" class="btn btn-outline">Cancel</button>
+                </div>
+            </form>
+            <form action="productManagement" method="post" class="mt-8 flex items-center justify-between gap-4 rounded-xl border border-red-200 bg-red-50 p-4">
+                <p class="text-sm text-red-700">Delete this product permanently.</p>
+                <input type="hidden" name="productId" value="<%=product.getProductId()%>">
+                <input type="hidden" name="operation" value="delete">
+                <button type="submit" class="btn btn-danger"><i class="uil uil-trash-alt"></i>
+                    <span class="link-name">Delete</span></button>
+            </form>
+        </section>
+    </main>
 </section>
-</body>
-</html>
+<%@ include file="admin/admin_includes/end.jsp"%>
 
 <%
         } else {

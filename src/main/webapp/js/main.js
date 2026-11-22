@@ -1,15 +1,24 @@
-document.getElementById('promo_cart').addEventListener('click', () => {
-    window.location.href = './cart.jsp';
-    console.log('ola')
-})
+// These elements only exist on some pages, so guard each lookup.
+const promoCart = document.getElementById('promo_cart');
+if (promoCart) {
+    promoCart.addEventListener('click', () => {
+        window.location.href = './cart.jsp';
+    })
+}
 
-document.getElementById('promo_contact').addEventListener('click', () => {
-    window.location.href = './contact.jsp';
-})
+const promoContact = document.getElementById('promo_contact');
+if (promoContact) {
+    promoContact.addEventListener('click', () => {
+        window.location.href = './contact.jsp';
+    })
+}
 
-document.getElementById('logo').addEventListener('click', ()=> {
-    window.location.href = './index.jsp';
-})
+const logo = document.getElementById('logo');
+if (logo) {
+    logo.addEventListener('click', ()=> {
+        window.location.href = './index.jsp';
+    })
+}
 
 
 function AddToCart(productId) {
@@ -39,7 +48,7 @@ function feedbackSubmit(event) {
     let fields = document.querySelectorAll('input, textarea');
     fields.forEach(function (input) {
         if(input.value.trim() === '') {
-            document.getElementById('error-billId').style.color = '#FF0000';
+            document.getElementById('error-billId').style.color = '#dc2626';
             document.getElementById('error-billId').innerText = 'Bill ID cannot be empty';
             document.getElementById('error_feedback').innerText = 'Feedback cannot be empty';
             valid = false;
@@ -61,16 +70,16 @@ function feedbackSubmit(event) {
             success: function (response) {
                 if(response === 'invalidBillId') {
                     document.getElementById('error-billId').innerText = 'Invalid Bill ID';
-                    document.getElementById('error-billId').style.color = '#FF0000';
+                    document.getElementById('error-billId').style.color = '#dc2626';
                 } else if (response === 'FeedbackFailed') {
                     document.getElementById('error_feedback').innerText = 'Feedback Submission Failed!';
-                    document.getElementById('error_feedback').style.color = '#FF0000';
+                    document.getElementById('error_feedback').style.color = '#dc2626';
                 } else if (response === 'FeedbackSuccess') {
                     document.getElementById('massage').innerText = 'Your feedback successfully received. Thank You For Your Feedback. ';
-                    document.getElementById('massage').style.color = '#3c7841';
+                    document.getElementById('massage').style.color = '#0d7b27';
                 } else {
                     document.getElementById('error_feedback').innerText = 'Feedback Submission Failed!';
-                    document.getElementById('error_feedback').style.color = '#FF0000';
+                    document.getElementById('error_feedback').style.color = '#dc2626';
                 }
             }
         })

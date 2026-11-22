@@ -1,52 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="icon" href="./images/main/logo/logo.png" type="image/x-icon">
-
-    <title>Document</title>
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-            crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="./css/normalize.css" />
-    <link rel="stylesheet" href="./css/contact_style.css">
-    <link rel="stylesheet" href="./css/footer.css">
-    <link rel="stylesheet" href="./css/navbar.css">
-    <link rel="stylesheet" href="./css/style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-</head>
-<body>
+<%@ include file="includes/header.jsp"%>
 <%@ include file="includes/navbar.jsp"%>
 <!--Main Section-->
-<main>
-    <div class="container-contact">
-        <div class="header-contact">
-            <h2>Contact &nbsp;  Us</h2>
-            <img src="./images/main/contact/email.png" alt="email"><p>E-mail</p><a href="">greensuper@gmail.com</a>
+<main class="container-page py-12">
+    <div class="text-center">
+        <h1 class="text-4xl font-bold">Contact Us</h1>
+        <p class="mt-2 text-slate-500">We'd love to hear from you.</p>
+    </div>
+
+    <div class="mx-auto mt-10 grid max-w-5xl items-center gap-8 md:grid-cols-2">
+        <div class="card p-6">
+            <img src="./images/main/contact/icon12.png" alt="" class="mx-auto w-full max-w-sm">
         </div>
-
-        <div class="all">
-            <div class="content">
-
-                <img src="./images/main/contact/icon12.png" alt="">
+        <div class="space-y-6">
+            <div class="card flex items-center gap-4 p-6">
+                <img src="./images/main/contact/email.png" alt="" class="size-12">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">E-mail</p>
+                    <a href="mailto:greensuper@gmail.com" class="text-lg font-semibold text-brand-700 hover:underline">greensuper@gmail.com</a>
+                </div>
             </div>
-            <div class="social">
-                <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Follow Us</h3>
-                <img src="./images/main/contact/f.png" alt="">
-                <img src="./images/main/contact/i.png" alt="">
-                <img src="./images/main/contact/t.png" alt="">
-                <img src="./images/main/contact/w.png" alt="">
+            <div class="card p-6">
+                <h3 class="font-semibold">Follow Us</h3>
+                <div class="mt-4 flex gap-4">
+                    <a href="#" aria-label="Facebook"><img src="./images/main/contact/f.png" alt="Facebook" class="size-10 transition hover:scale-110"></a>
+                    <a href="#" aria-label="Instagram"><img src="./images/main/contact/i.png" alt="Instagram" class="size-10 transition hover:scale-110"></a>
+                    <a href="#" aria-label="Twitter"><img src="./images/main/contact/t.png" alt="Twitter" class="size-10 transition hover:scale-110"></a>
+                    <a href="#" aria-label="WhatsApp"><img src="./images/main/contact/w.png" alt="WhatsApp" class="size-10 transition hover:scale-110"></a>
+                </div>
             </div>
         </div>
-
     </div>
 </main>
 <!--Footer-->

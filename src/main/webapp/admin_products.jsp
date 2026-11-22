@@ -16,36 +16,23 @@
 %>
 
 <section class="dashboard">
-  <div class="top">
-    <i class="uil uil-bars sidebar-toggle"></i>
+  <%@ include file="admin/admin_includes/topbar.jsp"%>
 
-    <div class="search-box">
-      <i class="uil uil-search"></i>
-      <input type="text" placeholder="Search here..." />
+  <main class="p-4 sm:p-8">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <h1 class="text-2xl font-bold">Products</h1>
+      <a href="admin_add_product.jsp" class="btn btn-primary"><i class="uil uil-plus-circle text-lg"></i> Add Product</a>
     </div>
-  </div>
-  <br /><br /><br /><br />
-
-  <main class="table">
-    <section class="table__header">
-      <h1>Products</h1>
-      <ul class="nav-links">
-        <a href="admin_add_product.jsp">
-          <i class="uil uil-plus-circle"></i>
-          <span class="link-name">Add Product</span>
-        </a>
-      </ul>
-    </section>
-    <section class="table__body">
-      <table>
+    <div class="card mt-6 overflow-x-auto">
+      <table class="table-base">
         <thead>
         <tr>
           <th>Product ID</th>
           <th>Product Name</th>
           <th>Product Image</th>
           <th>Category</th>
-          <th>product Quantity</th>
-          <th>price</th>
+          <th>Product Quantity</th>
+          <th>Price</th>
           <th>Action</th>
         </tr>
         </thead>
@@ -55,14 +42,14 @@
             for(var product : productList) {
         %>
         <tr>
-          <td><%=product.getProductId()%></td>
-          <td><%=product.getProductName()%></td>
-          <td><img src="./uploadedImages/product/<%=product.getImageName()%>" alt="" /></td>
+          <td class="text-slate-500">#<%=product.getProductId()%></td>
+          <td class="font-medium text-slate-900"><%=product.getProductName()%></td>
+          <td><img src="./uploadedImages/product/<%=product.getImageName()%>" alt="" class="size-12 rounded-lg object-cover" /></td>
           <%System.out.printf(product.getImageName());%>
-          <td><%=product.getCategoryName()%></td>
+          <td><span class="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700"><%=product.getCategoryName()%></span></td>
           <td><%=product.getQuantity()%></td>
-          <td><strong><%=product.getPrice()%></strong></td>
-          <td><a href="./admin_manage_product.jsp?productId=<%=product.getProductId()%>">Manage</a> </td>
+          <td><strong class="text-slate-900"><%=product.getPrice()%></strong></td>
+          <td><a href="./admin_manage_product.jsp?productId=<%=product.getProductId()%>" class="btn btn-outline px-3 py-1.5">Manage</a> </td>
         </tr>
         <%
             }
@@ -73,10 +60,8 @@
 
         </tbody>
       </table>
-    </section>
+    </div>
   </main>
 </section>
-<script src="./js/script.js"></script>
 
 <%@ include file="admin/admin_includes/end.jsp"%>
-
