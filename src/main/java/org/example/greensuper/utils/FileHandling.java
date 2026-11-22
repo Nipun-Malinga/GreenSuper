@@ -42,7 +42,8 @@ public class FileHandling {
 
             System.out.println("File Successfully moved to: " + destinationPath);
         } catch (IOException e) {
-            e.fillInStackTrace();
+            System.out.println("Could not save file: " + destinationPath + " (" + e + ")");
+            return false;
         }
         return Files.exists(destinationPath);
     }

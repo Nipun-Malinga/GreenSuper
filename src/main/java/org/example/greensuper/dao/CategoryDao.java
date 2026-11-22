@@ -8,47 +8,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDao {
-    //Add category image with details.
-    public boolean addCategory(Category category, Image image) {
+    // Adds the category and its image row in one transaction: either both rows are stored or neither is.
+    // Returns the new category id, or -1 if nothing was stored.
+    public int addCategory(Category category, Image image) {
         isCategoryExists(category.getCategoryType());
 
-        boolean imageStored = false;
-        boolean categoryStored = false;
-
-        String SQL = """
+        String SQL_Image = """
                 INSERT INTO images (image_name)
                 VALUES (?)
                 """;
-        try (Connection connection = DBConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, image.getImageName());
+        String SQL_Category = """
+                INSERT INTO categories (category_type, image_id)
+                VALUES (?, ?)
+                """;
 
-            if (preparedStatement.executeUpdate() > 0) {
-                imageStored = true;
-            }
-            // Getting Generated key(image id)
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    int image_id = generatedKeys.getInt(1);
+        try (Connection connection = DBConnection.getConnection()) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement imageInsert = connection.prepareStatement(SQL_Image, Statement.RETURN_GENERATED_KEYS);
+                 PreparedStatement categoryInsert = connection.prepareStatement(SQL_Category, Statement.RETURN_GENERATED_KEYS)) {
+                imageInsert.setString(1, image.getImageName());
+                imageInsert.executeUpdate();
+                int imageId = firstGeneratedKey(imageInsert);
 
-                    String SQL_Category = """
-                            INSERT INTO categories (category_type, image_id)
-                            VALUES (?, ?)
-                            """;
+                categoryInsert.setString(1, category.getCategoryType());
+                categoryInsert.setInt(2, imageId);
+                categoryInsert.executeUpdate();
+                int categoryId = firstGeneratedKey(categoryInsert);
 
-                    try (PreparedStatement categoryDetails = connection.prepareStatement(SQL_Category)) {
-                        categoryDetails.setString(1, category.getCategoryType());
-                        categoryDetails.setInt(2, image_id);
-
-                        if (categoryDetails.executeUpdate() > 0) {
-                            categoryStored = true;
-                        }
-                    }
-                }
+                connection.commit();
+                return categoryId;
+            } catch (SQLException ex) {
+                connection.rollback();
+                throw ex;
+            } finally {
+                // The connection goes back to the pool; don't leave it in manual-commit mode.
+                connection.setAutoCommit(true);
             }
         } catch (SQLException ex) {
             throw new RuntimeException("An error occurred while inserting category details to the database....", ex);
         }
-        return imageStored && categoryStored;
+    }
+
+    private static int firstGeneratedKey(PreparedStatement statement) throws SQLException {
+        try (ResultSet keys = statement.getGeneratedKeys()) {
+            if (!keys.next()) {
+                throw new SQLException("No generated key returned.");
+            }
+            return keys.getInt(1);
+        }
     }
 
     public boolean removeCategory(Category category) {
@@ -78,7 +85,7 @@ public class CategoryDao {
     public boolean updateCategory(Category category) {
         String SQL = """
                 UPDATE categories
-                JOIN images ON categories.category_id = images.image_id
+                JOIN images ON categories.image_id = images.image_id
                 SET
                     categories.category_type = ?,
                     images.image_name = ?

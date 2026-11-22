@@ -27,9 +27,11 @@
         window.location.href = url;
     }
 
-    function failurePage(event, serverError) {
+    // errorKind: 'server' (server errored or replied with something unexpected),
+    // 'network' (the browser couldn't send the request at all), or nothing.
+    function failurePage(event, errorKind) {
         let url = 'admin_failed.jsp?event=' + encodeURIComponent(event);
-        if (serverError) url += '&error=server';
+        if (errorKind) url += '&error=' + errorKind;
         return url;
     }
 
@@ -76,7 +78,7 @@
             }
 
             if (!res.ok) {
-                await go(failurePage(failureEvent, true));
+                await go(failurePage(failureEvent, 'server'));
                 return;
             }
 
@@ -90,14 +92,15 @@
             if (SUCCESS_TOKENS.indexOf(token) !== -1) {
                 await go(successUrl);
             } else if (FAILURE_TOKENS.indexOf(token) !== -1) {
-                await go(failurePage(token, false));
+                await go(failurePage(token));
             } else {
-                await go(failurePage(failureEvent, true));
+                await go(failurePage(failureEvent, 'server'));
             }
         } catch (err) {
-            // Network failure or server unreachable.
+            // The request was never sent: the server is unreachable, the chosen file changed or
+            // can't be read, or an extension blocked it. Nothing reached the server.
             console.error(err);
-            await go(failurePage(failureEvent, true));
+            await go(failurePage(failureEvent, 'network'));
         } finally {
             setBusy(form, false);
         }

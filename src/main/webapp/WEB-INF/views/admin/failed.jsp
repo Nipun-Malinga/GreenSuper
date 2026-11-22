@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%--
     Failure page for admin product/category operations.
-    Opened by js/admin_forms.js as admin_failed.jsp?event=<servlet response token>[&error=server]
+    Opened by js/admin_forms.js as admin_failed.jsp?event=<servlet response token>[&error=server|network]
     Only the known tokens below are accepted; anything else shows a generic message,
     so nothing from the URL is ever echoed into the page.
 --%>
@@ -15,6 +15,7 @@
 
     String event = request.getParameter("event");
     boolean serverError = "server".equals(request.getParameter("error"));
+    boolean networkError = "network".equals(request.getParameter("error"));
 
     String title = "Something went wrong";
     String message = "The operation could not be completed.";
@@ -105,6 +106,14 @@
                 "A field may contain an invalid value. Make sure a category is selected and price and quantity are numbers.",
                 "If it keeps happening, check the Tomcat logs (catalina.out) for the stack trace."
         };
+    } else if (networkError) {
+        message = "Your browser couldn't send the form, so nothing was changed.";
+        causes = new String[] {
+                "The selected file was changed, moved or deleted after you picked it. Choose it again.",
+                "The server isn't reachable. Check that Tomcat is running.",
+                "A browser extension (for example an ad blocker) blocked the request.",
+                "The browser console (F12) shows the exact error."
+        };
     }
 %>
 <%@ include file="/WEB-INF/views/includes/admin/header.jsp"%>
@@ -124,6 +133,8 @@
                 <p class="mt-2 text-slate-600"><%= message %></p>
                 <% if (serverError) { %>
                 <p class="mt-3 inline-block rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-700">Server error</p>
+                <% } else if (networkError) { %>
+                <p class="mt-3 inline-block rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-700">Request not sent</p>
                 <% } %>
             </div>
 

@@ -48,9 +48,15 @@ public class CategoryManagementServlet extends HttpServlet {
                     image.setImageName(imageName);
 
                     try {
-                        if (categoryDao.addCategory(category, image) && handling.moveFile(uploadPath, categoryImage, imageName)) {
+                        // Rows first: the duplicate-name check must run before the file is written,
+                        // otherwise a duplicate would overwrite the existing category's image.
+                        int newCategoryId = categoryDao.addCategory(category, image);
+                        if (handling.moveFile(uploadPath, categoryImage, imageName)) {
                             writer.write("categoryAddedSuccessfully");
                         } else {
+                            // Don't leave a category pointing at an image file that doesn't exist.
+                            category.setCategoryId(newCategoryId);
+                            categoryDao.removeCategory(category);
                             writer.write("failedToAddCategory");
                         }
                     } catch (AlreadyExistsException e) {
