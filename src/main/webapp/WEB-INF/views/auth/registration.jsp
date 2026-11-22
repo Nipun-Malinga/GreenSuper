@@ -21,6 +21,7 @@
             </div>
             <p class="form-error" id="error"></p>
             <button type="submit" class="btn btn-primary w-full">Sign Up</button>
+            <p class="text-center text-xs text-slate-500">By signing up you agree to our <a class="font-medium text-brand-700 hover:underline" href="./terms_and_conditions.jsp" target="_blank">Terms &amp; Conditions</a>.</p>
             <p class="text-center text-sm text-slate-500 md:hidden">Already have an account? <a class="font-semibold text-brand-700 hover:underline" href="./login.jsp">Sign In</a></p>
         </form>
     </div>
