@@ -116,6 +116,29 @@
     @apply text-sm text-red-600 empty:hidden;
   }
 
+  /* Inline status messages: combine .alert with one variant */
+  .alert {
+    @apply flex items-start gap-3 rounded-xl px-4 py-3 text-sm ring-1;
+  }
+  .alert > i {
+    @apply mt-0.5 text-base;
+  }
+  .alert a {
+    @apply font-semibold underline;
+  }
+  .alert-success {
+    @apply bg-brand-50 text-brand-800 ring-brand-200;
+  }
+  .alert-error {
+    @apply bg-red-50 text-red-800 ring-red-200;
+  }
+  .alert-info {
+    @apply bg-sky-50 text-sky-800 ring-sky-200;
+  }
+  .alert-warning {
+    @apply bg-amber-50 text-amber-800 ring-amber-200;
+  }
+
   .card {
     @apply rounded-2xl bg-white shadow-sm ring-1 ring-slate-200;
   }

@@ -176,6 +176,24 @@ public class UserDao {
         return 0;
     }
 
+    // True when feedback was already left for this bill. Used by FeedbackServlet.
+    public boolean hasFeedbackForBill(int billId) {
+        String SQL = """
+                SELECT 1
+                FROM customer_feedback
+                WHERE bill_id = ?
+                """;
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setInt(1, billId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return resultSet.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("An error occurred while checking existing feedback.", e);
+        }
+    }
+
     //Adding customer feedback to the database.
     public boolean addCustomerFeedback(Feedback feedback) {
         LocalDate localDate = LocalDate.now();
@@ -218,7 +236,7 @@ public class UserDao {
              PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()) {
+            while (resultSet.next()) {
                 Feedback feedback = new Feedback();
                 feedback.setCustomer_name(
                         resultSet.getString("first_name") + " " + resultSet.getString("last_name"));

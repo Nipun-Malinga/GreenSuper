@@ -11,6 +11,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bill_InfoDao {
+    // True when the bill exists and was created from this customer's cart. Used by FeedbackServlet.
+    public boolean isBillOwnedByCustomer(int billId, int customerId) {
+        String SQL = """
+                SELECT 1
+                FROM bill b
+                JOIN cart c ON b.cart_id = c.cart_id
+                WHERE b.bill_id = ? AND c.customer_id = ?
+                """;
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
+            preparedStatement.setInt(1, billId);
+            preparedStatement.setInt(2, customerId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return resultSet.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("An error occurred while checking the bill.", e);
+        }
+    }
+
     public boolean isBillValid(Bill bill) {
 
         String SQL_billValidation = """

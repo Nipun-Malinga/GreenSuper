@@ -1,39 +1,37 @@
 <%@ include file="/WEB-INF/views/includes/header.jsp"%>
 <%@ include file="/WEB-INF/views/includes/navbar.jsp"%>
+<% boolean feedbackLoggedIn = session.getAttribute("userCredentials") != null; %>
 
-<main class="container-page py-12">
-    <div class="card mx-auto max-w-xl p-8">
-        <form onsubmit="feedbackSubmit(event)" class="space-y-5">
-            <div>
-                <h1 class="text-2xl font-bold">Give Us Your Feedback</h1>
-                <p class="mt-1 text-sm text-slate-500">Tell us how we did. You'll find the Bill ID in your receipt email.</p>
-            </div>
-            <div>
-                <label for="billId" class="label">Bill ID</label>
-                <input type="text" id="billId" class="input" placeholder="Enter your Bill ID">
-                <p id="error-billId" class="mt-1 text-sm"></p>
-            </div>
-            <div>
-                <label for="feedback" class="label">Feedback</label>
-                <textarea name="txtmsg" id="feedback" rows="5" class="input" placeholder="Your Feedback"></textarea>
-                <p id="error_feedback" class="mt-1 text-sm"></p>
-            </div>
-            <h5 id="response"></h5>
-            <p id="massage" class="text-sm font-medium"></p>
-            <div>
-                <% if(session.getAttribute("auth") != null) {%>
-                    <input type="submit" name="btnSubmit" class="btn btn-primary w-full" value="Send Feedback">
-                <% } else {%>
-                <input type="submit" name="btnSubmit" onclick="popup.showModal()" class="btn btn-primary w-full" value="Send Feedback">
-                <dialog class="modal" id="popup">
-                    <h2 class="text-xl font-bold">Oops!</h2>
-                    <p class="mt-2">Looks like you are not logged in, Please log in to continue with the purchase. Click <a class="font-semibold text-brand-700 underline" href="./login.jsp">here</a> to log in.</p>
-                    <div class="mt-6 flex justify-end">
-                        <button type="button" class="btn btn-dark" onclick="popup.close()">Close</button>
+<main class="container-page flex flex-1 items-center py-10">
+    <div class="card mx-auto w-full max-w-xl p-6 sm:p-8">
+        <span class="eyebrow"><i class="fa fa-comment-dots"></i> Feedback</span>
+        <h1 class="mt-2 text-2xl font-bold sm:text-3xl">How did we do?</h1>
+        <p class="mt-1 text-sm text-slate-500">Tell us about your order. You'll find the Bill ID in your receipt email.</p>
+
+        <%-- Filled by feedbackSubmit() in js/main.js --%>
+        <div id="feedback-alert" class="mt-5 empty:hidden" role="status" aria-live="polite"><% if (!feedbackLoggedIn) { %><div class="alert alert-info"><i class="fa fa-circle-info"></i><p>Please <a href="./login.jsp">log in</a> to share feedback about your order.</p></div><% } %></div>
+
+        <form id="feedback-form" onsubmit="feedbackSubmit(event)" class="mt-5 space-y-5" novalidate>
+            <fieldset class="space-y-5 disabled:opacity-60" <%= feedbackLoggedIn ? "" : "disabled" %>>
+                <div>
+                    <label for="billId" class="label">Bill ID</label>
+                    <input type="text" id="billId" name="billId" class="input" placeholder="e.g. 1024"
+                           inputmode="numeric" autocomplete="off" aria-describedby="error-billId">
+                    <p id="error-billId" class="form-error mt-1.5"></p>
+                </div>
+                <div>
+                    <div class="flex items-baseline justify-between">
+                        <label for="feedback" class="label">Your feedback</label>
+                        <span id="feedback-count" class="text-xs text-slate-400 tabular-nums">0 / 1000</span>
                     </div>
-                </dialog>
-                <% } %>
-            </div>
+                    <textarea id="feedback" name="feedback" rows="5" class="input" maxlength="1000"
+                              placeholder="What did you like? What could we do better?" aria-describedby="error-feedback"></textarea>
+                    <p id="error-feedback" class="form-error mt-1.5"></p>
+                </div>
+                <button type="submit" id="feedback-submit" class="btn btn-primary w-full rounded-full">
+                    <i class="fa fa-paper-plane"></i> <span>Send Feedback</span>
+                </button>
+            </fieldset>
         </form>
     </div>
 </main>
